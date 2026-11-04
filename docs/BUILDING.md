@@ -56,11 +56,13 @@ bash scripts/build_nemu.sh reference
 bash scripts/build_emu.sh
 ```
 
-默认使用单核 `MinimalConfig`、4500 MiB 子 JVM 堆、5500 MiB 进程组内存上限、单任务 Make，并启用 FST 波形编译支持。通过官方 `DISABLE_PERF=1 DISABLE_ALWAYSDB=1` 关闭仿真统计和数据库生成，Difftest 继续启用。脚本为每次构建建立独立报告目录，保存命令、源码摘要、日志、内存和退出状态。它依赖当前 Linux 用户的 systemd 会话；内存不足会失败，脚本不会自动扩大上限。
+当前脚本按阶段执行：Chisel 仅生成 CHIRRTL 并写辅助文件，退出 Java 后独立运行 firtool，再生成 SRAM 模型、处理仿真断言和构建 Verilator 模型。默认单核 `MinimalConfig`，关闭仿真统计/数据库，Difftest 保持启用，带 FST 支持。
+
+默认 Java 堆8GiB、Chisel进程组上限4800MiB、firtool上限5500MiB、模型编译上限5500MiB。每阶段独立记录命令、日志、退出状态和资源，最后检查源码摘要未漂移；该方式依赖 Linux 用户 systemd 会话。整套脚本仍需完整成功运行和干净环境复现后才能标记可复现。
 
 `scripts/lowmem-bin/mill` 直接调用固定 Mill 0.12.3 的主入口，限制构建工具自身的 JVM 堆为 384 MiB；实际硬件生成子进程仍通过 Makefile 的 `JVM_XMX` 参数配置。仅设置普通 Mill 启动脚本的 `JAVA_OPTS` 不能保证该主进程继承同样上限。
 
-本机普通 4500 MiB 堆仍在转换期间持续满载。已验证 JVM 的文件映射堆能够在 384 MiB 内存上限内校验 512 MiB 存活数据。本机当前尝试的完整命令为：
+本机普通 4500 MiB 堆在转换期间持续满载。已验证 JVM 的文件映射堆能够在 384 MiB 内存上限内校验 512 MiB 存活数据。脚本默认启用该方式，可显式指定：
 
 ```bash
 VDOT_JAVA_HEAP=8G \
@@ -68,7 +70,13 @@ VDOT_JAVA_HEAP=8G \
   VDOT_BUILD_MEMORY_MAX=4800M bash scripts/build_emu.sh
 ```
 
-该方式通过 `-XX:AllocateHeapAt` 在项目目录下创建临时堆映射，进程退出后 JVM 关闭临时文件。预留至少 9 GiB 磁盘空间；可能因页读写而降低构建速度。它只用于构建，不用于 RTL 性能计时。机制见 [OpenJDK 20 实现](https://github.com/openjdk/jdk20u/blob/master/src/hotspot/os/posix/os_posix.cpp) 与 [JVM 选项文档](https://docs.oracle.com/en/java/javase/11/tools/java.html)。完整全核生成是否通过仍以运行日志为准。
+该方式通过 `-XX:AllocateHeapAt` 在项目目录下创建临时堆映射，进程退出后 JVM 关闭临时文件。可能因页读写而降低构建速度。它只用于构建，不用于 RTL 性能计时。机制见 [OpenJDK 20 实现](https://github.com/openjdk/jdk20u/blob/master/src/hotspot/os/posix/os_posix.cpp) 与 [JVM 选项文档](https://docs.oracle.com/en/java/javase/11/tools/java.html)。
+
+独立 firtool 1.62.1 已成功生成 SystemVerilog：5分46秒、最大RSS 5359524KiB，见 `reports/firtool-standalone-time.txt`。随后带 FST 的 Verilator 模型生成仍超过5200MiB，当前测试原生文件映射分配库。
+
+`scripts/lowmem-bin/verilator` 仅对模型生成的 Verilator 5.022 原生进程使用 `libvmmalloc`，默认临时池32GiB，退出后释放，仿真器运行不加载该库。小规模测试在384MiB限制下校验512MiB数据通过。工具库来自 Debian 官方 `libvmmalloc1=1.8-2`，本地安装入口为 `bash scripts/install_memory_helper.sh`，带固定SHA256校验，不修改系统目录。机制见 [官方手册](https://pmem.io/vmem/manpages/linux/master/libvmmalloc/libvmmalloc.7.html) 和 [Debian包信息](https://packages.debian.org/bullseye/libvmmalloc1)。整核模型是否生成成功仍待运行证据。
+
+分阶段默认需要约33GiB临时堆空间，另给RTL、C++和对象文件保留充足空间。默认追踪12层层级、生成器优化等级O1，均只作用于宿主模型构建，实际波形层级仍需验证。`VDOT_VERILATOR_BIN` 可覆盖本机原生 Verilator 路径，`VDOT_NATIVE_FILE_HEAP=0` 可在有足够内存时禁用原生文件映射库。不要把构建时间计入处理器性能测量。
 
 可用环境变量显式指定配置和资源：
 

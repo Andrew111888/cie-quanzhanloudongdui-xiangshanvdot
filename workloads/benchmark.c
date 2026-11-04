@@ -17,21 +17,28 @@ static uint64_t measure(unsigned n, unsigned baseline, unsigned dependent) {
   uint64_t begin = cycle();
   for (unsigned i = 0; i < n; ++i) {
     if (baseline) {
-      __asm__ volatile(
-        "vwmul.vv v16,v8,v10\n"
-        "vsetivli zero,4,e32,m1,tu,mu\n vmv.v.i v24,0\n"
-        "vsetivli zero,8,e16,m1,tu,mu\n vwredsum.vs v24,v16,v24\n"
-        "vsetivli zero,8,e8,m1,ta,ma\n"
-        ::: "memory", "v16", "v17", "v24");
-      if (dependent) __asm__ volatile("vmv1r.v v8,v24" ::: "v8");
+      if (dependent) {
+        __asm__ volatile(
+          "vwmul.vv v16,v8,v10\n"
+          "vsetivli zero,4,e32,m1,tu,mu\n vmv.v.i v8,0\n"
+          "vsetivli zero,8,e16,m1,tu,mu\n vwredsum.vs v8,v16,v8\n"
+          "vsetivli zero,8,e8,m1,ta,ma\n"
+          ::: "memory", "v8", "v16", "v17");
+      } else {
+        __asm__ volatile(
+          "vwmul.vv v16,v8,v10\n"
+          "vsetivli zero,4,e32,m1,tu,mu\n vmv.v.i v12,0\n"
+          "vsetivli zero,8,e16,m1,tu,mu\n vwredsum.vs v12,v16,v12\n"
+          "vsetivli zero,8,e8,m1,ta,ma\n"
+          ::: "memory", "v12", "v16", "v17");
+      }
     } else {
       if (dependent) __asm__ volatile(".word 0x02a4040b" ::: "v8");
       else __asm__ volatile(".word 0x02a4060b" ::: "v12");
     }
   }
   // Force completion and make the result observable before the ending CSR.
-  if (baseline) __asm__ volatile("vs1r.v v24,(%0)" : : "r"(out) : "memory");
-  else if (dependent) __asm__ volatile("vs1r.v v8,(%0)" : : "r"(out) : "memory");
+  if (dependent) __asm__ volatile("vs1r.v v8,(%0)" : : "r"(out) : "memory");
   else __asm__ volatile("vs1r.v v12,(%0)" : : "r"(out) : "memory");
   uint64_t end = cycle();
   // Inputs stay 1; the recurrence reaches 8 and is then stable.

@@ -1,6 +1,6 @@
 # 开发进度（2026-11-04）
 
-阶段一、二、三尚未全部通过；按用户要求，未向比赛提交作品，GitHub 作品仓库仍为空。已有本地开发提交 `432e52e`，其后还有未提交的构建与测试改进。
+阶段一、二、三尚未全部通过；按用户要求，未向比赛提交作品，GitHub 作品仓库仍为空。已有本地开发提交，最终验收证据仍需绑定最终源码。
 
 ## 当前有效结果
 
@@ -16,9 +16,17 @@
 
 文件映射堆的小规模验证通过：384MiB进程组内存上限下校验512MiB存活数据，见 `reports/heap-probe.log`。8GB文件映射堆生成了 `third_party/XiangShan/build/rtl/SimTop.fir`（930730759字节），随后原联合生成进程组在4800MiB限制处被OOM终止，见 `reports/vdot-build-20261104T145544Z-3252404/`。
 
-当前独立运行固定版本 firtool 1.62.1 编译该FIR文件，日志 `reports/firtool-standalone.log`，工具会话33588，systemd scope `vdot-firtool-standalone.scope`，上限4800MiB。必须等待退出并核对RTL是否完整生成。若成功，还需解决 Chisel 主程序未走到 FileRegisters.write 的辅助产物生成，并按 Makefile 完成 SRAM 生成、断言后处理及 Verilator 构建。
+独立 firtool 1.62.1 已成功编译该FIR文件，耗时5分46秒、最大RSS 5359524KiB（scope上限从4800MiB调到5500MiB），日志 `reports/firtool-standalone.log`。已生成 SystemVerilog、SRAM模型并完成与 Makefile 等价的仿真断言后处理。
+
+Verilator 带FST生成模型在5200MiB内存限制下失败，普通分配器和jemalloc均被OOM终止；限制追踪深度12层及生成优化O1后普通分配仍超过上限。原生文件映射堆探测在384MiB限制下校验512MiB数据通过。16GiB文件映射池的首次尝试因I/O缓慢被主动停止，不能计为通过。
+
+当前会话88656、scope `vdot-emu-fileheap-opt1.scope` 使用32GiB文件映射池、5500MiB进程组上限、追踪深度12、生成优化O1生成Verilator模型，日志 `reports/emu-fileheap-opt1.log`，参数 `reports/emu-fileheap-opt1-parameters.txt`，源码摘要 `reports/emu-fileheap-opt1-source.json`。不要与旧尝试的成功/失败混淆，当前仍未得到 emu。
+
+`scripts/build_emu.sh` 已改为独立 CHIRRTL → firtool → 模型构建的流程，避免Java与原生编译器同时占内存；`--target chirrtl` 已由固定生成器help确认，脚本尚未全程跑通。最终复现还需验证辅助产物及完整构建流程。
 
 下一步顺序：可运行 emu → vadd与vdot_smoke整核 → 短窗口波形 → vdot_test完整差分 → 临时错误NEMU库证明向量mismatch → 恢复并回归 → RTL性能测量。计划中的步骤不得标为完成。
+
+运行入口 `bash scripts/run_rtl.sh vadd_test|vdot_smoke|vdot_test|benchmark` 默认启用真实差分、128MB仿真内存，保存命令与二进制校验值；波形准备见 `docs/WAVEFORM_PLAN.md`。性能基线已消除结果寄存器搬移，依赖/无显式结果依赖分别与vdot使用相同v8/v12和存储位置；新 `reports/nemu-benchmark-current.log` 仅证明功能通过，不是RTL性能。
 
 ## 仓库与提交准备
 
