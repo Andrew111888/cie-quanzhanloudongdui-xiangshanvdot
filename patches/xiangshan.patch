@@ -1,0 +1,172 @@
+diff --git a/src/main/scala/xiangshan/backend/decode/VecDecoder.scala b/src/main/scala/xiangshan/backend/decode/VecDecoder.scala
+index 3764191..0a48114 100644
+--- a/src/main/scala/xiangshan/backend/decode/VecDecoder.scala
++++ b/src/main/scala/xiangshan/backend/decode/VecDecoder.scala
+@@ -12,6 +12,7 @@ import xiangshan.backend.fu.FuType
+ import xiangshan._
+ import yunsuan.{VfpuType, VipuType, VimacType, VpermType, VialuFixType, VfaluType, VfmaType, VfdivType, VfcvtType, VidivType}
+ import xiangshan.backend.decode.Zvbb._
++import xiangshan.backend.fu.vector.VdotEncoding
+ 
+ abstract class VecDecode extends XSDecodeBase {
+   def generate() : List[BitPat]
+@@ -186,6 +187,7 @@ case class VST(src2: BitPat, fuOp: BitPat, strided: Boolean = false, indexed: Bo
+ 
+ object VecDecoder extends DecodeConstants {
+   val opivv: Array[(BitPat, XSDecodeBase)] = Array(
++    VdotEncoding.instruction -> OPIVV(FuType.vimac, VdotEncoding.op, T, F, F),
+     VADD_VV         -> OPIVV(FuType.vialuF, VialuFixType.vadd_vv, T, F, F),
+     VSUB_VV         -> OPIVV(FuType.vialuF, VialuFixType.vsub_vv, T, F, F),
+ 
+diff --git a/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala b/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala
+index c553020..31f2134 100644
+--- a/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala
++++ b/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala
+@@ -91,7 +91,8 @@ trait BitFieldsVec { this: Riscv32BitInst =>
+   }
+ 
+   def isVecArith = {
+-    this.OPCODE5Bit === xiangshan.backend.decode.isa.bitfield.OPCODE5Bit.OP_V
++    this.OPCODE5Bit === xiangshan.backend.decode.isa.bitfield.OPCODE5Bit.OP_V ||
++      xiangshan.backend.fu.vector.VdotEncoding.instruction === this.ALL
+   }
+ 
+   def isOPIVV = {
+diff --git a/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala b/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala
+index 27eb801..6edafc7 100644
+--- a/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala
++++ b/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala
+@@ -7,7 +7,7 @@ import utility.XSError
+ import xiangshan.backend.fu.FuConfig
+ import xiangshan.backend.fu.vector.Bundles.VSew
+ import xiangshan.backend.fu.vector.utils.VecDataSplitModule
+-import xiangshan.backend.fu.vector.{Mgu, Utils, VecPipedFuncUnit, VecSrcTypeModule}
++import xiangshan.backend.fu.vector.{Mgu, Utils, VecPipedFuncUnit, VecSrcTypeModule, VdotDatapath, VdotEncoding}
+ import xiangshan.ExceptionNO
+ import yunsuan.VialuFixType
+ import yunsuan.encoding.Opcode.VimacOpcode
+@@ -63,6 +63,12 @@ class VIMacU(cfg: FuConfig)(implicit p: Parameters) extends VecPipedFuncUnit(cfg
+   private val oldVdSplit  = Module(new VecDataSplitModule(dataWidth, dataWidthOfDataModule))
+   private val vimacs = Seq.fill(numVecModule)(Module(new VIMac64b))
+   private val mgu = Module(new Mgu(dataWidth))
++  require(dataWidth == 128 && latency == 2, "vdot requires the 128-bit two-cycle vector MAC slot")
++  private val dot = Module(new VdotDatapath)
++  dot.io.vs1 := vs1
++  dot.io.vs2 := vs2
++  dot.io.enable1 := regEnable(1)
++  dot.io.enable2 := regEnable(2)
+ 
+   /**
+     * [[typeMod]]'s in connection
+@@ -145,7 +151,11 @@ class VIMacU(cfg: FuConfig)(implicit p: Parameters) extends VecPipedFuncUnit(cfg
+   mgu.io.in.info.dstMask := 0.B
+   mgu.io.in.isIndexedVls := false.B
+ 
+-  io.out.bits.res.data := mgu.io.out.vd
+-  io.out.bits.res.vxsat.get := (outVxsat & mgu.io.out.active).orR
+-  io.out.bits.ctrl.exceptionVec.get(ExceptionNO.illegalInstr) := mgu.io.out.illegal
++  private val outIsDot = outCtrl.fuOpType === VdotEncoding.op
++  private val dotIllegal = outVecCtrl.vill || outVecCtrl.vsew =/= 0.U ||
++    outVecCtrl.vlmul =/= 0.U || outVl =/= 8.U || outVstart =/= 0.U || !outVm
++  io.out.bits.res.data := Mux(outIsDot, dot.io.result, mgu.io.out.vd)
++  io.out.bits.res.vxsat.get := !outIsDot && (outVxsat & mgu.io.out.active).orR
++  io.out.bits.ctrl.exceptionVec.get(ExceptionNO.illegalInstr) :=
++    Mux(outIsDot, dotIllegal, mgu.io.out.illegal)
+ }
+diff --git a/src/main/scala/xiangshan/mem/MemBlock.scala b/src/main/scala/xiangshan/mem/MemBlock.scala
+index 16f8837..d037847 100644
+--- a/src/main/scala/xiangshan/mem/MemBlock.scala
++++ b/src/main/scala/xiangshan/mem/MemBlock.scala
+@@ -674,7 +674,7 @@ class MemBlockInlinedImp(outer: MemBlockInlined) extends LazyModuleImp(outer)
+   val sfence = RegNext(RegNext(io.ooo_to_mem.sfence))
+   val tlbcsr = RegNext(RegNext(io.ooo_to_mem.tlbCsr))
+   private val ptw = outer.ptw.module
+-  private val ptw_to_l2_buffer = outer.ptw_to_l2_buffer.module
++  private val ptw_to_l2_buffer = Option(outer.ptw_to_l2_buffer).map(_.module)
+   private val l1d_to_l2_buffer = outer.l1d_to_l2_buffer.module
+   ptw.io.hartId := io.hartId
+   ptw.io.sfence <> sfence
+@@ -2101,12 +2101,12 @@ class MemBlockInlinedImp(outer: MemBlockInlined) extends LazyModuleImp(outer)
+     val leftResetTree = ResetGenNode(
+       Seq(
+         ModuleNode(ptw),
+-        ModuleNode(ptw_to_l2_buffer),
+         ModuleNode(lsq),
+         ModuleNode(dtlb_st_tlb_st),
+         ModuleNode(dtlb_prefetch_tlb_prefetch),
+         ModuleNode(pmp)
+       )
++      ++ ptw_to_l2_buffer.toSeq.map(ModuleNode(_))
+       ++ pmp_checkers.map(ModuleNode(_))
+       ++ (if (prefetcherOpt.isDefined) Seq(ModuleNode(prefetcherOpt.get)) else Nil)
+       ++ (if (l1PrefetcherOpt.isDefined) Seq(ModuleNode(l1PrefetcherOpt.get)) else Nil)
+diff --git a/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala b/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala
+new file mode 100644
+index 0000000..44136c9
+--- /dev/null
++++ b/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: MulanPSL-2.0
++package xiangshan.backend.fu.vector
++
++import chisel3._
++import chisel3.util._
++
++/** Provisional CIE-2026 contract, kept outside YunSuan's standard op namespace. */
++object VdotEncoding {
++  // custom-0, funct6=0, funct3=0; bit25 retains RVV's vm meaning.
++  val instruction = BitPat("b000000???????????000?????0001011")
++  def op = "b100000000".U(9.W)
++}
++
++/** Two stages, enabled by the existing vector FU pipeline's stage enables.
++  * Control validity, ROB flushing and destination tags remain in VecPipedFuncUnit.
++  */
++class VdotDatapath extends Module {
++  val io = IO(new Bundle {
++    val vs1 = Input(UInt(128.W))
++    val vs2 = Input(UInt(128.W))
++    val enable1 = Input(Bool())
++    val enable2 = Input(Bool())
++    val result = Output(UInt(128.W))
++  })
++  val products = Reg(Vec(8, SInt(16.W)))
++  when(io.enable1) {
++    for (i <- 0 until 8) {
++      products(i) := io.vs1(8*i+7, 8*i).asSInt * io.vs2(8*i+7, 8*i).asSInt
++    }
++  }
++  val pairs = (0 until 4).map(i => products(2*i) +& products(2*i+1))
++  val quads = (0 until 2).map(i => pairs(2*i) +& pairs(2*i+1))
++  val sum = quads(0) +& quads(1) // 19-bit signed, including +131072
++  val result = Reg(UInt(128.W))
++  when(io.enable2) {
++    result := Cat(0.U(96.W), sum.pad(32).asUInt)
++  }
++  io.result := result
++}
+diff --git a/src/test/scala/top/VdotSimConfig.scala b/src/test/scala/top/VdotSimConfig.scala
+new file mode 100644
+index 0000000..4a477f3
+--- /dev/null
++++ b/src/test/scala/top/VdotSimConfig.scala
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: MulanPSL-2.0
++package top
++
++import org.chipsalliance.cde.config.Config
++import system.SoCParamsKey
++import xiangshan.XSTileKey
++
++/** Experimental simulation configuration. Keep MinimalConfig's cache and vector
++  * execution topology; reduce L3 sets and use the soft page walker.
++  * This configuration has not yet been validated by an elaboration or run.
++  */
++class VdotSimConfig(n: Int = 1) extends Config(
++  new MinimalConfig(n).alter((site, here, up) => {
++    case XSTileKey => up(XSTileKey).map(_.copy(softPTW = true))
++    case SoCParamsKey => up(SoCParamsKey).copy(
++      L3CacheParamsOpt = up(SoCParamsKey).L3CacheParamsOpt.map(_.copy(sets = 128))
++    )
++  })
++)

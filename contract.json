@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "status": "provisional_not_organizer_confirmed",
+  "instruction": "vdot.vv",
+  "opcode": 11,
+  "funct6": 0,
+  "funct3": 0,
+  "mask": "0xfc00707f",
+  "match": "0x0000000b",
+  "vm_bit": 25,
+  "supported": {"vlen": 128, "sew": 8, "lmul": 1, "vl": 8, "vstart": 0, "vm": 1},
+  "source_lanes": 8,
+  "source_signed_bits": 8,
+  "result_bits": 32,
+  "result_high_bits": "zero",
+  "old_destination_accumulated": false,
+  "unsupported": "illegal_instruction_no_destination_or_vstart_modification",
+  "source": "https://rv.cie.org.cn/direction?id=8"
+}

@@ -1,0 +1,5 @@
+team-name: 全栈漏洞队
+repo-url: https://github.com/Andrew111888/cie2026-quanzhan-loudong-dui-xiangshan-vdot.git
+github-username: Andrew111888
+contact-email: 请在最终提交前填写真实联系邮箱
+project-description: 基于香山昆明湖V2的vdot向量点积自定义指令设计、仿真验证与性能分析。

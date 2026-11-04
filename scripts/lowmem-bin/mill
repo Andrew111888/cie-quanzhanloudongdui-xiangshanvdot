@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Invoke the pinned Mill 0.12.3 main JVM directly. Its normal client launcher
+# starts another JVM without forwarding the client's JAVA_OPTS heap limit.
+VDOT_ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
+vdot_java=${JAVA_HOME:+$JAVA_HOME/bin/java}
+vdot_java=${vdot_java:-java}
+export MILL_WORKSPACE_ROOT="$PWD"
+exec "$vdot_java" -Xmx"${VDOT_MILL_HEAP:-384m}" -Xss8m \
+  -XX:ActiveProcessorCount=2 -Djna.nosys=true \
+  -cp "$VDOT_ROOT/tools/mill" mill.runner.MillMain "$PWD" "$@"
