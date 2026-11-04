@@ -84,9 +84,13 @@ if [[ "${VDOT_USE_JEMALLOC:-0}" == 1 ]]; then
   vdot_compile_env=(env "LD_PRELOAD=$vdot_jemalloc" \
     MALLOC_CONF=narenas:1,dirty_decay_ms:0,muzzy_decay_ms:0,retain:false)
 fi
-run_stage compile "$vdot_compile_limit" "${vdot_compile_env[@]}" make emu \
+run_stage compile "$vdot_compile_limit" "${vdot_compile_env[@]}" \
+  env "MAKEFILES=$VDOT_ROOT/configs/verilator_5_022.mk" make emu \
   "CONFIG=$vdot_config" NUM_CORES=1 DISABLE_PERF=1 DISABLE_ALWAYSDB=1 \
-  WITH_CHISELDB=0 WITH_CONSTANTIN=0 "${vdot_verilator_option[@]}" "EMU_TRACE=$vdot_trace" -j1
+  WITH_CHISELDB=0 WITH_CONSTANTIN=0 "${vdot_verilator_option[@]}" "EMU_TRACE=$vdot_trace" \
+  "CXX=${VDOT_HOST_CXX:-/usr/bin/g++}" "LINK=${VDOT_HOST_CXX:-/usr/bin/g++}" \
+  "CC=${VDOT_HOST_CC:-/usr/bin/gcc}" AR=/usr/bin/ar \
+  "OPT_FAST=${VDOT_CPP_OPT:--O2 -fno-tree-slp-vectorize}" "-j${VDOT_CPP_JOBS:-2}"
 
 test -x build/emu
 sha256sum build/emu > "$vdot_report/emu.sha256"

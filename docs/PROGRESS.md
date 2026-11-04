@@ -17,6 +17,20 @@
 
 ## 当前阻断及下一步
 
+### 2026-11-05 凌晨：模型已生成，正在修复C++构建兼容性
+
+`vdot-model-20261104T155853Z-3297719.service`在48分32秒后完成Verilator模型生成并进入C++编译，随后因默认`-fno-slp-vectorize`不被GCC识别而退出2。此前“没有C++模型”的状态已被后续事实更新。该次最大RSS为4694396KiB，资源日志`reports/model-resume-20261104T155853Z-3297719/time.txt`；不能把整个make退出2误判为模型生成失败或OOM。
+
+已将构建固定为系统GCC/G++，使用`-O2 -fno-tree-slp-vectorize`。后续编译成功产出42个对象文件，又在`emu.o`遇到Difftest较新的`VerilatedTraceBaseC`类型与Verilator5.022不兼容。最小失败目标见`reports/trace-api-red.log`；项目内新增版本限定的类型别名头`configs/verilator_5_022_trace.h`，预包含后同一`emu.o`目标实际编译通过，见`reports/trace-api-fixed.log`。没有修改Difftest源码、比较器或跳过逻辑。
+
+随后在`VSimTop.o`暴露全局预包含对GCC预编译头的干扰，见`reports/model-resume-20261104T165430Z-3341330/build.log`。全局纯宏/`-imacros`候选在小例与真实目标中仍未通过，未作为最终方案。最终采用`configs/verilator_5_022.mk`：仅对emu.o/main.o/verilator.o/waveform.o添加兼容头，模型对象保持原PCH规则；实际`VSimTop.o`、`emu.o`、`waveform.o`、`verilator.o`四个目标均编译通过，见`reports/trace-pch-targeted.log`。失败候选及旧PCH保存在本机开发产物中。
+
+当前继续复用已生成模型的C++构建服务为`vdot-model-20261104T170533Z-3349034.service`，报告`reports/model-resume-20261104T170533Z-3349034/`。按单任务实测峰值约1.5GB将C++编译改为两任务，总进程组上限仍为5500MiB；最新完整构建检查已超过百个对象文件，暂无新错误。新验证队列为`vdot-validate-20261104T170620Z-3351242.service`，报告`reports/rtl-queue-20261104T170620Z-3351242/`。旧队列随对应构建失败停止，不能记为测试通过。最终emu仍需链接及实际运行验证。
+
+另发现旧wrapper的`-O3 -O1`参数在5.022中仍保留最大内联。小层级RTL实测中，该参数组合内联33个实例；显式追加`--inline-mult 2000`后为1个，两个生成命令均退出0。wrapper已明确设置该值，避免以后重构建继续遗留最大内联；**当前复用的整核模型是在修正前生成的，不能把小例收益写成整核实测收益**。分配器禁purge小探测未显示收益，未应用到真实模型。主来源研究见`docs/LOWMEM_OPTIONS.md`。
+
+以下保留早先构建经过，用于排查历史；以本小节及最新运行报告判定当前状态。
+
 全核构建尚未生成可运行 emu。普通4–4.5GB Java堆不足，精简缓存/软PTW实验另有兼容性问题，实验代码已撤回。正式实现只保留 vdot 修改。
 
 文件映射堆的小规模验证通过：384MiB进程组内存上限下校验512MiB存活数据，见 `reports/heap-probe.log`。8GB文件映射堆生成了 `third_party/XiangShan/build/rtl/SimTop.fir`（930730759字节），随后原联合生成进程组在4800MiB限制处被OOM终止，见 `reports/vdot-build-20261104T145544Z-3252404/`。

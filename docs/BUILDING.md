@@ -68,6 +68,10 @@ bash scripts/build_emu.sh
 
 当前脚本按阶段执行：Chisel 仅生成 CHIRRTL 并写辅助文件，退出 Java 后独立运行 firtool，再生成 SRAM 模型、处理仿真断言和构建 Verilator 模型。默认单核 `MinimalConfig`，关闭仿真统计/数据库，Difftest 保持启用，带 FST 支持。
 
+C++构建明确使用系统GCC/G++及`OPT_FAST=-O2 -fno-tree-slp-vectorize`。固定Difftest默认的`-fno-slp-vectorize`属于另一编译器的选项，会被当前GCC拒绝。固定Verilator5.022还需要`configs/verilator_5_022_trace.h`，使Difftest的通用trace指针名称对应实际FST/VCD具体类；头文件对版本精确检查，不改变比较器。通过`MAKEFILES=configs/verilator_5_022.mk`仅将它预包含到四个使用波形接口的用户对象，不能全局添加到模型对象，否则会干扰GCC的PCH加载。实际`VSimTop.o/emu.o/waveform.o/verilator.o`目标已编译通过；完整链接及波形仍需后续验证。
+
+C++阶段默认两个编译任务，总内存仍受5500MiB上限约束。可用`VDOT_CPP_JOBS=1`降低并行度。JVM及firtool阶段仍各自串行执行，与C++编译分离。
+
 默认 Java 堆8GiB、Chisel进程组上限4800MiB、firtool上限5500MiB、模型编译上限5500MiB。每阶段独立记录命令、日志、退出状态和资源，最后检查源码摘要未漂移；该方式依赖 Linux 用户 systemd 会话。整套脚本仍需完整成功运行和干净环境复现后才能标记可复现。
 
 `scripts/lowmem-bin/mill` 直接调用固定 Mill 0.12.3 的主入口，限制构建工具自身的 JVM 堆为 384 MiB；实际硬件生成子进程仍通过 Makefile 的 `JVM_XMX` 参数配置。仅设置普通 Mill 启动脚本的 `JAVA_OPTS` 不能保证该主进程继承同样上限。
@@ -87,6 +91,8 @@ VDOT_JAVA_HEAP=8G \
 `scripts/lowmem-bin/verilator` 仅对模型生成的 Verilator 5.022 原生进程使用 `libvmmalloc`，默认临时池32GiB，退出后释放，仿真器运行不加载该库。小规模测试在384MiB限制下校验512MiB数据通过。工具库来自 Debian 官方 `libvmmalloc1=1.8-2`，本地安装入口为 `bash scripts/install_memory_helper.sh`，带固定SHA256校验，不修改系统目录。机制见 [官方手册](https://pmem.io/vmem/manpages/linux/master/libvmmalloc/libvmmalloc.7.html) 和 [Debian包信息](https://packages.debian.org/bullseye/libvmmalloc1)。整核模型是否生成成功仍待运行证据。
 
 分阶段默认需要约33GiB临时堆空间，另给RTL、C++和对象文件保留充足空间。默认追踪12层层级、生成器优化等级O1，均只作用于宿主模型构建，实际波形层级仍需验证。`VDOT_VERILATOR_BIN` 可覆盖本机原生 Verilator 路径，`VDOT_NATIVE_FILE_HEAP=0` 可在有足够内存时禁用原生文件映射库。不要把构建时间计入处理器性能测量。
+
+wrapper在所有`-O`选项之后显式追加`--inline-mult 2000`。Verilator5.022的`-O3`会设置最大内联，随后`-O1`不会撤销该设置；小例已实测33个与1个内联实例的差异，整核改善尚待重新生成模型验证。`VDOT_INLINE_MULT`可显式覆盖；当前开发中已经生成的整核C++保留原参数，不为该宿主优化重新丢弃有效模型。详见[固定版本低内存选项核对](LOWMEM_OPTIONS.md)。
 
 可用环境变量显式指定配置和资源：
 

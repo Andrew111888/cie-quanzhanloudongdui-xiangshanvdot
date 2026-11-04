@@ -22,6 +22,10 @@ if [[ "${1:-}" != --worker ]]; then
     --setenv="VDOT_VERILATOR_OPT=${VDOT_VERILATOR_OPT:-1}" \
     --setenv="VDOT_NATIVE_HEAP_SIZE=${VDOT_NATIVE_HEAP_SIZE:-34359738368}" \
     --setenv="VDOT_NATIVE_FILE_HEAP=${VDOT_NATIVE_FILE_HEAP:-1}" \
+    --setenv="VDOT_CPP_JOBS=${VDOT_CPP_JOBS:-2}" \
+    --setenv="VDOT_HOST_CXX=${VDOT_HOST_CXX:-/usr/bin/g++}" \
+    --setenv="VDOT_HOST_CC=${VDOT_HOST_CC:-/usr/bin/gcc}" \
+    --setenv="VDOT_CPP_OPT=${VDOT_CPP_OPT:--O2 -fno-tree-slp-vectorize}" \
     /bin/bash "$VDOT_ROOT/scripts/resume_model_build.sh" --worker "$vdot_report"
   printf 'BUILD_STARTED unit=%s.service report=%s\n' "$vdot_unit" "$vdot_report"
   exit 0
@@ -29,6 +33,8 @@ fi
 
 [[ $# == 2 ]] || exit 2
 vdot_report=$2
+vdot_cpp_jobs=${VDOT_CPP_JOBS:-2}
+[[ "$vdot_cpp_jobs" =~ ^[1-9][0-9]*$ ]] || exit 2
 exec >> "$vdot_report/build.log" 2>&1
 cd "$NOOP_HOME"
 free -b > "$vdot_report/memory-before.txt"
@@ -40,13 +46,19 @@ import sys
 report = Path(sys.argv[1])
 paths = list(Path('build/rtl').glob('*.sv'))
 paths += list(Path('build/generated-src').glob('*'))
+for suffix in ('*.cpp', '*.h', '*.mk'):
+    paths += list(Path('build/verilator-compile').glob(suffix))
 digests = {str(p): hashlib.sha256(p.read_bytes()).hexdigest()
            for p in sorted(paths) if p.is_file()}
 (report / 'generated-input-sha256.json').write_text(json.dumps(digests, indent=2) + '\n')
 PY
-vdot_command=(make emu CONFIG=MinimalConfig NUM_CORES=1 DISABLE_PERF=1
+vdot_command=(env "MAKEFILES=$VDOT_ROOT/configs/verilator_5_022.mk"
+  make emu CONFIG=MinimalConfig NUM_CORES=1 DISABLE_PERF=1
   DISABLE_ALWAYSDB=1 WITH_CHISELDB=0 WITH_CONSTANTIN=0 EMU_TRACE=fst
-  "VERILATOR=$VDOT_ROOT/scripts/lowmem-bin/verilator" -j1)
+  "CXX=${VDOT_HOST_CXX:-/usr/bin/g++}" "LINK=${VDOT_HOST_CXX:-/usr/bin/g++}"
+  "CC=${VDOT_HOST_CC:-/usr/bin/gcc}" AR=/usr/bin/ar
+  "OPT_FAST=${VDOT_CPP_OPT:--O2 -fno-tree-slp-vectorize}"
+  "VERILATOR=$VDOT_ROOT/scripts/lowmem-bin/verilator" "-j$vdot_cpp_jobs")
 printf '%q ' "${vdot_command[@]}" > "$vdot_report/command.txt"
 printf '\n' >> "$vdot_report/command.txt"
 set +e

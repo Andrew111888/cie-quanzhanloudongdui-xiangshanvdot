@@ -5,18 +5,23 @@ vdot_bin=${VDOT_VERILATOR_BIN:-/home/yh/chipyard/.conda-env/bin/verilator_bin}
 vdot_pool=${VDOT_NATIVE_HEAP_DIR:-$VDOT_ROOT/build/native-heap}
 vdot_allocator="$VDOT_ROOT/tools/sysroot/usr/lib/x86_64-linux-gnu/libvmmalloc.so.1"
 test -x "$vdot_bin"
+if [[ $# == 1 && "$1" == --version ]]; then
+  exec "$vdot_bin" --version
+fi
 vdot_depth=${VDOT_TRACE_DEPTH:-12}
 [[ "$vdot_depth" =~ ^[0-9]+$ ]] || exit 2
 vdot_opt=${VDOT_VERILATOR_OPT:-1}
 [[ "$vdot_opt" =~ ^[0-3]$ ]] || exit 2
+vdot_inline=${VDOT_INLINE_MULT:-2000}
+[[ "$vdot_inline" =~ ^(-1|[0-9]+)$ ]] || exit 2
 # Equivalent to the native executable invoked by Verilator's Perl launcher.
 # The allocator is scoped to model generation; it is not used by the emulator.
 ulimit -s unlimited
 if [[ "${VDOT_NATIVE_FILE_HEAP:-1}" == 0 ]]; then
-  exec "$vdot_bin" --trace-depth "$vdot_depth" "$@" "-O$vdot_opt"
+  exec "$vdot_bin" --trace-depth "$vdot_depth" "$@" "-O$vdot_opt" --inline-mult "$vdot_inline"
 fi
 test -f "$vdot_allocator"
 mkdir -p "$vdot_pool"
 exec env LD_PRELOAD="$vdot_allocator" VMMALLOC_POOL_DIR="$vdot_pool" \
   VMMALLOC_POOL_SIZE="${VDOT_NATIVE_HEAP_SIZE:-34359738368}" \
-  "$vdot_bin" --trace-depth "$vdot_depth" "$@" "-O$vdot_opt"
+  "$vdot_bin" --trace-depth "$vdot_depth" "$@" "-O$vdot_opt" --inline-mult "$vdot_inline"
