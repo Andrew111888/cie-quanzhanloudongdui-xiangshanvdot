@@ -9,7 +9,6 @@ patches.mkdir(exist_ok=True)
 projects = {
     'xiangshan': (root / 'third_party/XiangShan', [
         'src/main/scala/xiangshan/backend/fu/vector/Vdot.scala',
-        'src/test/scala/top/VdotSimConfig.scala',
     ]),
     'nemu': (root / 'third_party/NEMU', []),
 }

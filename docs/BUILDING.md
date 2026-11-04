@@ -60,6 +60,16 @@ bash scripts/build_emu.sh
 
 `scripts/lowmem-bin/mill` 直接调用固定 Mill 0.12.3 的主入口，限制构建工具自身的 JVM 堆为 384 MiB；实际硬件生成子进程仍通过 Makefile 的 `JVM_XMX` 参数配置。仅设置普通 Mill 启动脚本的 `JAVA_OPTS` 不能保证该主进程继承同样上限。
 
+本机普通 4500 MiB 堆仍在转换期间持续满载。已验证 JVM 的文件映射堆能够在 384 MiB 内存上限内校验 512 MiB 存活数据。本机当前尝试的完整命令为：
+
+```bash
+VDOT_JAVA_HEAP=8G \
+  VDOT_HEAP_BACKING_DIR="$PWD/build/jvm-heap" \
+  VDOT_BUILD_MEMORY_MAX=4800M bash scripts/build_emu.sh
+```
+
+该方式通过 `-XX:AllocateHeapAt` 在项目目录下创建临时堆映射，进程退出后 JVM 关闭临时文件。预留至少 9 GiB 磁盘空间；可能因页读写而降低构建速度。它只用于构建，不用于 RTL 性能计时。机制见 [OpenJDK 20 实现](https://github.com/openjdk/jdk20u/blob/master/src/hotspot/os/posix/os_posix.cpp) 与 [JVM 选项文档](https://docs.oracle.com/en/java/javase/11/tools/java.html)。完整全核生成是否通过仍以运行日志为准。
+
 可用环境变量显式指定配置和资源：
 
 ```bash
@@ -67,6 +77,6 @@ VDOT_CONFIG=MinimalConfig VDOT_JAVA_HEAP=4500m \
   VDOT_BUILD_MEMORY_MAX=5500M bash scripts/build_emu.sh
 ```
 
-`VdotSimConfig` 是失败实验的保留记录：软 PTW 缓冲访问曾触发空指针，处理后还暴露缩小 L3 导致的索引越界。它尚不能生成可运行仿真器，不作为推荐构建配置。当前继续验证原有 `MinimalConfig` 配合官方统计开关。
+此前的 `VdotSimConfig` 实验遇到软 PTW 缓冲空指针和缩小 L3 导致的索引越界，实验代码及临时 MemBlock 改动已撤回，失败日志与开发提交保留了经过。当前继续验证原有 `MinimalConfig` 配合官方统计开关。
 
 完整仿真器生成后，还需核对其 `--help`，补全固定版本的 RTL 运行、短窗口波形、真实 Difftest 和性能命令。不要根据 NEMU 结果替代这些待完成步骤。

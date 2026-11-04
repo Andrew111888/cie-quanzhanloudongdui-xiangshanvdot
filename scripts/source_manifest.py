@@ -18,6 +18,9 @@ def sha256(data):
 
 
 result = {'recorded_at_utc': datetime.now(timezone.utc).isoformat(), 'repositories': {}}
+project_head = subprocess.run(['git', '-C', str(root), 'rev-parse', 'HEAD'],
+                              text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+result['project_head'] = project_head.stdout.strip() if project_head.returncode == 0 else None
 for name in ('XiangShan', 'NEMU'):
     repo = root / 'third_party' / name
     changed = {}

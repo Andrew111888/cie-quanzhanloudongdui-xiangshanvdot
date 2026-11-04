@@ -73,33 +73,6 @@ index 27eb801..6edafc7 100644
 +  io.out.bits.ctrl.exceptionVec.get(ExceptionNO.illegalInstr) :=
 +    Mux(outIsDot, dotIllegal, mgu.io.out.illegal)
  }
-diff --git a/src/main/scala/xiangshan/mem/MemBlock.scala b/src/main/scala/xiangshan/mem/MemBlock.scala
-index 16f8837..d037847 100644
---- a/src/main/scala/xiangshan/mem/MemBlock.scala
-+++ b/src/main/scala/xiangshan/mem/MemBlock.scala
-@@ -674,7 +674,7 @@ class MemBlockInlinedImp(outer: MemBlockInlined) extends LazyModuleImp(outer)
-   val sfence = RegNext(RegNext(io.ooo_to_mem.sfence))
-   val tlbcsr = RegNext(RegNext(io.ooo_to_mem.tlbCsr))
-   private val ptw = outer.ptw.module
--  private val ptw_to_l2_buffer = outer.ptw_to_l2_buffer.module
-+  private val ptw_to_l2_buffer = Option(outer.ptw_to_l2_buffer).map(_.module)
-   private val l1d_to_l2_buffer = outer.l1d_to_l2_buffer.module
-   ptw.io.hartId := io.hartId
-   ptw.io.sfence <> sfence
-@@ -2101,12 +2101,12 @@ class MemBlockInlinedImp(outer: MemBlockInlined) extends LazyModuleImp(outer)
-     val leftResetTree = ResetGenNode(
-       Seq(
-         ModuleNode(ptw),
--        ModuleNode(ptw_to_l2_buffer),
-         ModuleNode(lsq),
-         ModuleNode(dtlb_st_tlb_st),
-         ModuleNode(dtlb_prefetch_tlb_prefetch),
-         ModuleNode(pmp)
-       )
-+      ++ ptw_to_l2_buffer.toSeq.map(ModuleNode(_))
-       ++ pmp_checkers.map(ModuleNode(_))
-       ++ (if (prefetcherOpt.isDefined) Seq(ModuleNode(prefetcherOpt.get)) else Nil)
-       ++ (if (l1PrefetcherOpt.isDefined) Seq(ModuleNode(l1PrefetcherOpt.get)) else Nil)
 diff --git a/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala b/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala
 new file mode 100644
 index 0000000..44136c9
@@ -145,28 +118,3 @@ index 0000000..44136c9
 +  }
 +  io.result := result
 +}
-diff --git a/src/test/scala/top/VdotSimConfig.scala b/src/test/scala/top/VdotSimConfig.scala
-new file mode 100644
-index 0000000..4a477f3
---- /dev/null
-+++ b/src/test/scala/top/VdotSimConfig.scala
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: MulanPSL-2.0
-+package top
-+
-+import org.chipsalliance.cde.config.Config
-+import system.SoCParamsKey
-+import xiangshan.XSTileKey
-+
-+/** Experimental simulation configuration. Keep MinimalConfig's cache and vector
-+  * execution topology; reduce L3 sets and use the soft page walker.
-+  * This configuration has not yet been validated by an elaboration or run.
-+  */
-+class VdotSimConfig(n: Int = 1) extends Config(
-+  new MinimalConfig(n).alter((site, here, up) => {
-+    case XSTileKey => up(XSTileKey).map(_.copy(softPTW = true))
-+    case SoCParamsKey => up(SoCParamsKey).copy(
-+      L3CacheParamsOpt = up(SoCParamsKey).L3CacheParamsOpt.map(_.copy(sets = 128))
-+    )
-+  })
-+)

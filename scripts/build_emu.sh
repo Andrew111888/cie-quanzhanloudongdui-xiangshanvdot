@@ -11,6 +11,10 @@ vdot_report="$VDOT_ROOT/reports/$vdot_unit"
 mkdir -p "$vdot_report"
 export PATH="$VDOT_ROOT/scripts/lowmem-bin:$PATH"
 export JAVA_TOOL_OPTIONS='-XX:ActiveProcessorCount=2 -XX:+UseSerialGC'
+if [[ -n "${VDOT_HEAP_BACKING_DIR:-}" ]]; then
+  mkdir -p "$VDOT_HEAP_BACKING_DIR"
+  export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -XX:AllocateHeapAt=\"$VDOT_HEAP_BACKING_DIR\""
+fi
 
 python3 "$VDOT_ROOT/scripts/source_manifest.py" "$vdot_report/source.json"
 free -b > "$vdot_report/memory-before.txt"

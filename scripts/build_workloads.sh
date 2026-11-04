@@ -8,7 +8,7 @@ try:
     ip = subprocess.check_output(['hostname', '-I'], text=True).split()[0]
 except (OSError, subprocess.CalledProcessError, IndexError):
     ip = 'IP-unavailable'
-identity = os.environ.get('VDOT_IDENTITY', os.environ.get('USER', 'participant'))
+identity = os.environ.get('VDOT_IDENTITY', '全栈漏洞队')
 target = pathlib.Path(os.environ['VDOT_ROOT']) / 'build/workloads/identity.h'
 target.write_text('#define VDOT_IDENTITY ' + json.dumps(identity) + '\n#define VDOT_IP ' + json.dumps(ip) + '\n')
 PY
