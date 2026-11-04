@@ -24,3 +24,17 @@ VDOT_WAVE_BEGIN=BEGIN VDOT_WAVE_END=END bash scripts/run_rtl.sh vadd_test
 ```
 
 BEGIN/END须用实际提交日志或首次波形确定的整数周期替换。波形时间戳不能直接当CPU周期，尤其在包含复位段时。需要验证目标指令是否重放或被冲刷、实际VIALU通路、结果写回值及最终提交；静态源代码定位不能代替这些证据。
+
+## 基线与vdot延迟定位
+
+`workloads/latency_probe.c` 提供一次等价基线和一次vdot，结果均为低32位8、高96位0。已有NEMU功能通过，只说明程序计算正确，不包含RTL周期结果。当前反汇编定位如下，重编译后必须重新核对：
+
+| 符号 | PC | 用途 |
+|---|---|---|
+| baseline_latency_begin | 0x800000ba | vwmul入口指令 |
+| baseline_latency_reduce | 0x800000ca | vwredsum入口指令 |
+| baseline_latency_end | 0x800000d2 | 基线结果存储；此前已恢复SEW=8 |
+| vdot_latency_begin | 0x800000e2 | vdot指令 |
+| vdot_latency_end | 0x800000e6 | vdot结果存储 |
+
+使用 `bash scripts/run_rtl.sh latency_probe`，需要波形时设置有效的VDOT_WAVE_BEGIN/END。按PC找到对应ROB标识，分别记录各算术指令的功能单元输入握手和结果有效周期。基线首个乘法握手至末次归约结果有效的区间包含中间配置与清零指令造成的等待，应标为该等价组合的计算路径延迟；vdot的输入握手至结果有效才是其功能单元执行延迟。另行报告两段指令的提交/结果存储边界和benchmark程序片段周期，不能混用这些指标。单次短程序没有吞吐测量意义，吞吐仍使用多次独立操作批次并说明循环和配置开销。

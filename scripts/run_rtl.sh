@@ -6,6 +6,7 @@ case "$vdot_workload" in
   vadd_test) vdot_marker=VADD_PASS ;;
   vdot_smoke|vdot_test) vdot_marker=VDOT_PASS ;;
   benchmark) vdot_marker=BENCH_PASS ;;
+  latency_probe) vdot_marker=LATENCY_PROBE_PASS ;;
   *) printf 'Unknown validation workload: %s\n' "$vdot_workload" >&2; exit 2 ;;
 esac
 vdot_emu="$NOOP_HOME/build/emu"
@@ -17,7 +18,7 @@ vdot_report="$VDOT_ROOT/reports/rtl-$vdot_workload-$vdot_run_id"
 mkdir -p "$vdot_report"
 vdot_command=("$vdot_emu" -i "$VDOT_ROOT/build/workloads/$vdot_workload.bin" \
   -F "$VDOT_ROOT/build/workloads/flash.bin" --ram-size=128MB \
-  "--diff=$vdot_reference" -C "${VDOT_MAX_CYCLES:-5000000}")
+  "--diff=$vdot_reference" --no-squash -C "${VDOT_MAX_CYCLES:-5000000}")
 if [[ -n "${VDOT_WAVE_BEGIN:-}" || -n "${VDOT_WAVE_END:-}" ]]; then
   [[ "${VDOT_WAVE_BEGIN:-}" =~ ^[0-9]+$ && "${VDOT_WAVE_END:-}" =~ ^[0-9]+$ ]] || exit 2
   vdot_command+=(--dump-wave-full -b "$VDOT_WAVE_BEGIN" -e "$VDOT_WAVE_END" \
@@ -39,3 +40,7 @@ fi
 printf '%s\n' "$vdot_status" > "$vdot_report/exit-status.txt"
 test "$vdot_status" == 0
 python3 "$VDOT_ROOT/scripts/check_run.py" "$vdot_report/run.log" "$vdot_marker"
+if ! rg -Fq 'Difftest enabled.' "$vdot_report/run.log"; then
+  printf 'Missing Difftest initialization evidence.\n' >&2
+  exit 1
+fi

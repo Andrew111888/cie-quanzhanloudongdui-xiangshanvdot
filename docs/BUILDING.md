@@ -50,6 +50,16 @@ bash scripts/build_nemu.sh reference
 
 输出位于 `build/nemu/reference/riscv64-nemu-interpreter-so`。`configs/` 保存当前使用的完整独立运行、参考库两份配置。两种配置不同，必须分别构建，不能将普通可执行程序误用为参考动态库。
 
+可以独立检查动态库ABI，确认其通过`init_v2/regcpy/memcpy/exec`实际执行vdot：
+
+```bash
+python3 scripts/check_reference_abi.py \
+  build/nemu/reference/riscv64-nemu-interpreter-so --expected-result 8
+bash scripts/build_fault_reference.sh
+```
+
+第二条命令将当前NEMU复制到隔离目录，仅对vdot结果最低位注入错误，打印错误库的独立路径；不会改动正常源码或参考库。用打印的路径再次运行ABI检查并传入`--expected-result 9`，再执行`scripts/run_fault_check.sh <错误库路径>`检验真正的RTL向量比较器。ABI检查只包含REF，故障库构建成功也不代表RTL故障注入已通过。完整判据见[DIFFTEST_CHECKS.md](DIFFTEST_CHECKS.md)。
+
 ## 香山全核构建
 
 ```bash
@@ -87,4 +97,14 @@ VDOT_CONFIG=MinimalConfig VDOT_JAVA_HEAP=4500m \
 
 此前的 `VdotSimConfig` 实验遇到软 PTW 缓冲空指针和缩小 L3 导致的索引越界，实验代码及临时 MemBlock 改动已撤回，失败日志与开发提交保留了经过。当前继续验证原有 `MinimalConfig` 配合官方统计开关。
 
-完整仿真器生成后，还需核对其 `--help`，补全固定版本的 RTL 运行、短窗口波形、真实 Difftest 和性能命令。不要根据 NEMU 结果替代这些待完成步骤。
+已有SystemVerilog、SRAM模型和Difftest辅助文件时，可用以下开发恢复入口，只重启原生模型构建：
+
+```bash
+bash scripts/resume_model_build.sh
+```
+
+它会启动独立用户systemd服务，终端或聊天连接断开后仍可继续运行，并在打印的报告目录保存服务名、构建输入摘要、命令、日志、退出状态和时间。用 `systemctl --user status <报告中的服务名>` 查看实际状态；`BUILD_STARTED`只表示已启动，必须出现 `MODEL_BUILD_COMPLETE`、退出码0和可执行的`build/emu`才算成功。此恢复入口依赖现有生成文件，不能替代干净检出复现。
+
+在同一构建之后继续本地验证，可运行`bash scripts/validate_rtl_when_ready.sh <构建报告目录> <错误库路径>`。它等待指定构建的成功记录与校验值，按序执行功能、差分、故障注入恢复、性能和初始波形运行，首个失败立即退出；实际波形分析和完整复现不由该队列自动判定通过。两个后台服务均不执行推送、上传或比赛提交。
+
+完整仿真器生成后，还需核对其 `--help`，实际验证 `scripts/run_rtl.sh` 的运行参数、短窗口波形、真实Difftest和性能命令。不要根据NEMU结果替代这些待完成步骤。

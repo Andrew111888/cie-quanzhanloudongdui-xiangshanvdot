@@ -6,7 +6,4 @@
 /private/
 __pycache__/
 *.pyc
-/reports/*.log
-/reports/*-time.txt
-/reports/*.vcd
-/reports/*.fst
+/reports/
