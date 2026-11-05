@@ -19,15 +19,23 @@
 
 原核emu SHA256为b887f745a2c04b9bc2db4e9b8d0d47125068dcf69772a403b5e9677a01b1a878，原版NEMU参考库为88c6eb01871691981e2e5e095e337239acad63d006489ace4248fd61abb513de。该二者仅证明标准向量原核环境，不具有vdot实现。
 
-## vdot扩展核：当前在构建
+## vdot扩展核：构建通过，完整验收进行中
 
 在源提交3424efe下应用两个固定补丁，重放后4个香山文件和5个NEMU文件与补丁一致。Python4项、独立Chisel/Verilator数据通路、全部裸机工作负载构建及NEMU的vadd、vdot smoke/完整随机、latency、pipeline、register、benchmark功能均已通过，证据在独立目录reports/extension-preparation/。
 
 重新构建的扩展NEMU参考库SHA256为baa2f11e3190d4dd3e7d6107c46ca6795c9b574978a070fdd7bdfafaf8372225；不能将开发目录83fd…的库摘要套用到新二进制。
 
-原核生成目录已移动到build/pristine-generated，扩展核从空的XiangShan/build目录生成。当前构建报告为reports/vdot-build-20261105T050232Z-3720179/，命令显式VDOT_COMPILE_MEMORY_MAX=7G，其余配置为BUILDING.md的单核MinimalConfig和FST。
+原核生成目录已移动到build/pristine-generated，扩展核从空的XiangShan/build目录生成。构建报告为reports/vdot-build-20261105T050232Z-3720179/，命令显式VDOT_COMPILE_MEMORY_MAX=7G，其余配置为BUILDING.md的单核MinimalConfig和FST。该构建已正常完成，BUILD_COMPLETE、compile退出0及模拟器摘要重验均通过；新emu SHA256为dd1f0323f96d567e26e9ba25336db5f9cbcc3a9ebb55821665110fc993e30e31。
 
-主工程后台构建为vdot-extension-clean-20261105T0502.service，入口日志reports/extension-clean-driver.log；全量验证等待服务为vdot-extension-acceptance-20261105T0510.service。排队不表示通过。构建完成并通过输入摘要后，verify_reproduction.sh才执行真实差分、故障注入恢复、完整随机、压力、边界寄存器、性能与波形分析。
+| 宿主构建阶段 | 实际墙钟耗时 | 最大RSS（KiB） | 退出码 |
+|---|---:|---:|---:|
+| Chisel/CHIRRTL | 5分38.35秒 | 4535272 | 0 |
+| firtool | 6分02.43秒 | 6093400 | 0 |
+| Verilator模型生成及C++编译/链接 | 1小时19分36秒 | 6003044 | 0 |
+
+上述为各阶段/usr/bin/time原始计量，包含宿主I/O等开销，不是处理器指令延迟。扩展核FIR SHA256为9aca2ac7704e2e6a28dbd62cfdb81e6575686f45d16ebaa69ebf9bf94dc8d77e。rtl/中的生成模块与该构建逐字节对应，完整平台RTL仍由脚本从固定源码重新生成。
+
+主工程后台构建vdot-extension-clean-20261105T0502.service已成功结束，入口日志reports/extension-clean-driver.log。完整验证服务vdot-extension-acceptance-20261105T0510.service已启动，目录reports/acceptance-20261105T063406Z-3723760/；verify_reproduction.sh正在执行真实差分、故障注入恢复、完整随机、压力、边界寄存器、性能与波形分析。构建通过不等于完整验收通过，最终以acceptance.json及源摘要为准。
 
 ## 真实失败与修复
 

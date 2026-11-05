@@ -1,0 +1,22 @@
+{
+  "schema": "generated-rtl/v1",
+  "build_status": "completed",
+  "tested_project_head": "3424efe852a1b4e2b26fa3efc25b233d94aec9a4",
+  "upstream_xiangshan_head": "7b16188f7f18a97be69c9b1a2dae8a446eec3b47",
+  "firtool": "1.62.1",
+  "build_report": "reports/vdot-build-20261105T050232Z-3720179",
+  "fir_sha256": "9aca2ac7704e2e6a28dbd62cfdb81e6575686f45d16ebaa69ebf9bf94dc8d77e",
+  "xiangshan_patch_sha256": "48acd77d03bfd0badb83b3eeb0291000fbe38b88f25dc999b0c84532f91499a6",
+  "modules": [
+    {
+      "file": "VdotDatapath.sv",
+      "generated_path": "third_party/XiangShan/build/rtl/VdotDatapath.sv",
+      "sha256": "868ca4b2f21e499a37c14161c72e0776817086eb73a27354102722008de20b89"
+    },
+    {
+      "file": "VIMacU.sv",
+      "generated_path": "third_party/XiangShan/build/rtl/VIMacU.sv",
+      "sha256": "7a3a577e40340ec16162afa9d453756879729d749e4966e6d9f524784482ba74"
+    }
+  ]
+}

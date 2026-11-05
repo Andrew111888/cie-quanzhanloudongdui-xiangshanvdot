@@ -1,0 +1,7 @@
+# 本次完整构建生成的RTL模块
+
+这两个SystemVerilog文件直接复制自独立检出的完整扩展核构建，未手工修改。provenance.json记录构建源码、上游版本、FIR与补丁摘要，以及每个模块的SHA256。实际验收结果由docs/FINAL_RESULTS.md（完整验收通过后生成）和发布包source-binding.json关联，模块文件存在本身不代表测试通过。
+
+VdotDatapath.sv是新增的两级8路有符号点积算术模块。VIMacU.sv是实际接入的向量乘法包装器，依赖固定平台中其它生成模块，不能仅凭这两个文件独立仿真整核。权威修改源为patches/xiangshan.patch及其中的Chisel源码；完整平台RTL使用scripts/build_emu.sh重新生成。
+
+源码和依赖许可见根目录LICENSE与NOTICE.md；保留生成器原始文件头。生成文件用于检查实际结构，不替代时序、综合、面积或功耗报告。

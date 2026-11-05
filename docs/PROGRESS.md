@@ -23,7 +23,7 @@
 
 ## 当前正在补齐的验收
 
-1. **干净检出全流程。** 未修改原核已完成完整构建和vadd真实差分/FST，保存产物摘要见CLEAN_REPRODUCTION.md。独立目录已应用vdot补丁，并从空的硬件生成目录重建，源码基于3424efe；Python、数据通路及7类NEMU工作负载均通过。当前服务vdot-extension-clean-20261105T0502.service，日志reports/extension-clean-driver.log；Chisel、firtool和Verilator模型生成已完成，正在编译C++对象文件。全量验收等待服务vdot-extension-acceptance-20261105T0510.service，构建失败即停止。尚不能把扩展核干净复现标为通过。
+1. **干净检出全流程。** 未修改原核已完成完整构建和vadd真实差分/FST，保存产物摘要见CLEAN_REPRODUCTION.md。独立目录已应用vdot补丁，并从空的硬件生成目录重建，源码基于3424efe；Python、数据通路及7类NEMU工作负载均通过。扩展核完整构建已成功结束，日志reports/extension-clean-driver.log；新emu SHA256为dd1f0323f96d567e26e9ba25336db5f9cbcc3a9ebb55821665110fc993e30e31。全量验收已在独立目录reports/acceptance-20261105T063406Z-3723760/运行，服务vdot-extension-acceptance-20261105T0510.service。尚不能把扩展核完整验收标为通过。
 2. **正式材料。** 三份PDF开发审阅稿已生成并目视检查，位于output/pdf/；阶段一已完成62.7秒的实际原核vadd/FST录屏，命令退出0并复核完整命令和画面列宽，目录output/video-stage1-reviewed-20261105/；阶段二/三脚本已准备但尚未正式录制。最终证据索引、压缩包、校验清单和双入口提交仍待完成；所有材料要与最终源码重新核对。
 3. **明确保留的覆盖边界。** 观察到的是完成FU输出后、等待ROB提交期间被冲刷的vdot；未观察到功能单元输出端反压或redirect恰在两级算术内部的情形，不将这些具体时序计为覆盖。标准完整压力运行通过，28000周期的补充诊断采集故意截断，不作为功能PASS。
 
