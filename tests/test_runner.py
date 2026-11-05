@@ -41,8 +41,12 @@ class RunnerTest(unittest.TestCase):
             for relative in ('build/workloads/vadd_test.bin', 'build/workloads/flash.bin',
                              'build/nemu/reference/riscv64-nemu-interpreter-so'):
                 (root / relative).write_bytes(b'test stub\n')
+            # Keep this fixture on its own fake artifacts even when the caller
+            # selects a real simulator/reference for a surrounding regression.
+            environment = dict(os.environ, VDOT_EMU_PATH=str(emu),
+                               VDOT_REF_SO=str(root / 'build/nemu/reference/riscv64-nemu-interpreter-so'))
             process = subprocess.Popen(['/bin/bash', str(runner), 'vadd_test'],
-                                       env=os.environ.copy(), stdout=subprocess.PIPE,
+                                       env=environment, stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE, text=True)
             try:
                 deadline = time.monotonic() + 10
