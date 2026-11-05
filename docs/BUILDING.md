@@ -1,6 +1,6 @@
 # 构建与运行记录
 
-本文为开发中的复现入口。尚未完成干净检出复现，也尚未成功运行香山整核，不能据此标记三阶段完成。
+本文为开发中的复现入口。已成功运行香山整核，完成vadd、vdot定向、真实向量差分反例与恢复、压力和性能测试；干净检出全流程正在单独复现，不能据此提前标记三阶段交付完成。实际结果见 `PROGRESS.md`。
 
 ## 固定源码
 
@@ -68,13 +68,13 @@ bash scripts/build_emu.sh
 
 当前脚本按阶段执行：Chisel 仅生成 CHIRRTL 并写辅助文件，退出 Java 后独立运行 firtool，再生成 SRAM 模型、处理仿真断言和构建 Verilator 模型。默认单核 `MinimalConfig`，关闭仿真统计/数据库，Difftest 保持启用，带 FST 支持。
 
-C++构建明确使用系统GCC/G++及`OPT_FAST=-O2 -fno-tree-slp-vectorize`。固定Difftest默认的`-fno-slp-vectorize`属于另一编译器的选项，会被当前GCC拒绝。固定Verilator5.022还需要`configs/verilator_5_022_trace.h`，使Difftest的通用trace指针名称对应实际FST/VCD具体类；头文件对版本精确检查，不改变比较器。通过`MAKEFILES=configs/verilator_5_022.mk`仅将它预包含到四个使用波形接口的用户对象，不能全局添加到模型对象，否则会干扰GCC的PCH加载。实际`VSimTop.o/emu.o/waveform.o/verilator.o`目标已编译通过；完整链接及波形仍需后续验证。
+C++构建明确使用系统GCC/G++及`OPT_FAST=-O2 -fno-tree-slp-vectorize`。固定Difftest默认的`-fno-slp-vectorize`属于另一编译器的选项，会被当前GCC拒绝。固定Verilator5.022还需要`configs/verilator_5_022_trace.h`，使Difftest的通用trace指针名称对应实际FST/VCD具体类；头文件对版本精确检查，不改变比较器。通过`MAKEFILES=configs/verilator_5_022.mk`仅将它预包含到四个使用波形接口的用户对象，不能全局添加到模型对象，否则会干扰GCC的PCH加载。实际完整链接与FST读写均已通过，兼容头未修改checker。
 
 C++阶段默认两个编译任务，总内存仍受5500MiB上限约束。可用`VDOT_CPP_JOBS=1`降低并行度。JVM及firtool阶段仍各自串行执行，与C++编译分离。
 
 默认 Java 堆8GiB、Chisel进程组上限4800MiB、firtool上限5500MiB、模型编译上限5500MiB。每阶段独立记录命令、日志、退出状态和资源，最后检查源码摘要未漂移；该方式依赖 Linux 用户 systemd 会话。整套脚本仍需完整成功运行和干净环境复现后才能标记可复现。
 
-`scripts/lowmem-bin/mill` 直接调用固定 Mill 0.12.3 的主入口，限制构建工具自身的 JVM 堆为 384 MiB；实际硬件生成子进程仍通过 Makefile 的 `JVM_XMX` 参数配置。仅设置普通 Mill 启动脚本的 `JAVA_OPTS` 不能保证该主进程继承同样上限。
+`scripts/lowmem-bin/mill`直接调用固定Mill 0.12.3主入口，并在新检出中先创建out锁目录。构建工具自身默认堆为2GiB，可用VDOT_MILL_HEAP显式覆盖；384MiB只在已有编译缓存时跑通过，干净检出编译315个Rocket Chip源码会Java heap OOM，2GiB同目标已实际通过。硬件生成子进程另由-Djvm-xmx参数配置，不能将子进程8GiB误当成Mill自身的上限。
 
 本机普通 4500 MiB 堆在转换期间持续满载。已验证 JVM 的文件映射堆能够在 384 MiB 内存上限内校验 512 MiB 存活数据。脚本默认启用该方式，可显式指定：
 
@@ -86,9 +86,9 @@ VDOT_JAVA_HEAP=8G \
 
 该方式通过 `-XX:AllocateHeapAt` 在项目目录下创建临时堆映射，进程退出后 JVM 关闭临时文件。可能因页读写而降低构建速度。它只用于构建，不用于 RTL 性能计时。机制见 [OpenJDK 20 实现](https://github.com/openjdk/jdk20u/blob/master/src/hotspot/os/posix/os_posix.cpp) 与 [JVM 选项文档](https://docs.oracle.com/en/java/javase/11/tools/java.html)。
 
-独立 firtool 1.62.1 已成功生成 SystemVerilog：5分46秒、最大RSS 5359524KiB，见 `reports/firtool-standalone-time.txt`。随后带 FST 的 Verilator 模型生成仍超过5200MiB，当前测试原生文件映射分配库。
+独立firtool 1.62.1已成功生成SystemVerilog：5分46秒、最大RSS5359524KiB，见 `reports/firtool-standalone-time.txt`。随后带FST的Verilator在常规分配器下超过5200MiB；改用原生文件映射分配库后已完成模型生成及C++链接。这是开发恢复路线的实际结果，新的完整分阶段脚本仍在干净目录验证。
 
-`scripts/lowmem-bin/verilator` 仅对模型生成的 Verilator 5.022 原生进程使用 `libvmmalloc`，默认临时池32GiB，退出后释放，仿真器运行不加载该库。小规模测试在384MiB限制下校验512MiB数据通过。工具库来自 Debian 官方 `libvmmalloc1=1.8-2`，本地安装入口为 `bash scripts/install_memory_helper.sh`，带固定SHA256校验，不修改系统目录。机制见 [官方手册](https://pmem.io/vmem/manpages/linux/master/libvmmalloc/libvmmalloc.7.html) 和 [Debian包信息](https://packages.debian.org/bullseye/libvmmalloc1)。整核模型是否生成成功仍待运行证据。
+`scripts/lowmem-bin/verilator` 仅对模型生成的Verilator 5.022原生进程使用 `libvmmalloc`，默认临时池32GiB，退出后释放，仿真器运行不加载该库。小规模测试在384MiB限制下校验512MiB数据通过；整核生成成功证据为 `reports/model-resume-20261104T155853Z-3297719/`，该次make随后因C++选项不兼容失败，经修复后在 `reports/model-resume-20261104T170533Z-3349034/` 完成链接。工具库来自Debian官方 `libvmmalloc1=1.8-2`，本地安装入口为 `bash scripts/install_memory_helper.sh`，带固定SHA256校验，不修改系统目录。机制见 [官方手册](https://pmem.io/vmem/manpages/linux/master/libvmmalloc/libvmmalloc.7.html) 和 [Debian包信息](https://packages.debian.org/bullseye/libvmmalloc1)。
 
 分阶段默认需要约33GiB临时堆空间，另给RTL、C++和对象文件保留充足空间。默认追踪12层层级、生成器优化等级O1，均只作用于宿主模型构建，实际波形层级仍需验证。`VDOT_VERILATOR_BIN` 可覆盖本机原生 Verilator 路径，`VDOT_NATIVE_FILE_HEAP=0` 可在有足够内存时禁用原生文件映射库。不要把构建时间计入处理器性能测量。
 
@@ -109,8 +109,16 @@ VDOT_CONFIG=MinimalConfig VDOT_JAVA_HEAP=4500m \
 bash scripts/resume_model_build.sh
 ```
 
+若Chisel已成功而firtool被停止，可从原构建报告恢复：
+
+```bash
+bash scripts/build_emu.sh --resume-fir /absolute/path/to/prior-build-report
+```
+
+恢复前会核对原Chisel退出0、平台与资源仓库身份、项目输入、单核配置及完整FIR的SHA256；仅允许恢复入口自身的脚本修订，不允许其它输入漂移。新报告以chisel-reuse.json引用已完成阶段，不伪造一次新的Chisel运行。篡改FIR摘要的反例已被实际拒绝；恢复仍须完成firtool、原生编译、最终源码复核和真实运行才能验收。
+
 它会启动独立用户systemd服务，终端或聊天连接断开后仍可继续运行，并在打印的报告目录保存服务名、构建输入摘要、命令、日志、退出状态和时间。用 `systemctl --user status <报告中的服务名>` 查看实际状态；`BUILD_STARTED`只表示已启动，必须出现 `MODEL_BUILD_COMPLETE`、退出码0和可执行的`build/emu`才算成功。此恢复入口依赖现有生成文件，不能替代干净检出复现。
 
 在同一构建之后继续本地验证，可运行`bash scripts/validate_rtl_when_ready.sh <构建报告目录> <错误库路径>`。它等待指定构建的成功记录与校验值，按序执行功能、差分、故障注入恢复、性能和初始波形运行，首个失败立即退出；实际波形分析和完整复现不由该队列自动判定通过。两个后台服务均不执行推送、上传或比赛提交。
 
-完整仿真器生成后，还需核对其 `--help`，实际验证 `scripts/run_rtl.sh` 的运行参数、短窗口波形、真实Difftest和性能命令。不要根据NEMU结果替代这些待完成步骤。
+现有emu已实际验证 `scripts/run_rtl.sh` 的运行参数、短窗口FST、真实Difftest及性能命令。新的独立检出仍须完成同样的构建与验证，不能以开发目录的可运行二进制替代最终复现。

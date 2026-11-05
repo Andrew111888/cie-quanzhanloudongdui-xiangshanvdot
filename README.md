@@ -4,11 +4,11 @@
 
 赛题：[官方说明](https://rv.cie.org.cn/direction?id=8)。指令结果位宽等赛题未明确事项采用的暂定解释见 [contract.json](contract.json) 和 [待确认问题](docs/QUESTIONS.md)，尚未获得赛题方确认。
 
-当前已完成数据通路级 Verilator 测试和 NEMU 独立运行测试；还没有成功生成全核仿真器，阶段一波形、整核 vdot、RTL/NEMU 协同仿真和 RTL 性能对比均未完成。不得将这些工作标记为通过。
+全核仿真器现已成功构建。标准vadd、vdot定向整核、真实RTL/NEMU差分、向量状态单比特故障注入及恢复、1664条流水线压力测试均已取得实际通过证据。波形确认vdot功能单元输入至结果为2周期；60条RTL性能样本中，等价程序片段的中位数加速比为2.607–4.634。边界与原始证据见[阶段一波形](docs/STAGE1_WAVEFORM.md)、[差分验证](docs/DIFFTEST_CHECKS.md)、[性能报告](docs/PERFORMANCE.md)。
 
-正常与单比特故障参考库均已通过独立Difftest ABI烟测，分别产生8和9；该检查只执行NEMU，不能替代RTL差分。全核构建及构建成功后的验证队列正在本机独立服务中运行，实时进度与服务名见[开发进度](docs/PROGRESS.md)。
+完整1000组随机输入已在修复驱动后通过整核差分，包括4000次合法随机vdot和1000次等价基线；退出码与4项输入校验均正确。另有波形证明3条已写回的错路vdot被分支冲刷且未提交。独立干净检出的全流程复现、三阶段录屏和最终打包仍在推进，尚未满足完整提交条件。当前服务及证据入口见[开发进度](docs/PROGRESS.md)。
 
-`vdot_vstart_probe` 是独立探测程序：它尝试在非零 `vstart` 下执行普通 `vmul`。固定版本的 NEMU 原有实现对此报非法指令，因此该探测在 NEMU 中停止；这不是 vdot 主回归的通过项，也不单独证明 NEMU 违反规范。香山整核尚未构建，不能据此判断两者行为是否一致，待可运行原版整核后再比较。
+`vdot_vstart_probe` 是独立探测程序：它尝试在非零 `vstart` 下执行普通 `vmul`。固定版本NEMU原有实现对此报非法指令；该探测不属于vdot主回归的通过项，也不单独证明规范问题。vdot自身的非零vstart非法行为已由整核差分检查。
 
 全核构建继续采用官方 `MinimalConfig`，通过 `DISABLE_PERF=1 DISABLE_ALWAYSDB=1` 减少仿真统计与数据库逻辑。此前的 `VdotSimConfig` 精简实验还遇到软 PTW 和缓存索引问题，不作为可用配置。
 

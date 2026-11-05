@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="444" viewBox="0 0 1140 444">
+<rect width="100%" height="100%" fill="#fff"/>
+<style>text{font-family:DejaVu Sans,Arial,sans-serif;fill:#182b49;font-size:14px}.small{font-size:12px;fill:#52647d}</style>
+<text x="24" y="30" style="font-size:20px;font-weight:bold">vadd.vv: committed instruction timeline</text>
+<text x="24" y="54" class="small">Real FST handshakes; sampled before rising backend clock edges. Dots are events, not continuous signal levels.</text>
+<line x1="340.0" x2="340.0" y1="78" y2="398" stroke="#e6ebf2"/>
+<text x="340.0" y="420" text-anchor="middle" class="small">6425</text>
+<line x1="363.2258064516129" x2="363.2258064516129" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="386.4516129032258" x2="386.4516129032258" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="409.6774193548387" x2="409.6774193548387" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="432.9032258064516" x2="432.9032258064516" y1="78" y2="398" stroke="#e6ebf2"/>
+<text x="432.9032258064516" y="420" text-anchor="middle" class="small">6429</text>
+<line x1="456.1290322580645" x2="456.1290322580645" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="479.35483870967744" x2="479.35483870967744" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="502.5806451612903" x2="502.5806451612903" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="525.8064516129032" x2="525.8064516129032" y1="78" y2="398" stroke="#e6ebf2"/>
+<text x="525.8064516129032" y="420" text-anchor="middle" class="small">6433</text>
+<line x1="549.0322580645161" x2="549.0322580645161" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="572.258064516129" x2="572.258064516129" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="595.483870967742" x2="595.483870967742" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="618.7096774193549" x2="618.7096774193549" y1="78" y2="398" stroke="#e6ebf2"/>
+<text x="618.7096774193549" y="420" text-anchor="middle" class="small">6437</text>
+<line x1="641.9354838709678" x2="641.9354838709678" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="665.1612903225806" x2="665.1612903225806" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="688.3870967741935" x2="688.3870967741935" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="711.6129032258065" x2="711.6129032258065" y1="78" y2="398" stroke="#e6ebf2"/>
+<text x="711.6129032258065" y="420" text-anchor="middle" class="small">6441</text>
+<line x1="734.8387096774193" x2="734.8387096774193" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="758.0645161290323" x2="758.0645161290323" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="781.2903225806451" x2="781.2903225806451" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="804.516129032258" x2="804.516129032258" y1="78" y2="398" stroke="#e6ebf2"/>
+<text x="804.516129032258" y="420" text-anchor="middle" class="small">6445</text>
+<line x1="827.741935483871" x2="827.741935483871" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="850.9677419354839" x2="850.9677419354839" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="874.1935483870968" x2="874.1935483870968" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="897.4193548387096" x2="897.4193548387096" y1="78" y2="398" stroke="#e6ebf2"/>
+<text x="897.4193548387096" y="420" text-anchor="middle" class="small">6449</text>
+<line x1="920.6451612903226" x2="920.6451612903226" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="943.8709677419355" x2="943.8709677419355" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="967.0967741935484" x2="967.0967741935484" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="990.3225806451612" x2="990.3225806451612" y1="78" y2="398" stroke="#e6ebf2"/>
+<text x="990.3225806451612" y="420" text-anchor="middle" class="small">6453</text>
+<line x1="1013.5483870967741" x2="1013.5483870967741" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="1036.774193548387" x2="1036.774193548387" y1="78" y2="398" stroke="#e6ebf2"/>
+<line x1="1060.0" x2="1060.0" y1="78" y2="398" stroke="#e6ebf2"/>
+<text x="1060.0" y="420" text-anchor="middle" class="small">6456</text>
+<text x="24" y="101">Decode</text>
+<circle cx="340.0" cy="96" r="6" fill="#2563a6"/>
+<text x="350.0" y="86" text-anchor="start" class="small">edge 6425: PC 0x80000118</text>
+<text x="24" y="139">Rename</text>
+<circle cx="386.4516129032258" cy="134" r="6" fill="#2563a6"/>
+<text x="396.4516129032258" y="124" text-anchor="start" class="small">edge 6427: R=(1,18), P=51</text>
+<text x="24" y="177">Issue</text>
+<circle cx="920.6451612903226" cy="172" r="6" fill="#2563a6"/>
+<text x="930.6451612903226" y="162" text-anchor="start" class="small">edge 6450: R=(1,18), P=51</text>
+<text x="24" y="215">VialuFix input</text>
+<circle cx="990.3225806451612" cy="210" r="6" fill="#2563a6"/>
+<text x="980.3225806451612" y="200" text-anchor="end" class="small">edge 6453: R=(1,18), P=51</text>
+<text x="24" y="253">VialuFix output</text>
+<circle cx="1013.5483870967741" cy="248" r="6" fill="#2563a6"/>
+<text x="1003.5483870967741" y="238" text-anchor="end" class="small">edge 6454: R=(1,18), P=51</text>
+<text x="24" y="291">Writeback</text>
+<circle cx="1013.5483870967741" cy="286" r="6" fill="#2563a6"/>
+<text x="1003.5483870967741" y="276" text-anchor="end" class="small">edge 6454: R=(1,18), P=51</text>
+<text x="24" y="329">VF register write</text>
+<circle cx="1013.5483870967741" cy="324" r="6" fill="#2563a6"/>
+<text x="1003.5483870967741" y="314" text-anchor="end" class="small">edge 6454: R=(1,18), P=51</text>
+<text x="24" y="367">ROB commit</text>
+<circle cx="1060.0" cy="362" r="6" fill="#2563a6"/>
+<text x="1050.0" y="352" text-anchor="end" class="small">edge 6456: R=(1,18), P=51</text>
+</svg>

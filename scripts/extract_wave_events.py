@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+from collections import Counter
 
 parser = argparse.ArgumentParser()
 parser.add_argument('fst', type=Path)
@@ -103,6 +104,8 @@ def select(signal):
 
 
 events = []
+stalls = Counter()
+vdot_frontend_stalls = Counter()
 state = {}
 changes = {}
 edge = 0
@@ -122,6 +125,12 @@ def finish_timestamp():
         if state.get(reset) == 0:
             for group in groups.values():
                 data = values(group)
+                if data.get('valid') == 1 and data.get('ready') == 0:
+                    stalls[group['kind'] + ':' + group['source']] += 1
+                    decoded_dot = group['kind'] == 'decode' and data.get('instr') is not None and data['instr'] & 0xfc00707f == 0x0000000b
+                    renamed_dot = group['kind'] == 'rename' and data.get('vecwen') == 1 and data.get('op') == 0x100
+                    if decoded_dot or renamed_dot:
+                        vdot_frontend_stalls[group['kind'] + ':' + group['source']] += 1
                 if data.get('valid') != 1 or ('ready' in data and data['ready'] != 1):
                     continue
                 kind = group['kind']
@@ -194,7 +203,9 @@ metadata = {'fst': str(args.fst.resolve()),
             'fst_sha256': hashlib.sha256(args.fst.read_bytes()).hexdigest(),
             'timescale': ' '.join(timescale), 'sampling': 'before rising backend clock edge',
             'clock': backend + '.clock' if backend + '.clock' in clock_codes else 'TOP.clock',
-            'edges': edge, 'event_count': len(events), 'selected_signals': len(selected)}
+            'edges': edge, 'event_count': len(events), 'selected_signals': len(selected),
+            'valid_not_ready_cycles_by_interface': dict(sorted(stalls.items())),
+            'vdot_frontend_valid_not_ready_cycles_by_interface': dict(sorted(vdot_frontend_stalls.items()))}
 (args.output / 'metadata.json').write_text(json.dumps(metadata, indent=2) + '\n')
 (args.output / 'signals.json').write_text(json.dumps(list(selected.values()), indent=2) + '\n')
 (args.output / 'events.json').write_text(json.dumps(events, indent=2) + '\n')

@@ -159,7 +159,8 @@ labels = {'decode': 'Decode', 'rename': 'Rename', 'issue': 'Issue',
 for kind, label in labels.items():
     event = require_one([e for e in vadd['events'] if e['kind'] == kind], label)
     vadd_rows.append((label, event['edge'], '#2563a6',
-                      'R=(1,18), P=51' if kind != 'decode' else 'PC 0x80000118'))
+                      f'R=({vadd["rob_flag"]},{vadd["rob_value"]}), P={vadd_pairs[0]["pdest"]}'
+                      if kind != 'decode' else f'PC {vadd["pc"]:#x}'))
 diagram(args.output / 'vadd-timeline.svg', 'vadd.vv: committed instruction timeline', vadd_rows)
 latency_rows = []
 for name, ps, color in [('vwmul', mul_pairs, '#217a59'), ('vwredsum', red_pairs, '#217a59'), ('vdot', dot_pairs, '#a64b26')]:
