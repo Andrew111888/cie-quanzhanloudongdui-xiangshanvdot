@@ -27,7 +27,7 @@ python3 scripts/bind_evidence.py /absolute/path/to/completed-acceptance \
 bash scripts/render_reports.sh --binding reports/final-source-binding.json
 ```
 
-PDF入口需要ReportLab，本机已验证4.4.9；版面复核使用Poppler和pypdf 6.10.0。启动脚本依次使用VDOT_PDF_PYTHON、已有系统Python或已安装的Codex依赖环境，不修改系统Python。其他机器可在独立Python虚拟环境安装ReportLab并设置VDOT_PDF_PYTHON。还需要DejaVu和Droid Sans Fallback字体、ImageMagick的SVG渲染。没有binding参数时仅生成标注待完成项的开发审阅稿；正式版写入output/pdf-release，须重新渲染并目视检查所有页。
+PDF入口需要ReportLab与pypdf，本机已验证4.4.9和6.10.0；版面复核使用Poppler。启动脚本使用VDOT_PDF_PYTHON指定的Python，未指定时使用系统Python。其他机器可在独立Python虚拟环境安装ReportLab和pypdf后设置VDOT_PDF_PYTHON。还需要DejaVu和Droid Sans Fallback字体、ImageMagick的SVG渲染。没有binding参数时仅生成标注待完成项的开发审阅稿；正式版写入output/pdf-release，须重新渲染并目视检查所有页。
 
 录屏依赖和隔离显示方式见VIDEO_PLAN.md。视频、脚本、终端日志、实际退出码、源码前后清单与MP4参数一起保存；必须检查完整播放/抽帧、可读性和源摘要。工具预检短片不作为赛题视频。
 
@@ -47,3 +47,5 @@ python3 scripts/prepare_encrypted_submission.py --packages output/submission-pac
 ```
 
 只将生成的submission.asc放入官方脚本指定的赛题/队伍目录。提交前再次核对所有材料、仓库提交与阶段完成情况；上传与加密准备是不同步骤，不能以ZIP或密文存在推定官网已接收。
+
+仓库及材料链接统一使用 https://github.com/Andrew111888/cie2026quanzhanloudongduixiangshanvdot 。正式PDF元数据仅保留作者全栈漏洞队，其余Info字段及XMP清除。重新发布可通过render_reports.py的--output和package_submission.py的--pdf-dir指定新的报告目录，保留历史报告；--submission-checklist和--workflow-receipt将当前核对清单、提交信息放入四类ZIP。

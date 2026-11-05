@@ -15,6 +15,9 @@ import zipfile
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--binding', type=Path, required=True)
+parser.add_argument('--pdf-dir', type=Path, help='Directory containing final PDFs and reports-manifest.json')
+parser.add_argument('--submission-checklist', type=Path, help='Reviewed requirement mapping to include in every archive')
+parser.add_argument('--workflow-receipt', type=Path, help='Current external submission metadata to include in every archive')
 parser.add_argument('--stage1-video', type=Path, required=True)
 parser.add_argument('--stage2-video', type=Path, required=True)
 parser.add_argument('--stage3-video', type=Path, required=True)
@@ -33,7 +36,7 @@ acceptance_path = Path(binding['acceptance'])
 acceptance = json.loads((acceptance_path / 'acceptance.json').read_text())
 if acceptance['status'] != 'passed':
     raise SystemExit('Full clean-checkout acceptance did not pass')
-pdf_path = root / 'output/pdf-release'
+pdf_path = args.pdf_dir.resolve(strict=True) if args.pdf_dir else root / 'output/pdf-release'
 pdf_manifest = json.loads((pdf_path / 'reports-manifest.json').read_text())
 if pdf_manifest['status'] != 'final' or pdf_manifest['final_project_head'] != head:
     raise SystemExit('Final PDFs are missing or bound to another source commit')
@@ -59,7 +62,7 @@ destination = args.output.resolve()
 destination.mkdir(parents=True, exist_ok=False)
 readme = ('香山向量点积指令设计 - 全栈漏洞队\n'
           f'最终作品源码：{head}\n实际干净构建源码：{binding["tested_project_head"]}\n'
-          '作品仓库：https://github.com/Andrew111888/cie2026-quanzhan-loudong-dui-xiangshan-vdot\n'
+          '作品仓库：https://github.com/Andrew111888/cie2026quanzhanloudongduixiangshanvdot\n'
           '核心代码、工作负载、配置和分析输入已逐字节绑定；后续文档/演示工具差异见source-binding.json。\n'
           '语义未明确事项已向官方Issue #126询问；当前契约仍为暂定解释，详见源码docs/QUESTIONS.md。\n'
           '延迟、吞吐与程序片段加速比分别说明；没有面积、频率、功耗或能效实测声明。\n'
@@ -77,6 +80,10 @@ def digest_file(path):
 def archive(name, files, extra=None):
     files = dict(files)
     extra = {'README.txt': readme, **(extra or {})}
+    if args.submission_checklist:
+        extra['SUBMISSION_CHECKLIST.md'] = args.submission_checklist.read_text()
+    if args.workflow_receipt:
+        extra['workflow-receipt.json'] = args.workflow_receipt.read_text()
     if len(files) != len(set(files)) or files.keys() & extra.keys():
         raise ValueError('Duplicate ZIP entry')
     manifest = []
@@ -107,6 +114,8 @@ for item in pdf_manifest['reports']:
     pdfs['documents/' + path.name] = path
 pdfs['source-binding.json'] = binding_path
 pdfs['reports-manifest.json'] = pdf_path / 'reports-manifest.json'
+if (pdf_path / 'pdf-metadata-cleaning.json').exists():
+    pdfs['pdf-metadata-cleaning.json'] = pdf_path / 'pdf-metadata-cleaning.json'
 video_files = {}
 for stage, path in enumerate(videos, 1):
     for name in ('recording.mp4', 'recording.json', 'commands.sh', 'terminal.log', 'terminal.timing'):

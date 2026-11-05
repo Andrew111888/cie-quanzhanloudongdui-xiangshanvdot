@@ -1,4 +1,5 @@
-"""Render the current evidence-based Markdown reports as explicitly draft PDFs."""
+"""Render source-bound reports, retaining only the team author in PDF metadata."""
+from io import BytesIO
 from pathlib import Path
 import argparse
 import hashlib
@@ -7,6 +8,7 @@ import json
 import re
 import subprocess
 import textwrap
+from pypdf import PdfReader, PdfWriter
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
@@ -20,6 +22,7 @@ from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, LongTable,
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument('--binding', type=Path, help='Verified final source binding; omitting this creates draft PDFs')
+parser.add_argument('--output', type=Path, help='Use a new directory to preserve previously issued reports')
 args = parser.parse_args()
 binding = None
 if args.binding:
@@ -30,7 +33,7 @@ if args.binding:
     for name, digest in binding['tracked_file_sha256'].items():
         if hashlib.sha256((root / name).read_bytes()).hexdigest() != digest:
             raise SystemExit('Source/document changed after binding: ' + name)
-output = root / ('output/pdf-release' if binding else 'output/pdf')
+output = args.output.resolve() if args.output else root / ('output/pdf-release' if binding else 'output/pdf')
 temporary = root / 'tmp/pdfs'
 output.mkdir(parents=True, exist_ok=True)
 temporary.mkdir(parents=True, exist_ok=True)
@@ -197,6 +200,17 @@ for filename, title, documents in reports:
                             topMargin=45, bottomMargin=55, title=title,
                             author='全栈漏洞队', pageCompression=1)
     doc.build(story, onFirstPage=footer, onLaterPages=footer)
+    original = PdfReader(BytesIO(target.read_bytes()), strict=True)
+    sanitized = PdfWriter()
+    sanitized.clone_reader_document_root(original)
+    sanitized.metadata = {'/Author': '全栈漏洞队'}
+    sanitized.root_object.pop('/Metadata', None)
+    sanitized.compress_identical_objects(remove_duplicates=False, remove_unreferenced=True)
+    with target.open('wb') as stream:
+        sanitized.write(stream)
+    verified = PdfReader(target, strict=True)
+    if dict(verified.metadata or {}) != {'/Author': '全栈漏洞队'} or '/Metadata' in verified.root_object:
+        raise RuntimeError('PDF metadata policy failed: ' + target.name)
     artifact_records.append({'file': str(target), 'sha256': hashlib.sha256(target.read_bytes()).hexdigest(),
                              'document_sha256': {name: hashlib.sha256((root/'docs'/name).read_bytes()).hexdigest()
                                                  for name in documents}})
