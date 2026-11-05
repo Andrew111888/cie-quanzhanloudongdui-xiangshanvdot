@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="600" viewBox="0 0 1160 600">
+<defs><marker id="arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7" fill="#51677e"/></marker></defs>
+<rect width="1160" height="600" fill="white"/>
+<style>text{font-family:DejaVu Sans,Arial,sans-serif;fill:#172d49;font-size:16px}.title{font-size:23px;font-weight:bold}.small{font-size:14px;fill:#536980}.wire{fill:none;stroke:#51677e;stroke-width:1.6;marker-end:url(#arr)}.box{fill:#edf4fc;stroke:#4a75a2;stroke-width:1.4}.reg{fill:#e5f2e9;stroke:#2a7751;stroke-width:1.5}</style>
+<text x="25" y="36" class="title">vdot.vv: 8 signed int8 products, two pipeline stages</text>
+<text x="25" y="60" class="small">VLEN=128, SEW=8, VL=8, LMUL=1, vm=1, vstart=0 (provisional supported domain)</text>
+<text x="35" y="95">vs1 / vs2 low 64 bits</text>
+<text x="348" y="95">Stage 1 registers</text>
+<text x="655" y="95">Stage 2 balanced sum</text>
+<text x="1010" y="95">Stage 2 register</text>
+<text x="35" y="133">a[0], b[0]</text>
+<line x1="112.0" y1="128.0" x2="165.0" y2="128.0" stroke="#51677e" stroke-width="1.6"/><polygon points="165.0,128.0 158.0,125.0 158.0,131.0" fill="#51677e"/>
+<rect x="165" y="112" width="125" height="32" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="227.5" y="132.0" text-anchor="middle">signed 8 x 8</text>
+<line x1="290.0" y1="128.0" x2="350.0" y2="128.0" stroke="#51677e" stroke-width="1.6"/><polygon points="350.0,128.0 343.0,125.0 343.0,131.0" fill="#51677e"/>
+<rect x="350" y="112" width="105" height="32" rx="5" fill="#e5f2e9" stroke="#2a7751" stroke-width="1.5"/>
+<text x="402.5" y="132.0" text-anchor="middle">p0 : 16 bits</text>
+<text x="35" y="181">a[1], b[1]</text>
+<line x1="112.0" y1="176.0" x2="165.0" y2="176.0" stroke="#51677e" stroke-width="1.6"/><polygon points="165.0,176.0 158.0,173.0 158.0,179.0" fill="#51677e"/>
+<rect x="165" y="160" width="125" height="32" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="227.5" y="180.0" text-anchor="middle">signed 8 x 8</text>
+<line x1="290.0" y1="176.0" x2="350.0" y2="176.0" stroke="#51677e" stroke-width="1.6"/><polygon points="350.0,176.0 343.0,173.0 343.0,179.0" fill="#51677e"/>
+<rect x="350" y="160" width="105" height="32" rx="5" fill="#e5f2e9" stroke="#2a7751" stroke-width="1.5"/>
+<text x="402.5" y="180.0" text-anchor="middle">p1 : 16 bits</text>
+<text x="35" y="229">a[2], b[2]</text>
+<line x1="112.0" y1="224.0" x2="165.0" y2="224.0" stroke="#51677e" stroke-width="1.6"/><polygon points="165.0,224.0 158.0,221.0 158.0,227.0" fill="#51677e"/>
+<rect x="165" y="208" width="125" height="32" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="227.5" y="228.0" text-anchor="middle">signed 8 x 8</text>
+<line x1="290.0" y1="224.0" x2="350.0" y2="224.0" stroke="#51677e" stroke-width="1.6"/><polygon points="350.0,224.0 343.0,221.0 343.0,227.0" fill="#51677e"/>
+<rect x="350" y="208" width="105" height="32" rx="5" fill="#e5f2e9" stroke="#2a7751" stroke-width="1.5"/>
+<text x="402.5" y="228.0" text-anchor="middle">p2 : 16 bits</text>
+<text x="35" y="277">a[3], b[3]</text>
+<line x1="112.0" y1="272.0" x2="165.0" y2="272.0" stroke="#51677e" stroke-width="1.6"/><polygon points="165.0,272.0 158.0,269.0 158.0,275.0" fill="#51677e"/>
+<rect x="165" y="256" width="125" height="32" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="227.5" y="276.0" text-anchor="middle">signed 8 x 8</text>
+<line x1="290.0" y1="272.0" x2="350.0" y2="272.0" stroke="#51677e" stroke-width="1.6"/><polygon points="350.0,272.0 343.0,269.0 343.0,275.0" fill="#51677e"/>
+<rect x="350" y="256" width="105" height="32" rx="5" fill="#e5f2e9" stroke="#2a7751" stroke-width="1.5"/>
+<text x="402.5" y="276.0" text-anchor="middle">p3 : 16 bits</text>
+<text x="35" y="325">a[4], b[4]</text>
+<line x1="112.0" y1="320.0" x2="165.0" y2="320.0" stroke="#51677e" stroke-width="1.6"/><polygon points="165.0,320.0 158.0,317.0 158.0,323.0" fill="#51677e"/>
+<rect x="165" y="304" width="125" height="32" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="227.5" y="324.0" text-anchor="middle">signed 8 x 8</text>
+<line x1="290.0" y1="320.0" x2="350.0" y2="320.0" stroke="#51677e" stroke-width="1.6"/><polygon points="350.0,320.0 343.0,317.0 343.0,323.0" fill="#51677e"/>
+<rect x="350" y="304" width="105" height="32" rx="5" fill="#e5f2e9" stroke="#2a7751" stroke-width="1.5"/>
+<text x="402.5" y="324.0" text-anchor="middle">p4 : 16 bits</text>
+<text x="35" y="373">a[5], b[5]</text>
+<line x1="112.0" y1="368.0" x2="165.0" y2="368.0" stroke="#51677e" stroke-width="1.6"/><polygon points="165.0,368.0 158.0,365.0 158.0,371.0" fill="#51677e"/>
+<rect x="165" y="352" width="125" height="32" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="227.5" y="372.0" text-anchor="middle">signed 8 x 8</text>
+<line x1="290.0" y1="368.0" x2="350.0" y2="368.0" stroke="#51677e" stroke-width="1.6"/><polygon points="350.0,368.0 343.0,365.0 343.0,371.0" fill="#51677e"/>
+<rect x="350" y="352" width="105" height="32" rx="5" fill="#e5f2e9" stroke="#2a7751" stroke-width="1.5"/>
+<text x="402.5" y="372.0" text-anchor="middle">p5 : 16 bits</text>
+<text x="35" y="421">a[6], b[6]</text>
+<line x1="112.0" y1="416.0" x2="165.0" y2="416.0" stroke="#51677e" stroke-width="1.6"/><polygon points="165.0,416.0 158.0,413.0 158.0,419.0" fill="#51677e"/>
+<rect x="165" y="400" width="125" height="32" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="227.5" y="420.0" text-anchor="middle">signed 8 x 8</text>
+<line x1="290.0" y1="416.0" x2="350.0" y2="416.0" stroke="#51677e" stroke-width="1.6"/><polygon points="350.0,416.0 343.0,413.0 343.0,419.0" fill="#51677e"/>
+<rect x="350" y="400" width="105" height="32" rx="5" fill="#e5f2e9" stroke="#2a7751" stroke-width="1.5"/>
+<text x="402.5" y="420.0" text-anchor="middle">p6 : 16 bits</text>
+<text x="35" y="469">a[7], b[7]</text>
+<line x1="112.0" y1="464.0" x2="165.0" y2="464.0" stroke="#51677e" stroke-width="1.6"/><polygon points="165.0,464.0 158.0,461.0 158.0,467.0" fill="#51677e"/>
+<rect x="165" y="448" width="125" height="32" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="227.5" y="468.0" text-anchor="middle">signed 8 x 8</text>
+<line x1="290.0" y1="464.0" x2="350.0" y2="464.0" stroke="#51677e" stroke-width="1.6"/><polygon points="350.0,464.0 343.0,461.0 343.0,467.0" fill="#51677e"/>
+<rect x="350" y="448" width="105" height="32" rx="5" fill="#e5f2e9" stroke="#2a7751" stroke-width="1.5"/>
+<text x="402.5" y="468.0" text-anchor="middle">p7 : 16 bits</text>
+<line x1="455.0" y1="128.0" x2="535.0" y2="152.0" stroke="#51677e" stroke-width="1.6"/><polygon points="535.0,152.0 529.157259660151,147.11508594537213 527.4331723467529,152.86204365669903" fill="#51677e"/>
+<line x1="455.0" y1="176.0" x2="535.0" y2="152.0" stroke="#51677e" stroke-width="1.6"/><polygon points="535.0,152.0 527.4331723467529,151.13795634330097 529.157259660151,156.88491405462787" fill="#51677e"/>
+<rect x="535" y="134.0" width="93" height="36" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="581.5" y="156.0" text-anchor="middle">17-bit +</text>
+<line x1="455.0" y1="224.0" x2="535.0" y2="248.0" stroke="#51677e" stroke-width="1.6"/><polygon points="535.0,248.0 529.157259660151,243.11508594537213 527.4331723467529,248.86204365669903" fill="#51677e"/>
+<line x1="455.0" y1="272.0" x2="535.0" y2="248.0" stroke="#51677e" stroke-width="1.6"/><polygon points="535.0,248.0 527.4331723467529,247.13795634330097 529.157259660151,252.88491405462787" fill="#51677e"/>
+<rect x="535" y="230.0" width="93" height="36" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="581.5" y="252.0" text-anchor="middle">17-bit +</text>
+<line x1="455.0" y1="320.0" x2="535.0" y2="344.0" stroke="#51677e" stroke-width="1.6"/><polygon points="535.0,344.0 529.157259660151,339.11508594537213 527.4331723467529,344.86204365669903" fill="#51677e"/>
+<line x1="455.0" y1="368.0" x2="535.0" y2="344.0" stroke="#51677e" stroke-width="1.6"/><polygon points="535.0,344.0 527.4331723467529,343.13795634330097 529.157259660151,348.88491405462787" fill="#51677e"/>
+<rect x="535" y="326.0" width="93" height="36" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="581.5" y="348.0" text-anchor="middle">17-bit +</text>
+<line x1="455.0" y1="416.0" x2="535.0" y2="440.0" stroke="#51677e" stroke-width="1.6"/><polygon points="535.0,440.0 529.157259660151,435.11508594537213 527.4331723467529,440.86204365669903" fill="#51677e"/>
+<line x1="455.0" y1="464.0" x2="535.0" y2="440.0" stroke="#51677e" stroke-width="1.6"/><polygon points="535.0,440.0 527.4331723467529,439.13795634330097 529.157259660151,444.88491405462787" fill="#51677e"/>
+<rect x="535" y="422.0" width="93" height="36" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="581.5" y="444.0" text-anchor="middle">17-bit +</text>
+<line x1="628.0" y1="152.0" x2="695.0" y2="200.0" stroke="#51677e" stroke-width="1.6"/><polygon points="695.0,200.0 691.0567659648121,193.48456407108964 687.5624539582458,198.36204124692196" fill="#51677e"/>
+<line x1="628.0" y1="248.0" x2="695.0" y2="200.0" stroke="#51677e" stroke-width="1.6"/><polygon points="695.0,200.0 687.5624539582458,201.63795875307804 691.0567659648121,206.51543592891036" fill="#51677e"/>
+<rect x="695" y="182.0" width="93" height="36" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="741.5" y="204.0" text-anchor="middle">18-bit +</text>
+<line x1="628.0" y1="344.0" x2="695.0" y2="392.0" stroke="#51677e" stroke-width="1.6"/><polygon points="695.0,392.0 691.0567659648121,385.4845640710896 687.5624539582458,390.362041246922" fill="#51677e"/>
+<line x1="628.0" y1="440.0" x2="695.0" y2="392.0" stroke="#51677e" stroke-width="1.6"/><polygon points="695.0,392.0 687.5624539582458,393.637958753078 691.0567659648121,398.5154359289104" fill="#51677e"/>
+<rect x="695" y="374.0" width="93" height="36" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="741.5" y="396.0" text-anchor="middle">18-bit +</text>
+<line x1="788.0" y1="200.0" x2="845.0" y2="296.0" stroke="#51677e" stroke-width="1.6"/><polygon points="845.0,296.0 844.0057929524341,288.4494005306486 838.8466644893897,291.51263305558115" fill="#51677e"/>
+<line x1="788.0" y1="392.0" x2="845.0" y2="296.0" stroke="#51677e" stroke-width="1.6"/><polygon points="845.0,296.0 838.8466644893897,300.48736694441885 844.0057929524341,303.5505994693514" fill="#51677e"/>
+<rect x="845" y="278.0" width="90" height="36" rx="5" fill="#edf4fc" stroke="#4a75a2" stroke-width="1.4"/>
+<text x="890.0" y="300.0" text-anchor="middle">19-bit +</text>
+<line x1="935.0" y1="296.0" x2="1000.0" y2="296.0" stroke="#51677e" stroke-width="1.6"/><polygon points="1000.0,296.0 993.0,293.0 993.0,299.0" fill="#51677e"/>
+<rect x="1000" y="243.0" width="135" height="106" rx="5" fill="#e5f2e9" stroke="#2a7751" stroke-width="1.5"/>
+<text x="1067.5" y="300.0" text-anchor="middle">128-bit vd</text>
+<text x="1067" y="325" text-anchor="middle" class="small">low 32: sign extend</text>
+<text x="1067" y="345" text-anchor="middle" class="small">high 96: zero</text>
+<line x1="330" x2="330" y1="108" y2="495" stroke="#a4b5c7" stroke-dasharray="5 5"/>
+<line x1="985" x2="985" y1="108" y2="495" stroke="#a4b5c7" stroke-dasharray="5 5"/>
+<text x="350" y="518" class="small">enable: regEnable(1)</text>
+<text x="970" y="518" class="small">regEnable(2)</text>
+<rect x="25" y="542" width="1110" height="38" rx="5" fill="#f0f3f7"/>
+<text x="580" y="566" text-anchor="middle">Existing VIMac slot carries valid / ready, vector control, physical destination, ROB tag and flush handling.</text>
+</svg>

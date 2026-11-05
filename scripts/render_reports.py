@@ -1,6 +1,9 @@
 """Render the current evidence-based Markdown reports as explicitly draft PDFs."""
 from pathlib import Path
+import argparse
+import hashlib
 import html
+import json
 import re
 import subprocess
 import textwrap
@@ -15,7 +18,19 @@ from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, LongTable,
                                TableStyle, Image, XPreformatted, PageBreak)
 
 root = Path(__file__).resolve().parents[1]
-output = root / 'output/pdf'
+parser = argparse.ArgumentParser()
+parser.add_argument('--binding', type=Path, help='Verified final source binding; omitting this creates draft PDFs')
+args = parser.parse_args()
+binding = None
+if args.binding:
+    binding = json.loads(args.binding.read_text())
+    head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
+    if binding['status'] != 'verified' or binding['final_project_head'] != head:
+        raise SystemExit('Final report binding does not match the current source commit')
+    for name, digest in binding['tracked_file_sha256'].items():
+        if hashlib.sha256((root / name).read_bytes()).hexdigest() != digest:
+            raise SystemExit('Source/document changed after binding: ' + name)
+output = root / ('output/pdf-release' if binding else 'output/pdf')
 temporary = root / 'tmp/pdfs'
 output.mkdir(parents=True, exist_ok=True)
 temporary.mkdir(parents=True, exist_ok=True)
@@ -139,7 +154,7 @@ def footer(canvas, doc):
     canvas.line(48, 42, A4[0]-48, 42)
     canvas.setFont('Latin', 7.5)
     canvas.setFillColor(colors.HexColor('#61738a'))
-    label = paragraph('全栈漏洞队 | 开发审阅版 | 2026-11-05',
+    label = paragraph('全栈漏洞队 | ' + ('最终交付版' if binding else '开发审阅版') + ' | 2026-11-05',
                       ParagraphStyle('Footer', parent=body, fontSize=7.5, leading=10))
     label.wrap(width, 12)
     label.drawOn(canvas, 48, 27)
@@ -148,17 +163,33 @@ def footer(canvas, doc):
 
 reports = [
     ('stage1-environment-waveform-draft.pdf', '阶段一 - 环境与向量加法',
-     ['STAGE1_WAVEFORM.md', 'BUILDING.md', 'BOOTSTRAP.md']),
+     ['STAGE1_WAVEFORM.md', 'CLEAN_REPRODUCTION.md', 'BUILDING.md', 'BOOTSTRAP.md']),
     ('stage2-vdot-design-verification-draft.pdf', '阶段二 - 设计与功能验证',
      ['DESIGN.md', 'VALIDATION.md']),
     ('stage3-difftest-performance-draft.pdf', '阶段三 - 协同验证与性能',
-     ['DIFFTEST_CHECKS.md', 'PERFORMANCE.md']),
+     ['DIFFTEST_CHECKS.md', 'PERFORMANCE.md', 'EVIDENCE_INDEX.md']),
 ]
+if binding:
+    final_documents = [
+        ['results/stage1-clean.md', 'CLEAN_REPRODUCTION.md', 'BUILDING.md', 'BOOTSTRAP.md'],
+        ['DESIGN.md', 'results/stage2-clean.md'],
+        ['results/stage3-clean.md'],
+    ]
+    reports = [(name, title, documents) for (name, title, _), documents in zip(reports, final_documents)]
+artifact_records = []
 for filename, title, documents in reports:
+    if binding:
+        filename = filename.replace('-draft.pdf', '.pdf')
     target = output / filename
+    status_notice = ('最终交付版：完整干净检出验收已通过。各结果的实际构建提交、最终源码提交、输入摘要与证据目录由绑定清单明确区分。未明确的赛题语义仍按暂定契约披露，未得到官方确认。'
+                     if binding else '开发审阅版：定向、1000组随机、真实差分反例与恢复、流水压力和性能数据均已有证据。未修改原核的干净构建与vadd已通过；扩展核干净构建、最终录屏与打包仍待完成，不作为正式提交包。')
     story = [paragraph('香山昆明湖 V2 自定义 vdot.vv', h1), paragraph(title, h2),
              paragraph('队伍：全栈漏洞队。证据核对日期：2026-11-05。'),
-             paragraph('开发审阅版：定向、1000组随机、真实差分反例与恢复、流水压力和性能数据均已有证据。未修改原核的干净构建与vadd已通过；扩展核干净构建、最终录屏与打包仍待完成，不作为正式提交包。', notice)]
+             paragraph(status_notice, notice)]
+    if binding:
+        story += [paragraph('最终作品源码提交：' + binding['final_project_head']),
+                  paragraph('实际干净构建源码提交：' + binding['tested_project_head']),
+                  paragraph('两者的处理器、NEMU、工作负载、配置和验收分析输入已逐字节核对。')]
     for number, name in enumerate(documents):
         if number: story.append(PageBreak())
         story += markdown(root / 'docs' / name)
@@ -166,4 +197,11 @@ for filename, title, documents in reports:
                             topMargin=45, bottomMargin=55, title=title,
                             author='全栈漏洞队', pageCompression=1)
     doc.build(story, onFirstPage=footer, onLaterPages=footer)
+    artifact_records.append({'file': str(target), 'sha256': hashlib.sha256(target.read_bytes()).hexdigest(),
+                             'document_sha256': {name: hashlib.sha256((root/'docs'/name).read_bytes()).hexdigest()
+                                                 for name in documents}})
     print(target)
+(output / 'reports-manifest.json').write_text(json.dumps({'status': 'final' if binding else 'draft',
+    'final_project_head': binding['final_project_head'] if binding else None,
+    'binding_sha256': hashlib.sha256(args.binding.read_bytes()).hexdigest() if binding else None,
+    'reports': artifact_records}, ensure_ascii=False, indent=2) + '\n')

@@ -74,6 +74,8 @@ C++阶段默认两个编译任务，总内存仍受5500MiB上限约束。可用`
 
 默认 Java 堆8GiB、Chisel进程组上限4800MiB、firtool上限5500MiB、模型编译上限5500MiB。每阶段独立记录命令、日志、退出状态和资源，最后检查源码摘要未漂移；该方式依赖 Linux 用户 systemd 会话。整套脚本仍需完整成功运行和干净环境复现后才能标记可复现。
 
+当前独立扩展核复现显式使用 `VDOT_COMPILE_MEMORY_MAX=7G bash scripts/build_emu.sh`；原核也在模型生成阶段把进程组限制在线调至7GiB并保存调整记录。两者实际资源参数见CLEAN_REPRODUCTION.md及各阶段命令/日志，不能仅依据脚本默认值推断实测峰值。
+
 `scripts/lowmem-bin/mill`直接调用固定Mill 0.12.3主入口，并在新检出中先创建out锁目录。构建工具自身默认堆为2GiB，可用VDOT_MILL_HEAP显式覆盖；384MiB只在已有编译缓存时跑通过，干净检出编译315个Rocket Chip源码会Java heap OOM，2GiB同目标已实际通过。硬件生成子进程另由-Djvm-xmx参数配置，不能将子进程8GiB误当成Mill自身的上限。
 
 本机普通 4500 MiB 堆在转换期间持续满载。已验证 JVM 的文件映射堆能够在 384 MiB 内存上限内校验 512 MiB 存活数据。脚本默认启用该方式，可显式指定：
