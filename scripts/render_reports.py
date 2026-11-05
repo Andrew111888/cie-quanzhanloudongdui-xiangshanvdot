@@ -40,8 +40,8 @@ pdfmetrics.registerFont(TTFont('Latin', '/usr/share/fonts/truetype/dejavu/DejaVu
 pdfmetrics.registerFontFamily('Latin', normal='Latin', bold='Latin', italic='Latin', boldItalic='Latin')
 pdfmetrics.registerFont(TTFont('Mono', '/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf'))
 width = A4[0] - 96
-body = ParagraphStyle('Body', fontName='Latin', fontSize=9.3, leading=15,
-                      spaceAfter=7, wordWrap='CJK', splitLongWords=True)
+body = ParagraphStyle('Body', fontName='Latin', fontSize=9.3, leading=14,
+                      spaceAfter=6, wordWrap='CJK', splitLongWords=True)
 table_body = ParagraphStyle('Table', parent=body, fontSize=7.7, leading=11, spaceAfter=0)
 h1 = ParagraphStyle('H1', parent=body, fontSize=18, leading=25, textColor=colors.HexColor('#142d4e'),
                     spaceBefore=16, spaceAfter=13, keepWithNext=True)
@@ -119,7 +119,7 @@ def markdown(path):
                 ('GRID', (0, 0), (-1, -1), .35, colors.HexColor('#cbd5e2')),
                 ('VALIGN', (0, 0), (-1, -1), 'TOP'),
                 ('LEFTPADDING', (0, 0), (-1, -1), 6), ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-                ('TOPPADDING', (0, 0), (-1, -1), 6), ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                ('TOPPADDING', (0, 0), (-1, -1), 5), ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
             ]))
             elements += [table, Spacer(1, 10)]
             continue
