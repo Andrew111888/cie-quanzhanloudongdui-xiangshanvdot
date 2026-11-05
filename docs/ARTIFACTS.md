@@ -14,7 +14,7 @@ python3 scripts/record_terminal.py scripts/demo_stage2.sh --output output/video-
 python3 scripts/record_terminal.py scripts/demo_stage3.sh --output output/video-stage3
 ```
 
-先审阅所有文档、原始数据及录屏，再提交最终源码，保持Git工作区干净。绑定器比较处理器、NEMU、资源、工作负载、配置和关键构建/分析入口的字节；允许并记录后续报告/演示工具增加。子模块比较路径、SHA和初始化状态，不把不同克隆中的git-describe标签当作代码差异。
+先审阅所有文档、原始数据及录屏，再提交最终源码，保持Git工作区干净。绑定器比较处理器、NEMU、资源、工作负载、配置和关键构建/分析入口的字节；允许并记录后续报告/演示工具增加。子模块比较路径、SHA和初始化状态，不把不同克隆中的git-describe标签当作代码差异。rtl/中的两份生成模块另与本次完整构建的实际文件、FIR及补丁摘要比较，不把来源未明的生成文件混入交付。
 
 ```bash
 python3 scripts/bind_evidence.py /absolute/path/to/completed-acceptance \

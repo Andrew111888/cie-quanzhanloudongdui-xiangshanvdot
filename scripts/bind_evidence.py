@@ -90,6 +90,23 @@ if set(run_records) != {'vadd', 'smoke', 'register', 'random', 'pipeline', 'benc
 driver = Path(acceptance['driver'])
 if hashlib.sha256(driver.read_bytes()).hexdigest() != acceptance['driver_sha256']:
     raise SystemExit('Acceptance driver changed after the recorded run')
+generated = json.loads((root / 'rtl/provenance.json').read_text())
+tested_root = directory.parents[1]
+build_report = tested_root / generated['build_report']
+if generated['build_status'] != 'completed' or generated['tested_project_head'] != tested['project_head']:
+    raise SystemExit('Generated RTL identifies another build source')
+if (build_report / 'compile-exit-status.txt').read_text().strip() != '0':
+    raise SystemExit('Generated RTL build did not complete')
+if hashlib.sha256((tested_root / 'third_party/XiangShan/build/rtl/SimTop.fir').read_bytes()).hexdigest() != generated['fir_sha256']:
+    raise SystemExit('Generated RTL FIR identity changed')
+if hashlib.sha256((root / 'patches/xiangshan.patch').read_bytes()).hexdigest() != generated['xiangshan_patch_sha256']:
+    raise SystemExit('Generated RTL patch identity differs')
+for module in generated['modules']:
+    delivered = root / 'rtl' / module['file']
+    compiled = tested_root / module['generated_path']
+    if any(hashlib.sha256(path.read_bytes()).hexdigest() != module['sha256']
+           for path in (delivered, compiled)):
+        raise SystemExit('Delivered RTL differs from the clean build: ' + module['file'])
 non_dut_changes = sorted(name for name in old.keys() | new.keys()
                          if name not in critical and old.get(name) != new.get(name))
 head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
@@ -110,6 +127,7 @@ result = {'status': 'verified', 'recorded_at_utc': datetime.now(timezone.utc).is
           'acceptance_sha256': hashlib.sha256((directory / 'acceptance.json').read_bytes()).hexdigest(),
           'byte_identical_critical_inputs': critical, 'non_dut_changes_since_tested_checkout': non_dut_changes,
           'normalized_submodule_identity': submodule_records,
+          'generated_rtl': generated,
           'rtl_runs': run_records, 'tracked_file_sha256': tree_hashes,
           'note': 'This binds unchanged implementation bytes to a later documentation/tooling tree; it does not rename the original build commit.'}
 args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
