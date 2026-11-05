@@ -103,7 +103,7 @@ try:
                 raise RuntimeError('Virtual display startup failed')
             time.sleep(.1)
         subprocess.run(['xsetroot', '-solid', '#101b2d'], env=environment, check=True)
-        terminal = subprocess.Popen([str(xterm), '-ut', '-u8', '-geometry', '128x36+16+12',
+        terminal = subprocess.Popen([str(xterm), '-ut', '-u8', '-geometry', '116x32+16+12',
                                      '-fa', 'DejaVu Sans Mono', '-fs', '13', '-bg', '#101b2d',
                                      '-fg', '#dbe5f1', '-b', '14', '-bw', '0',
                                      '-e', '/bin/bash', str(wrapper)],

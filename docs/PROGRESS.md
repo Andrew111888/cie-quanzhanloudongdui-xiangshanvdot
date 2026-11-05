@@ -23,8 +23,8 @@
 
 ## 当前正在补齐的验收
 
-1. **干净检出全流程。** 独立目录/home/yh/cie/vdot-kmhv2-repro-20261105未复制旧RTL、C++或模拟器，源码从官方固定提交取得。已修复新检出缺少Mill锁目录、384MiB工具堆无法冷编译的问题；2GiB工具堆已完成全部Scala编译和CHIRRTL生成。firtool阶段在10:50收到停止请求，未完成且不记为通过。当前在91245d7上通过源码/配置/FIR摘要校验恢复，服务vdot-pristine-resume-20261105T0327.service，日志reports/pristine-resume-driver.log。篡改FIR摘要的反例已被恢复门禁拒绝，证据reports/resume-guard-negative.log。仍须生成未加vdot的上游emu并运行标准向量smoke，再应用补丁重新构建和回归。
-2. **正式材料。** 三份PDF开发审阅稿已生成并目视检查，位于output/pdf/；录制工具已在隔离虚拟显示器预检，未录完三段正式演示。最终证据索引、录屏、压缩包、校验清单和双入口提交仍待完成；所有材料要与最终源码重新核对。
+1. **干净检出全流程。** 未修改原核已完成完整构建和vadd真实差分/FST，保存产物摘要见CLEAN_REPRODUCTION.md。独立目录已应用vdot补丁，并从空的硬件生成目录重建，源码基于3424efe；Python、数据通路及7类NEMU工作负载均通过。当前服务vdot-extension-clean-20261105T0502.service，日志reports/extension-clean-driver.log；Chisel已通过，后续生成在进行。全量验收等待服务vdot-extension-acceptance-20261105T0510.service，构建失败即停止。尚不能把扩展核干净复现标为通过。
+2. **正式材料。** 三份PDF开发审阅稿已生成并目视检查，位于output/pdf/；阶段一已录得保存原核的真实vadd与FST提取，正在完善画面列宽；阶段二/三脚本已准备但尚未正式录制。最终证据索引、压缩包、校验清单和双入口提交仍待完成；所有材料要与最终源码重新核对。
 3. **明确保留的覆盖边界。** 观察到的是完成FU输出后、等待ROB提交期间被冲刷的vdot；未观察到功能单元输出端反压或redirect恰在两级算术内部的情形，不将这些具体时序计为覆盖。标准完整压力运行通过，28000周期的补充诊断采集故意截断，不作为功能PASS。
 
 首次随机运行因中途编辑脚本而缺少收尾记录，原始失败保留在reports/rtl-vdot_test-20261105T013446Z-3572191/。修复后的重跑已完整通过，见上表；没有补造第一次缺失的exit-status.txt。

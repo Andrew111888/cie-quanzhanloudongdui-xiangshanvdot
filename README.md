@@ -14,6 +14,8 @@
 
 实现说明见 [设计文档](docs/DESIGN.md)，当前工具、构建命令和限制见 [构建与运行记录](docs/BUILDING.md)。
 
+独立检出已完成未修改原核的构建与vadd验证；vdot扩展核正在从空的硬件生成目录重建，详见 [干净复现记录](docs/CLEAN_REPRODUCTION.md)。代码与依赖来源见 [NOTICE](NOTICE.md)。
+
 官网四个栏目的逐项来源核对见 [要求核对记录](docs/REQUIREMENTS_AUDIT.md)，三组文档、三段录屏和代码提交的当前缺口见 [交付清单](docs/DELIVERY_CHECKLIST.md)。
 
 `patches/` 保存相对固定上游版本的源代码改动，`workloads/` 是裸机测试与基准程序，`tests/` 是独立语义参考模型。编译工具和上游仓库保存在本地 `tools/` 与 `third_party/`，默认不上传。
