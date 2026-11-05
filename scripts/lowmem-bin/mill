@@ -10,6 +10,6 @@ export MILL_WORKSPACE_ROOT="$PWD"
 # MillMain opens its lock before creating the output tree. The usual client
 # launcher does this setup; direct invocation must also work in a fresh checkout.
 mkdir -p "$PWD/out"
-exec "$vdot_java" -Xmx"${VDOT_MILL_HEAP:-384m}" -Xss8m \
+exec "$vdot_java" -Xmx"${VDOT_MILL_HEAP:-2g}" -Xss8m \
   -XX:ActiveProcessorCount=2 -Djna.nosys=true \
   -cp "$VDOT_ROOT/tools/mill" mill.runner.MillMain "$PWD" "$@"
