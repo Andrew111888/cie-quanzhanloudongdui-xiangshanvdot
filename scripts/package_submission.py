@@ -62,7 +62,7 @@ destination = args.output.resolve()
 destination.mkdir(parents=True, exist_ok=False)
 readme = ('香山向量点积指令设计 - 全栈漏洞队\n'
           f'最终作品源码：{head}\n实际干净构建源码：{binding["tested_project_head"]}\n'
-          '作品仓库：https://github.com/Andrew111888/cie2026quanzhanloudongduixiangshanvdot\n'
+          '作品仓库：https://github.com/Andrew111888/cie-quanzhanloudongdui-xiangshanvdot\n'
           '核心代码、工作负载、配置和分析输入已逐字节绑定；后续文档/演示工具差异见source-binding.json。\n'
           '语义未明确事项已向官方Issue #126询问；当前契约仍为暂定解释，详见源码docs/QUESTIONS.md。\n'
           '延迟、吞吐与程序片段加速比分别说明；没有面积、频率、功耗或能效实测声明。\n'

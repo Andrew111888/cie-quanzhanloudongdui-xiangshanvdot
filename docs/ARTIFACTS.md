@@ -48,4 +48,4 @@ python3 scripts/prepare_encrypted_submission.py --packages output/submission-pac
 
 只将生成的submission.asc放入官方脚本指定的赛题/队伍目录。提交前再次核对所有材料、仓库提交与阶段完成情况；上传与加密准备是不同步骤，不能以ZIP或密文存在推定官网已接收。
 
-仓库及材料链接统一使用 https://github.com/Andrew111888/cie2026quanzhanloudongduixiangshanvdot 。正式PDF元数据仅保留作者全栈漏洞队，其余Info字段及XMP清除。重新发布可通过render_reports.py的--output和package_submission.py的--pdf-dir指定新的报告目录，保留历史报告；--submission-checklist和--workflow-receipt将当前核对清单、提交信息放入四类ZIP。
+仓库及材料链接统一使用 https://github.com/Andrew111888/cie-quanzhanloudongdui-xiangshanvdot 。正式PDF元数据仅保留作者全栈漏洞队，其余Info字段及XMP清除。重新发布可通过render_reports.py的--output和package_submission.py的--pdf-dir指定新的报告目录，保留历史报告；--submission-checklist和--workflow-receipt将当前核对清单、提交信息放入四类ZIP。

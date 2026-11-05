@@ -42,7 +42,7 @@ description = '复用香山昆明湖V2向量流水线扩展八路有符号点积
 if len(description) > 100:
     raise SystemExit('Project description is too long')
 content = ('team-name: 全栈漏洞队\n'
-           'repo-url: https://github.com/Andrew111888/cie2026quanzhanloudongduixiangshanvdot.git\n'
+           'repo-url: https://github.com/Andrew111888/cie-quanzhanloudongdui-xiangshanvdot.git\n'
            'github-username: Andrew111888\n'
            f'contact-email: {email}\n'
            f'project-description: {description}\n'

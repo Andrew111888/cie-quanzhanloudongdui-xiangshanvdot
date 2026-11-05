@@ -20,7 +20,7 @@
 
 从[环境准备](docs/BOOTSTRAP.md)获取固定源码和工具后，运行scripts/build_workloads.sh、scripts/build_nemu.sh、scripts/build_emu.sh，再用scripts/verify_reproduction.sh执行完整验收。具体参数、资源和恢复条件见[构建说明](docs/BUILDING.md)。报告、三段真实录屏和四类ZIP的生成入口见[材料工作流](docs/ARTIFACTS.md)。
 
-官网四栏逐项来源见[要求核对](docs/REQUIREMENTS_AUDIT.md)，阶段材料见[交付清单](docs/DELIVERY_CHECKLIST.md)。[发布页](https://github.com/Andrew111888/cie2026quanzhanloudongduixiangshanvdot/releases/latest)提供归档、校验值与对外提交回执；技术验收通过不代表官方评审通过。
+官网四栏逐项来源见[要求核对](docs/REQUIREMENTS_AUDIT.md)，阶段材料见[交付清单](docs/DELIVERY_CHECKLIST.md)。[发布页](https://github.com/Andrew111888/cie-quanzhanloudongdui-xiangshanvdot/releases/latest)提供归档、校验值与对外提交回执；技术验收通过不代表官方评审通过。
 
 `patches/` 保存相对固定上游版本的源代码改动，`workloads/` 是裸机测试与基准程序，`tests/` 是独立语义参考模型。编译工具和上游仓库保存在本地 `tools/` 与 `third_party/`，默认不上传。
 
