@@ -126,3 +126,22 @@ bash scripts/build_emu.sh --resume-fir /absolute/path/to/prior-build-report
 在同一构建之后继续本地验证，可运行`bash scripts/validate_rtl_when_ready.sh <构建报告目录> <错误库路径>`。它等待指定构建的成功记录与校验值，按序执行功能、差分、故障注入恢复、性能和初始波形运行，首个失败立即退出；实际波形分析和完整复现不由该队列自动判定通过。两个后台服务均不执行推送、上传或比赛提交。
 
 scripts/run_rtl.sh的参数、短窗口FST、真实Difftest及性能命令已有实际运行证据。独立检出的完整构建和回归单独保留，结果见CLEAN_REPRODUCTION.md；不以开发目录的可运行二进制替代最终复现。
+
+## 本轮性能模型的内存与编译恢复方案
+
+本轮新增实验在文件映射堆写回过多、普通堆5200MiB保护上限失败后，采用jemalloc单arena、Verilator O1、inline-mult=1、关闭波形及6GiB进程组上限完成模型生成。该次生成耗时91.92秒，最大RSS为6019712KiB；它是在测得约6.8GiB可用内存时完成的实测，不作为任意机器的最低配置承诺。本次没有启用新增交换文件。本机可选分配库为libjemalloc2 5.3.0-4，脚本在启用该选项时检查实际库文件。
+
+GCC15对生成的DecodeUnit表达式优化时间很长。可显式开启VDOT_CPP_DECODER_O0=1，仅将该模块的宿主C++快速对象改为O0并使用普通头文件，其他快速对象仍为O2。规则位于configs/gcc_decode_compat.mk，与实际生成新仿真器时使用的兼容规则逐字节相同。它不修改RTL或客体周期计数；新模型完整功能差分、流水压力和故障注入已通过，新增性能结果另见OPTIMIZATION.md。
+
+已有同配置RTL和生成模型时，本地可按下列实测参数恢复。此入口沿用现有生成文件，不能替代干净构建；修改波形/内联等生成参数后，需要重新生成匹配的模型，不能只凭旧可执行文件存在判断成功。
+
+```bash
+VDOT_NATIVE_FILE_HEAP=0 VDOT_USE_JEMALLOC=1 \
+VDOT_INLINE_MULT=1 VDOT_COMPILE_MEMORY_MAX=6G \
+VDOT_EMU_TRACE= VDOT_CPP_DECODER_O0=1 VDOT_CPP_JOBS=2 \
+bash scripts/resume_model_build.sh
+```
+
+该入口已实际重放，退出0、MODEL_BUILD_COMPLETE及仿真器SHA256一致均核对通过。此次重放复用了已有生成模型与对象，不另算一次从空目录生成。父进程会将这些参数显式传给持久用户服务；jemalloc仅在构建进程内加载。VDOT_EMU_TRACE为空的性能构建不产生新的FST证据，原调试构建的波形继续绑定原版本。
+
+完整构建入口build_emu.sh也识别上述环境参数，但其Chisel和firtool阶段的内存与磁盘需求仍须分别满足。不要把本次原生模型生成的峰值套用到整套工具链，也不要将宿主编译时间当作vdot硬件性能。

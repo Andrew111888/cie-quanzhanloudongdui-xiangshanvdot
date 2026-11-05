@@ -5,3 +5,5 @@
 VdotDatapath.sv是新增的两级8路有符号点积算术模块。VIMacU.sv是实际接入的向量乘法包装器，依赖固定平台中其它生成模块，不能仅凭这两个文件独立仿真整核。权威修改源为patches/xiangshan.patch及其中的Chisel源码；完整平台RTL使用scripts/build_emu.sh重新生成。
 
 源码和依赖许可见根目录LICENSE与NOTICE.md；保留生成器原始文件头。生成文件用于检查实际结构，不替代时序、综合、面积或功耗报告。
+
+本轮旧目标依赖修改只涉及译码。上述两个导出模块已与本轮新构建逐字节比较，一致；此处原独立检出的provenance.json仍保留原始来源，不改写成新生成记录。新译码、完整回归与540条性能样本的来源另见docs/OPTIMIZATION_RESULTS.md。

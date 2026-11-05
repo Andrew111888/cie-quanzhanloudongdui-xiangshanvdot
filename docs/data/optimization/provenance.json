@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "verified",
+  "before_core_source_commit": "3424efe852a1b4e2b26fa3efc25b233d94aec9a4",
+  "after_core_source_commit": "9f2f919561760e307ab19384ac67448aabc27b79",
+  "functional_regression_commit": "778d929affccecd2199fe08fa57c0a426c52118c",
+  "before_emu_sha256": "dd1f0323f96d567e26e9ba25336db5f9cbcc3a9ebb55821665110fc993e30e31",
+  "after_emu_sha256": "8e68a7db2e71193f8e34a443bc1c5454a1642a16d0b572ae03a9601c8b61de48",
+  "normal_reference_sha256": "baa2f11e3190d4dd3e7d6107c46ca6795c9b574978a070fdd7bdfafaf8372225",
+  "workload_and_flash_sha256": {
+    "benchmark_rvv.bin": "4a60b588918489e533cdccbb53771e0b3b059198fa01e1998ec36ef5c0a8d1a0",
+    "dot_memory.bin": "50afc8cca76294ae0e0a3bc33170881b23920867c0b9ea4cd74cfe5fcfc9b79f",
+    "flash.bin": "12b791f69e01db906377cac6d6b15c4cce7cd09c226515f181f7687186f786bd"
+  },
+  "before_rvv_samples": 180,
+  "after_rvv_samples": 180,
+  "before_memory_samples": 90,
+  "after_memory_samples": 90,
+  "repeats_per_group": 5,
+  "lengths": [
+    32,
+    128,
+    512
+  ],
+  "normal_rvv_control_groups": 36,
+  "all_control_medians_identical": true,
+  "hardware_change": "Only vdot OPIVV src3 is SrcType.no; VIMacU and VdotDatapath generated RTL bytes match the preserved build.",
+  "compiled_trace_support": {
+    "before": true,
+    "after": false
+  },
+  "wave_dump_during_performance": false,
+  "new_fst_coverage_claimed": false,
+  "new_independent_clean_checkout_claimed": false,
+  "host_build_workaround": "O1 inline-mult=1 native jemalloc generation; generated DecodeUnit C++ O0, other fast objects O2; guest cycles are the metric.",
+  "reference_fault_check": {
+    "field": "v12_low",
+    "bad_reference": 9,
+    "dut": 8,
+    "positive_and_restored_runs_passed": true
+  },
+  "support_contract": "SEW8/VLEN128/LMUL1/VL8/vstart0/vm1; signed low8 pairs, signed32 low result, high96 zero; project result-width interpretation remains provisional.",
+  "source_pins": {
+    "XiangShan": "7b16188f7f18a97be69c9b1a2dae8a446eec3b47",
+    "NEMU": "d772a9d9e06f663d529bd1c6518480c1ee59ded2",
+    "Difftest": "3729300ae233816d332d057f170472ebe35147b0",
+    "yunsuan": "955921186e34bb8915806582a238181a6dc3435c"
+  },
+  "evidence_receipts": {
+    "performance_report": "reports/optimization-final-20261105T154859Z",
+    "regression_acceptance": "reports/optimization-regression-20261105T150829Z/acceptance.json",
+    "complete_suite": "reports/optimization-validation-20261105T145837Z/recovered-suite.json",
+    "source_binding": "reports/optimization-build-to-regression-binding.json"
+  },
+  "data_files_sha256": {
+    "after-memory-incremental.csv": "574ef4c44f704fb19415d6f6db9db89c318f7881a200e8051eb898e64716d61a",
+    "after-memory-summary.csv": "96c6d6e09c21ed06183eeb4a9ebe16f75d7b1e09e9f11d39a128a700afa78c54",
+    "after-memory.csv": "da831b3e0f67cd13464a58df77c602ef92ed68c94d0f88d9b4784eee0a43c5f1",
+    "after-rvv-incremental.csv": "8f508da0dde06cf2ee229fdf624077df32a96ad185ffcd5fde5548e2aedbae21",
+    "after-rvv-summary.csv": "069e8ec0986cfee4cfc8bb66102340005c7462300194681d1966403149634855",
+    "after-rvv.csv": "3881856c46b6e08823597e0431aecc9c15433b8a933ceb790972f9ef0005acd9",
+    "before-memory-incremental.csv": "574ef4c44f704fb19415d6f6db9db89c318f7881a200e8051eb898e64716d61a",
+    "before-memory-summary.csv": "96c6d6e09c21ed06183eeb4a9ebe16f75d7b1e09e9f11d39a128a700afa78c54",
+    "before-memory.csv": "da831b3e0f67cd13464a58df77c602ef92ed68c94d0f88d9b4784eee0a43c5f1",
+    "before-rvv-incremental.csv": "7878b276d712e0ceab43e1a1d9d8665a9b689a3a63a0d65fa6aca21042b65e86",
+    "before-rvv-summary.csv": "9b93e18d7f064ee048b82c68300811b122bb1b09b05681c28b61f4694d37052a",
+    "before-rvv.csv": "ced61a19b5a222b6f0b523385fed604ede0586e5dbb92754316f52d5371e1e3b",
+    "full-report.md": "3d4fa05bb6f46050e2e42d29907eea375b207cd64b0e2b7e851e78bdfb2b113e",
+    "unchanged-rvv-controls.csv": "22fdc083b503fe38550861ebe92c2048948cb979f18d5b57e91b21a989414ef0"
+  },
+  "portal_or_official_pr_updated": false,
+  "report_replay_byte_identical": true,
+  "report_script_sha256": "eb21822eec1ed7f40c98ea667eefdf8b60ef915a56b968af88457d0d3865eada",
+  "runtime_project_inputs_sha256": {
+    "contract.json": "40634352e057becf17c1d9749a1202d43b7935547ad30cf6d322783bf5f0122b",
+    "workloads/benchmark.c": "07a347eb254b70f8a60b5caa182c5271da426df4c00865bf97a9dbb336864009",
+    "workloads/benchmark_rvv.c": "ef7b566e16207af7c52c9e7b3c6c495981c35e6fe25d8c6c7831d1e73c08acd1",
+    "workloads/console.h": "d104a747b9592229154b5696854b7df63f45e647acfad39888573d8c31f7ed58",
+    "workloads/dot_memory.c": "62607403418790c0dd742c727043b0d4fabaf3527f77c17ca39e6735294644f7",
+    "workloads/flash.S": "e8c3bb58b6da7586aa93a0c9435aa2ebf56869643baf8fc0daf579605b8dd671",
+    "workloads/latency_probe.c": "a404ffb6f3effdd92d68ab8cb9ec7ae85b544ba0b869b0381a04566d76d51447",
+    "workloads/link.ld": "1c6dd14937e88ae5e5ea0fa95cd3b4abfe9b0c3121caa9c8b1605380cdfd5d8a",
+    "workloads/pipeline_test.c": "edc1476a6b4a69489d6bc41796510d2aa832c256386f4d18afb604b3d1ba2705",
+    "workloads/register_test.c": "9f6c5db6bfd2d180d2462fc91d8fbdd6ba3fc9901db714bf639054940fbe390f",
+    "workloads/start.S": "3c8cc301c699d2e2eb2a605353b5f91b3f2d9e03f723f7e2ef5d9ff1da2a7883",
+    "workloads/vadd_test.c": "fd48cb3ba1ac950f1a31d227b5921951cc3f079c335e10d7aac4f9b455881423",
+    "workloads/vdot_test.c": "5f9b50256075811fe672dba8f688141eaf6c6022e16dd317b83d2780718e47f5",
+    "datapath/test/src/VdotDatapathTest.scala": "0c1200d5aea7b36d9b255e2c10aac8535f1b20ba6964875b00f0b019d8b199c4",
+    "patches/nemu.patch": "fbfe8ed34beaf5bde714806d2e3a5b90b9aa3d744b6a2927f81ce31a678c7e29",
+    "patches/xiangshan.patch": "76ef1a49dbfd17a51654e40bded2d2431f483ace9112bbbc50dae8680a757555"
+  }
+}

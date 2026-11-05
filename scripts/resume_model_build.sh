@@ -20,8 +20,12 @@ if [[ "${1:-}" != --worker ]]; then
     -p "StandardOutput=append:$vdot_report/service.log" -p StandardError=inherit \
     --setenv="VDOT_TRACE_DEPTH=${VDOT_TRACE_DEPTH:-12}" \
     --setenv="VDOT_VERILATOR_OPT=${VDOT_VERILATOR_OPT:-1}" \
+    --setenv="VDOT_INLINE_MULT=${VDOT_INLINE_MULT:-2000}" \
+    --setenv="VDOT_EMU_TRACE=${VDOT_EMU_TRACE-fst}" \
     --setenv="VDOT_NATIVE_HEAP_SIZE=${VDOT_NATIVE_HEAP_SIZE:-34359738368}" \
     --setenv="VDOT_NATIVE_FILE_HEAP=${VDOT_NATIVE_FILE_HEAP:-1}" \
+    --setenv="VDOT_USE_JEMALLOC=${VDOT_USE_JEMALLOC:-0}" \
+    --setenv="VDOT_CPP_DECODER_O0=${VDOT_CPP_DECODER_O0:-0}" \
     --setenv="VDOT_CPP_JOBS=${VDOT_CPP_JOBS:-2}" \
     --setenv="VDOT_HOST_CXX=${VDOT_HOST_CXX:-/usr/bin/g++}" \
     --setenv="VDOT_HOST_CC=${VDOT_HOST_CC:-/usr/bin/gcc}" \
@@ -37,6 +41,12 @@ vdot_cpp_jobs=${VDOT_CPP_JOBS:-2}
 [[ "$vdot_cpp_jobs" =~ ^[1-9][0-9]*$ ]] || exit 2
 exec >> "$vdot_report/build.log" 2>&1
 cd "$NOOP_HOME"
+if [[ "${VDOT_USE_JEMALLOC:-0}" == 1 ]]; then
+  vdot_jemalloc=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+  test -f "$vdot_jemalloc"
+  export LD_PRELOAD="$vdot_jemalloc"
+  export MALLOC_CONF=narenas:1,dirty_decay_ms:0,muzzy_decay_ms:0,retain:false
+fi
 free -b > "$vdot_report/memory-before.txt"
 python3 - "$vdot_report" <<'PY'
 import hashlib
@@ -54,7 +64,7 @@ digests = {str(p): hashlib.sha256(p.read_bytes()).hexdigest()
 PY
 vdot_command=(env "MAKEFILES=$VDOT_ROOT/configs/verilator_5_022.mk"
   make emu CONFIG=MinimalConfig NUM_CORES=1 DISABLE_PERF=1
-  DISABLE_ALWAYSDB=1 WITH_CHISELDB=0 WITH_CONSTANTIN=0 EMU_TRACE=fst
+  DISABLE_ALWAYSDB=1 WITH_CHISELDB=0 WITH_CONSTANTIN=0 "EMU_TRACE=${VDOT_EMU_TRACE-fst}"
   "CXX=${VDOT_HOST_CXX:-/usr/bin/g++}" "LINK=${VDOT_HOST_CXX:-/usr/bin/g++}"
   "CC=${VDOT_HOST_CC:-/usr/bin/gcc}" AR=/usr/bin/ar
   "OPT_FAST=${VDOT_CPP_OPT:--O2 -fno-tree-slp-vectorize}"
