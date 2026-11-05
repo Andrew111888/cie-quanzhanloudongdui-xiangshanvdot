@@ -9,6 +9,7 @@ from datetime import datetime
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
 import zipfile
 
@@ -141,6 +142,43 @@ for name in ('pristine-preserved.sha256', 'pristine-sources.json', 'pristine-vad
 pristine_run = Path((tested_root / 'reports/pristine-vadd-evidence.txt').read_text().strip())
 for path in pristine_run.rglob('*'):
     if path.is_file(): evidence['pristine/vadd/' + str(path.relative_to(pristine_run))] = path
+
+# Preserve the exact sessions shown in the videos as well as the earlier full
+# acceptance. A video recheck must not silently borrow another run's raw log.
+stage1_text = re.sub(r'\x1b\[[0-9;]*m', '', (videos[0] / 'terminal.log').read_text(errors='replace'))
+stage1_candidates = {Path(line.strip()) for line in stage1_text.splitlines()
+                     if re.fullmatch(re.escape(str(root / 'reports')) + r'/demo-stage1-\d{8}T\d{6}Z', line.strip())}
+if len(stage1_candidates) != 1:
+    raise SystemExit('Cannot identify the exact pristine session in the stage-one video')
+stage1_session = stage1_candidates.pop()
+if (stage1_session / 'exit-status.txt').read_text().strip() != '0':
+    raise SystemExit('Stage-one live session did not complete successfully')
+for path in stage1_session.rglob('*'):
+    if path.is_file(): evidence['video-rechecks/stage1/' + str(path.relative_to(stage1_session))] = path
+for label in ('smoke', 'register'):
+    log = acceptance_path / ('video-stage2-' + label + '.log')
+    folders = [Path(s.removeprefix('RTL evidence: ')) for s in log.read_text().splitlines()
+               if s.startswith('RTL evidence: ')]
+    if len(folders) != 1 or (folders[0] / 'exit-status.txt').read_text().strip() != '0':
+        raise SystemExit('Stage-two live session is missing: ' + label)
+    for path in folders[0].rglob('*'):
+        if path.is_file(): evidence['video-rechecks/stage2/' + label + '/' + str(path.relative_to(folders[0]))] = path
+stage3_log = acceptance_path / 'video-stage3-fault.log'
+stage3_folders = [Path(s.removeprefix('Fault-check evidence: ')) for s in stage3_log.read_text().splitlines()
+                  if s.startswith('Fault-check evidence: ')]
+if len(stage3_folders) != 1 or 'FAULT_CHECK_PASS' not in stage3_log.read_text():
+    raise SystemExit('Stage-three live fault-check session is missing')
+stage3_fault = stage3_folders[0]
+for path in stage3_fault.rglob('*'):
+    if path.is_file(): evidence['video-rechecks/stage3/fault-check/' + str(path.relative_to(stage3_fault))] = path
+for label in ('positive-before', 'negative', 'positive-restored'):
+    log = stage3_fault / (label + '.log')
+    folders = [Path(s.removeprefix('RTL evidence: ')) for s in log.read_text().splitlines()
+               if s.startswith('RTL evidence: ')]
+    if len(folders) != 1:
+        raise SystemExit('Missing live stage-three run: ' + label)
+    for path in folders[0].rglob('*'):
+        if path.is_file(): evidence['video-rechecks/stage3/' + label + '/' + str(path.relative_to(folders[0]))] = path
 for report in (tested_root / 'reports').glob('vdot-build-*'):
     if not report.is_dir(): continue
     for path in report.rglob('*'):
