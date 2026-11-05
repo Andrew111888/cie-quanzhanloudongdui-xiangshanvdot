@@ -15,7 +15,16 @@ PY
 riscv64-unknown-elf-gcc -march=rv64gc -mabi=lp64d -nostdlib -nostartfiles \
   -Wl,-Ttext=0x10000000 "$VDOT_ROOT/workloads/flash.S" -o "$VDOT_ROOT/build/workloads/flash.elf"
 riscv64-unknown-elf-objcopy -O binary "$VDOT_ROOT/build/workloads/flash.elf" "$VDOT_ROOT/build/workloads/flash.bin"
-for workload in vdot_test vdot_smoke vdot_vstart_probe vadd_test benchmark latency_probe; do
+if [[ $# -gt 0 ]]; then
+  vdot_workloads=("$@")
+else
+  vdot_workloads=(vdot_test vdot_smoke vdot_vstart_probe vadd_test benchmark latency_probe pipeline_test)
+fi
+for workload in "${vdot_workloads[@]}"; do
+case "$workload" in
+  vdot_test|vdot_smoke|vdot_vstart_probe|vadd_test|benchmark|latency_probe|pipeline_test) ;;
+  *) printf 'Unknown workload: %s\n' "$workload" >&2; exit 2 ;;
+esac
 source_name=$workload
 extra=()
 if [[ "$workload" == vdot_smoke ]]; then source_name=vdot_test; extra=(-DRANDOM_CASES=0); fi

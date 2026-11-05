@@ -90,12 +90,20 @@ static int test_illegal(void) {
     if (kind == 6) __asm__ volatile(".word 0x00a4060b" ::: "memory", "v12");
     else __asm__ volatile(".word 0x02a4060b" ::: "memory", "v12");
     if (expected_illegal) return 30 + kind;
-    uintptr_t current_vstart;
-    __asm__ volatile("csrr %0,vstart\n csrwi vstart,0\n vs1r.v v12,(%1)"
-                     : "=r"(current_vstart) : "r"(after) : "memory");
+    uintptr_t current_vstart, trap_value;
+    __asm__ volatile("csrr %0,vstart\n csrr %1,mtval\n csrwi vstart,0\n vs1r.v v12,(%2)"
+                     : "=&r"(current_vstart), "=&r"(trap_value) : "r"(after) : "memory");
+    if (trap_value != (kind == 4 ? 0x02a4060bu : 0u)) return 70 + kind;
     if (current_vstart != (kind == 4 ? 1u : 0u)) return 40 + kind;
     for (unsigned i = 0; i < 4; ++i) if (after[i] != before[i]) return 50 + kind;
   }
+  // An ordinary decode-illegal opcode must still report its instruction bits,
+  // including immediately after a custom fault. This catches stale metadata.
+  expected_illegal = 1;
+  __asm__ volatile("fence rw,rw\n .word 0x0000007b" ::: "memory");
+  uintptr_t ordinary_tval;
+  __asm__ volatile("csrr %0,mtval" : "=r"(ordinary_tval));
+  if (expected_illegal || ordinary_tval != 0x7b) return 79;
   return 0;
 }
 

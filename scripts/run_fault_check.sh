@@ -49,7 +49,7 @@ if 'HIT GOOD TRAP' in text:
     raise SystemExit('Negative run unexpectedly reported GOOD TRAP')
 commits = re.findall(r'^\[\d+\]\s+commit pc ([0-9a-fA-F]{16}) inst 02a4060b '
                      r'wen 1 dst 12 data [0-9a-fA-F]{16} idx [0-9a-fA-F]{3}([^\r\n]*)$', text, re.M)
-if not commits or commits[0][1].strip() not in ('', '<--'):
+if not commits or re.search(r'\([SDW]\)', commits[0][1]):
     raise SystemExit('Missing first vdot commit with an unskipped, non-delayed v12 write')
 (report / 'detected-mismatch.json').write_text(json.dumps({
     'rtl_run': str(run), 'observed_line': expected.group(0),

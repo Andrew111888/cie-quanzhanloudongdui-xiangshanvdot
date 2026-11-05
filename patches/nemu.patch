@@ -23,18 +23,26 @@ index 11290c8..f0da1a8 100644
  #endif // CONFIG_RVV
  #ifdef CONFIG_RV_AME
 diff --git a/src/isa/riscv64/instr/rvv/vcompute.h b/src/isa/riscv64/instr/rvv/vcompute.h
-index 2bcb6aa..1393c08 100644
+index 2bcb6aa..ddc865e 100644
 --- a/src/isa/riscv64/instr/rvv/vcompute.h
 +++ b/src/isa/riscv64/instr/rvv/vcompute.h
-@@ -19,6 +19,25 @@
+@@ -19,6 +19,33 @@
  #include "vcompute_impl.h"
  #include "vcommon.h"
  
 +// Provisional CIE-2026 vdot.vv: low eight signed bytes -> signed32, rest zero.
 +def_EHelper(vdot) {
 +  require_vector(true);
++  // Nonzero arithmetic vstart is rejected by the core's decoder, which has
++  // the original instruction payload. Preserve ordinary illegal xtval here.
++  if (vstart->val != 0) {
++    longjmp_exception(EX_II);
++  }
 +  if (VLEN != 128 || vtype->vsew != 0 || vtype->vlmul != 0 ||
-+      vl->val != 8 || vstart->val != 0 || !s->vm) {
++      vl->val != 8 || !s->vm) {
++    // The custom execution-unit configuration fault reports xtval=0.
++    // Keep ordinary decode/privilege illegal-instruction reporting unchanged.
++    cpu.trapInfo.vdot_config_fault = true;
 +    longjmp_exception(EX_II);
 +  }
 +  int32_t result = 0;
@@ -52,3 +60,63 @@ index 2bcb6aa..1393c08 100644
  def_EHelper(vadd) {
    ARITH(ADD, SIGNED)
  }
+diff --git a/src/isa/riscv64/local-include/trapinfo.h b/src/isa/riscv64/local-include/trapinfo.h
+index db68712..b3dd0cf 100644
+--- a/src/isa/riscv64/local-include/trapinfo.h
++++ b/src/isa/riscv64/local-include/trapinfo.h
+@@ -23,9 +23,11 @@ typedef struct {
+     word_t tval;
+     word_t tval2;
+     word_t tinst;
++    // Non-architectural metadata for the custom vdot execution-unit fault.
++    bool vdot_config_fault;
+ } trap_info_t;
+ 
+ void clear_trapinfo();
+ 
+ 
+-#endif // __TRAPINFO_H__
+\ No newline at end of file
++#endif // __TRAPINFO_H__
+diff --git a/src/isa/riscv64/system/intr.c b/src/isa/riscv64/system/intr.c
+index ecab269..f20184f 100644
+--- a/src/isa/riscv64/system/intr.c
++++ b/src/isa/riscv64/system/intr.c
+@@ -75,6 +75,10 @@ static word_t get_trap_pc(word_t xtvec, word_t xcause) {
+ 
+ word_t raise_intr(word_t NO, vaddr_t epc) {
+   IFDEF(CONFIG_SHARE, csr_difftest_mark_dirty());
++  // A late vdot configuration check has no decoded trap instruction payload.
++  // This platform-defined xtval=0 choice does not affect other illegal opcodes.
++  word_t illegal_tval = cpu.trapInfo.vdot_config_fault ? 0 : MUXDEF(CONFIG_TVAL_EX_II, cpu.instr, 0);
++  cpu.trapInfo.vdot_config_fault = false;
+ #ifdef CONFIG_RVV
+   // A vector-store fault can leave vstart at the faulting element.
+   if (cpu.isVstoreActive) {
+@@ -210,7 +214,7 @@ word_t raise_intr(word_t NO, vaddr_t epc) {
+ #endif // CONFIG_RV_SDTRIG
+         break;
+       case EX_II:
+-        vstval->val = MUXDEF(CONFIG_TVAL_EX_II, cpu.instr, 0);
++        vstval->val = illegal_tval;
+         break;
+ #ifdef CONFIG_RV_ZICFILP
+       case EX_SWC:
+@@ -258,7 +262,7 @@ word_t raise_intr(word_t NO, vaddr_t epc) {
+       case EX_IGPF: case EX_LGPF: case EX_SGPF:
+         break;
+       case EX_II: case EX_VI:
+-        stval->val = MUXDEF(CONFIG_TVAL_EX_II, cpu.instr, 0);
++        stval->val = illegal_tval;
+         IFDEF(CONFIG_RVH, htval->val = 0);
+         IFDEF(CONFIG_RVH, htinst->val = 0);
+         break;
+@@ -325,7 +329,7 @@ word_t raise_intr(word_t NO, vaddr_t epc) {
+       case EX_IGPF: case EX_LGPF: case EX_SGPF:
+         break;
+       case EX_II: case EX_VI:
+-        mtval->val = MUXDEF(CONFIG_TVAL_EX_II, cpu.instr, 0);
++        mtval->val = illegal_tval;
+         IFDEF(CONFIG_RVH, mtval2->val = 0);
+         IFDEF(CONFIG_RVH, mtinst->val = 0);
+         break;

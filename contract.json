@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "status": "provisional_not_organizer_confirmed",
   "instruction": "vdot.vv",
   "opcode": 11,
@@ -15,5 +15,7 @@
   "result_high_bits": "zero",
   "old_destination_accumulated": false,
   "unsupported": "illegal_instruction_no_destination_or_vstart_modification",
+  "configuration_fault": {"cause": 2, "xtval": 0, "origin": "execution_unit_configuration_check"},
+  "nonzero_vstart_fault": {"cause": 2, "xtval": "instruction_bits", "origin": "decode"},
   "source": "https://rv.cie.org.cn/direction?id=8"
 }

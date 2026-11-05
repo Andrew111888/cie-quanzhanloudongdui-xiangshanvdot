@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Parse the complete run before launching emu. Bash otherwise resumes reading
+# this file by byte offset after a long command, which is unsafe if an editor
+# changes the workload allowlist while that command is running.
+main() {
 set -euo pipefail
 source "$(dirname -- "$0")/env.sh"
 vdot_workload=${1:-vdot_smoke}
@@ -7,6 +11,7 @@ case "$vdot_workload" in
   vdot_smoke|vdot_test) vdot_marker=VDOT_PASS ;;
   benchmark) vdot_marker=BENCH_PASS ;;
   latency_probe) vdot_marker=LATENCY_PROBE_PASS ;;
+  pipeline_test) vdot_marker=PIPELINE_PASS ;;
   *) printf 'Unknown validation workload: %s\n' "$vdot_workload" >&2; exit 2 ;;
 esac
 vdot_emu="$NOOP_HOME/build/emu"
@@ -39,8 +44,12 @@ else
 fi
 printf '%s\n' "$vdot_status" > "$vdot_report/exit-status.txt"
 test "$vdot_status" == 0
+sha256sum --check "$vdot_report/artifacts.sha256" > "$vdot_report/artifacts-after.txt"
 python3 "$VDOT_ROOT/scripts/check_run.py" "$vdot_report/run.log" "$vdot_marker"
 if ! rg -Fq 'Difftest enabled.' "$vdot_report/run.log"; then
   printf 'Missing Difftest initialization evidence.\n' >&2
   exit 1
 fi
+}
+
+main "$@"; exit "$?"

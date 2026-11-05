@@ -17,12 +17,21 @@ def sha256(data):
     return hashlib.sha256(data).hexdigest()
 
 
-result = {'recorded_at_utc': datetime.now(timezone.utc).isoformat(), 'repositories': {}}
+result = {'schema_version': 2, 'recorded_at_utc': datetime.now(timezone.utc).isoformat(), 'repositories': {}}
 project_head = subprocess.run(['git', '-C', str(root), 'rev-parse', 'HEAD'],
                               text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
 result['project_head'] = project_head.stdout.strip() if project_head.returncode == 0 else None
-for name in ('XiangShan', 'NEMU'):
-    repo = root / 'third_party' / name
+repositories = (
+    ('XiangShan', 'XiangShan'),
+    ('NEMU', 'NEMU'),
+    ('xs-env', 'xs-env'),
+    ('NEMU-softfloat', 'NEMU/resource/softfloat/repo'),
+    ('NEMU-nanopb', 'NEMU/resource/nanopb'),
+    ('NEMU-LibCheckpoint', 'NEMU/resource/LibCheckpoint'),
+    ('NEMU-gcpt_restore', 'NEMU/resource/gcpt_restore'),
+)
+for name, relative_repo in repositories:
+    repo = root / 'third_party' / relative_repo
     changed = {}
     for line in git(repo, 'status', '--porcelain', '--untracked-files=all').splitlines():
         relative = line[3:]
@@ -36,6 +45,10 @@ for name in ('XiangShan', 'NEMU'):
         'changed_source_sha256': changed,
     }
 result['project_files_sha256'] = {}
+for relative in ('contract.json', 'build.sc', 'build.mill'):
+    path = root / relative
+    if path.is_file():
+        result['project_files_sha256'][relative] = sha256(path.read_bytes())
 for directory in ('scripts', 'tests', 'workloads', 'datapath', 'patches', 'configs'):
     for path in sorted((root / directory).rglob('*')):
         if path.is_file() and '__pycache__' not in path.parts:
