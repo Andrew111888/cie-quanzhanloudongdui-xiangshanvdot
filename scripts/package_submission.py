@@ -121,6 +121,22 @@ for name, run in acceptance['rtl_runs'].items():
 for path in acceptance_path.rglob('*'):
     if path.is_file():
         evidence['acceptance/' + str(path.relative_to(acceptance_path))] = path
+diagnostic_log = acceptance_path / 'pipeline-diagnostic.log'
+diagnostic_folders = [Path(line.removeprefix('RTL evidence: '))
+                      for line in diagnostic_log.read_text().splitlines()
+                      if line.startswith('RTL evidence: ')]
+if len(diagnostic_folders) != 1:
+    raise SystemExit('Missing exact pipeline diagnostic run')
+diagnostic = diagnostic_folders[0]
+purpose = json.loads((diagnostic / 'diagnostic-purpose.json').read_text())
+pipeline_analysis = json.loads((acceptance_path / 'pipeline-analysis/pipeline-analysis.json').read_text())
+if purpose['functional_pass'] or purpose['expected_budget_stop'] != 28000:
+    raise SystemExit('Pipeline diagnostic was incorrectly classified as a functional pass')
+if digest_file(diagnostic / 'wave.fst') != pipeline_analysis['metadata']['fst_sha256']:
+    raise SystemExit('Raw pipeline diagnostic FST differs from its analyzed source')
+for path in diagnostic.rglob('*'):
+    if path.is_file():
+        evidence['diagnostic/pipeline/' + str(path.relative_to(diagnostic))] = path
 fault_outer = next((line.removeprefix('Fault-check evidence: ') for line in
                     (acceptance_path / 'fault-check.log').read_text().splitlines()
                     if line.startswith('Fault-check evidence: ')), None)
