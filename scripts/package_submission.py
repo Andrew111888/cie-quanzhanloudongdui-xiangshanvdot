@@ -136,7 +136,7 @@ for label in ('positive-before', 'negative', 'positive-restored'):
     for path in directory.rglob('*'):
         if path.is_file(): evidence['fault-runs/' + label + '/' + str(path.relative_to(directory))] = path
 tested_root = acceptance_path.parents[1]
-for name in ('pristine-preserved.sha256', 'pristine-sources.json', 'pristine-vadd-evidence.txt', 'toolchain-identity.json'):
+for name in ('pristine-preserved.sha256', 'pristine-sources.json', 'pristine-vadd-evidence.txt', 'toolchain-identity.json', 'host-environment.json'):
     path = tested_root / 'reports' / name
     if path.exists(): evidence['pristine/' + name] = path
 pristine_run = Path((tested_root / 'reports/pristine-vadd-evidence.txt').read_text().strip())
@@ -189,7 +189,9 @@ for name in ('prepare-clean-20261105.sh', 'clean-prepare-driver.log', 'pristine-
              'pristine-build-retry-driver.log', 'pristine-build-heap2g-driver.log',
              'pristine-resume-driver.log', 'pristine-validation-driver.log',
              'prepare-extension-clean-20261105.sh', 'extension-clean-driver.log',
-             'queue-extension-acceptance-20261105.sh', 'extension-acceptance-driver.log'):
+             'queue-extension-acceptance-20261105.sh', 'extension-acceptance-driver.log',
+             'queue-final-artifacts-20261105.sh', 'final-artifact-queue-inputs.sha256',
+             'final-artifact-preparation-driver.log'):
     path = root / 'reports' / name
     if path.exists(): evidence['operation-logs/' + name] = path
 source = {name: root / name for name in binding['tracked_file_sha256']}

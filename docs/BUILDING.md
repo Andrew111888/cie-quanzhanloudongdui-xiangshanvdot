@@ -1,6 +1,6 @@
 # 构建与运行记录
 
-本文为开发中的复现入口。已成功运行香山整核，完成vadd、vdot定向、真实向量差分反例与恢复、压力和性能测试；干净检出全流程正在单独复现，不能据此提前标记三阶段交付完成。实际结果见 `PROGRESS.md`。
+本文为固定版本的构建与运行入口。开发与干净检出证据分别保留；本轮完整构建身份、资源和验收状态见CLEAN_REPRODUCTION.md，不能只依据某个中间文件判断三阶段交付完成。
 
 ## 固定源码
 
@@ -16,9 +16,11 @@
 
 ## 当前工具环境
 
+实际宿主为Ubuntu 26.04.1 LTS、x86_64、Linux 7.0.0-38-generic，Intel Core i7-11700、16个逻辑线程；内存总量16056976KiB（约15.3GiB），交换空间4194300KiB。采集在独立目录reports/host-environment.json，不包含主机名、网络地址或联系信息；可用磁盘空间随运行变化，不能当作最低配置。
+
 `scripts/env.sh` 只配置当前 Shell，默认复用本机 `/home/yh/chipyard/.conda-env` 的 RISC-V GCC、Java 和辅助程序，以及本项目 `tools/` 中的 Mill、依赖库。路径可通过本地 `local.env` 或 `VDOT_CHIPYARD_ENV` 覆盖。
 
-已使用 Mill 0.12.3、Scala 2.13.15、Chisel 6.7.0、RISC-V GCC 13.2.0 和本机 Conda 环境中的 OpenJDK 20。干净机器仍需按固定版本的香山环境要求安装 Verilator、C/C++ 编译器、Make、Python、设备树编译器、Bison、Flex、压缩库等依赖。工具安装及版本自动检查脚本尚未完备。
+已使用Mill 0.12.3、Scala 2.13.15、Chisel 6.7.0、RISC-V GCC 13.2.0、OpenJDK 20.0.2、Verilator 5.022、firtool 1.62.1及宿主GCC/G++ 15.2.0。scripts/toolchain_manifest.py记录实际可执行文件、版本与SHA256，本轮输出在独立目录reports/toolchain-identity.json。环境准备详见BOOTSTRAP.md；没有完整的新系统自动安装器或Conda传递依赖锁，仍需满足系统库、Make、Python、dtc、Bison、Flex等依赖。
 
 本机的 `/usr/bin/java` 与 Conda Java 版本不同；使用脚本中的 `JAVA_HOME`，不要只依据 PATH 推断 Java 版本。
 
@@ -72,7 +74,7 @@ C++构建明确使用系统GCC/G++及`OPT_FAST=-O2 -fno-tree-slp-vectorize`。�
 
 C++阶段默认两个编译任务，总内存仍受5500MiB上限约束。可用`VDOT_CPP_JOBS=1`降低并行度。JVM及firtool阶段仍各自串行执行，与C++编译分离。
 
-默认 Java 堆8GiB、Chisel进程组上限4800MiB、firtool上限5500MiB、模型编译上限5500MiB。每阶段独立记录命令、日志、退出状态和资源，最后检查源码摘要未漂移；该方式依赖 Linux 用户 systemd 会话。整套脚本仍需完整成功运行和干净环境复现后才能标记可复现。
+默认Java堆8GiB、Chisel进程组上限4800MiB、firtool上限5500MiB、模型编译上限5500MiB。每阶段独立记录命令、日志、退出状态和资源，最后检查源码摘要未漂移；该方式依赖Linux用户systemd会话。必须同时核对BUILD_COMPLETE、退出0、二进制摘要和后续真实运行，不能把任务启动视为成功。
 
 当前独立扩展核复现显式使用 `VDOT_COMPILE_MEMORY_MAX=7G bash scripts/build_emu.sh`；原核也在模型生成阶段把进程组限制在线调至7GiB并保存调整记录。两者实际资源参数见CLEAN_REPRODUCTION.md及各阶段命令/日志，不能仅依据脚本默认值推断实测峰值。
 
@@ -88,13 +90,13 @@ VDOT_JAVA_HEAP=8G \
 
 该方式通过 `-XX:AllocateHeapAt` 在项目目录下创建临时堆映射，进程退出后 JVM 关闭临时文件。可能因页读写而降低构建速度。它只用于构建，不用于 RTL 性能计时。机制见 [OpenJDK 20 实现](https://github.com/openjdk/jdk20u/blob/master/src/hotspot/os/posix/os_posix.cpp) 与 [JVM 选项文档](https://docs.oracle.com/en/java/javase/11/tools/java.html)。
 
-独立firtool 1.62.1已成功生成SystemVerilog：5分46秒、最大RSS5359524KiB，见 `reports/firtool-standalone-time.txt`。随后带FST的Verilator在常规分配器下超过5200MiB；改用原生文件映射分配库后已完成模型生成及C++链接。这是开发恢复路线的实际结果，新的完整分阶段脚本仍在干净目录验证。
+早期开发恢复路线的独立firtool 1.62.1实测5分46秒、最大RSS5359524KiB，见reports/firtool-standalone-time.txt。随后带FST的Verilator在常规分配器下超过5200MiB；改用原生文件映射分配库后完成模型生成及C++链接。本轮完整干净构建已成功，各阶段的新测量见CLEAN_REPRODUCTION.md；不能混用两轮的资源结果。
 
 `scripts/lowmem-bin/verilator` 仅对模型生成的Verilator 5.022原生进程使用 `libvmmalloc`，默认临时池32GiB，退出后释放，仿真器运行不加载该库。小规模测试在384MiB限制下校验512MiB数据通过；整核生成成功证据为 `reports/model-resume-20261104T155853Z-3297719/`，该次make随后因C++选项不兼容失败，经修复后在 `reports/model-resume-20261104T170533Z-3349034/` 完成链接。工具库来自Debian官方 `libvmmalloc1=1.8-2`，本地安装入口为 `bash scripts/install_memory_helper.sh`，带固定SHA256校验，不修改系统目录。机制见 [官方手册](https://pmem.io/vmem/manpages/linux/master/libvmmalloc/libvmmalloc.7.html) 和 [Debian包信息](https://packages.debian.org/bullseye/libvmmalloc1)。
 
-分阶段默认需要约33GiB临时堆空间，另给RTL、C++和对象文件保留充足空间。默认追踪12层层级、生成器优化等级O1，均只作用于宿主模型构建，实际波形层级仍需验证。`VDOT_VERILATOR_BIN` 可覆盖本机原生 Verilator 路径，`VDOT_NATIVE_FILE_HEAP=0` 可在有足够内存时禁用原生文件映射库。不要把构建时间计入处理器性能测量。
+分阶段默认需要约33GiB临时堆空间，另给RTL、C++和对象文件保留充足空间。默认追踪12层层级、生成器优化等级O1，均只作用于宿主模型构建；实际FST已提取到后端译码、重命名、执行、写回与提交接口。`VDOT_VERILATOR_BIN`可覆盖本机原生Verilator路径，`VDOT_NATIVE_FILE_HEAP=0`可在有足够内存时禁用原生文件映射库。不要把构建时间计入处理器性能测量。
 
-wrapper在所有`-O`选项之后显式追加`--inline-mult 2000`。Verilator5.022的`-O3`会设置最大内联，随后`-O1`不会撤销该设置；小例已实测33个与1个内联实例的差异，整核改善尚待重新生成模型验证。`VDOT_INLINE_MULT`可显式覆盖；当前开发中已经生成的整核C++保留原参数，不为该宿主优化重新丢弃有效模型。详见[固定版本低内存选项核对](LOWMEM_OPTIONS.md)。
+wrapper在所有`-O`选项之后显式追加`--inline-mult 2000`。Verilator5.022的`-O3`会设置最大内联，随后`-O1`不会撤销该设置；小例已实测33个与1个内联实例的差异。本轮原核和扩展核的干净构建均已使用显式内联参数成功生成模型，但未在同条件下与旧参数做完整A/B资源实验，不声称具体内存收益。`VDOT_INLINE_MULT`可显式覆盖；早期开发模型仍保留历史参数。详见[固定版本低内存选项核对](LOWMEM_OPTIONS.md)。
 
 可用环境变量显式指定配置和资源：
 
@@ -123,4 +125,4 @@ bash scripts/build_emu.sh --resume-fir /absolute/path/to/prior-build-report
 
 在同一构建之后继续本地验证，可运行`bash scripts/validate_rtl_when_ready.sh <构建报告目录> <错误库路径>`。它等待指定构建的成功记录与校验值，按序执行功能、差分、故障注入恢复、性能和初始波形运行，首个失败立即退出；实际波形分析和完整复现不由该队列自动判定通过。两个后台服务均不执行推送、上传或比赛提交。
 
-现有emu已实际验证 `scripts/run_rtl.sh` 的运行参数、短窗口FST、真实Difftest及性能命令。新的独立检出仍须完成同样的构建与验证，不能以开发目录的可运行二进制替代最终复现。
+scripts/run_rtl.sh的参数、短窗口FST、真实Difftest及性能命令已有实际运行证据。独立检出的完整构建和回归单独保留，结果见CLEAN_REPRODUCTION.md；不以开发目录的可运行二进制替代最终复现。
