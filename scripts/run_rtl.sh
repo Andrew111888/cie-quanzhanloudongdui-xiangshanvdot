@@ -12,6 +12,7 @@ case "$vdot_workload" in
   benchmark) vdot_marker=BENCH_PASS ;;
   latency_probe) vdot_marker=LATENCY_PROBE_PASS ;;
   pipeline_test) vdot_marker=PIPELINE_PASS ;;
+  register_test) vdot_marker=REGISTER_PASS ;;
   *) printf 'Unknown validation workload: %s\n' "$vdot_workload" >&2; exit 2 ;;
 esac
 vdot_emu="$NOOP_HOME/build/emu"
