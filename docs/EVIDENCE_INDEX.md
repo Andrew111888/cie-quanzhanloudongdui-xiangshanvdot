@@ -37,4 +37,4 @@ data/development-20261105-manifest.json记录CSV自身与来源日志/FST的SHA2
 
 首次随机运行的DUT本身正确，但驱动收尾退出2，其目录reports/rtl-vdot_test-20261105T013446Z-3572191/保留原样。后来的完整重跑才是有效验收；没有补造缺失退出文件。旧参考库及更早失败构建也只作为诊断历史。
 
-独立干净检出位于/home/yh/cie/vdot-kmhv2-repro-20261105。全部Scala/CHIRRTL和经校验恢复的firtool已通过，原核Verilator/C++及向量smoke仍在推进。最终扩展核复现、录屏、文件打包和双入口提交尚未完成，不能以这里的开发日志替代。
+独立干净检出位于/home/yh/cie/vdot-kmhv2-repro-20261105。未修改原核已完成全量构建和真实vadd；扩展核复现及正式交付的最新状态见CLEAN_REPRODUCTION.md和PROGRESS.md，不能以这里的开发日志替代最终验收。
