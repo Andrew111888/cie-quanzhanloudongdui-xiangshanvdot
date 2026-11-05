@@ -13,9 +13,11 @@ case "$vdot_workload" in
   latency_probe) vdot_marker=LATENCY_PROBE_PASS ;;
   pipeline_test) vdot_marker=PIPELINE_PASS ;;
   register_test) vdot_marker=REGISTER_PASS ;;
+  benchmark_rvv) vdot_marker=RVV_BENCH_PASS ;;
+  dot_memory) vdot_marker=MEMORY_DOT_PASS ;;
   *) printf 'Unknown validation workload: %s\n' "$vdot_workload" >&2; exit 2 ;;
 esac
-vdot_emu="$NOOP_HOME/build/emu"
+vdot_emu=${VDOT_EMU_PATH:-$NOOP_HOME/build/emu}
 vdot_reference=${VDOT_REF_SO:-$VDOT_ROOT/build/nemu/reference/riscv64-nemu-interpreter-so}
 test -x "$vdot_emu" || { printf 'Build emu first.\n' >&2; exit 2; }
 test -f "$vdot_reference"
