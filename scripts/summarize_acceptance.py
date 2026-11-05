@@ -142,7 +142,7 @@ stage2=('# 阶段二：整核功能与流水验证最终结果\n\n'+common+
         '诊断采集故意在28000周期停止，正常验收器拒绝其功能PASS；仅在与完整压力运行4项输入摘要一致后用于波形分析。'
         '观察到vdot译码/重命名反压，未观察到FU输出反压或冲刷恰在两级算术内部，不将这些具体时序计入覆盖。\n')
 perf=(acceptance_path/'performance.md').read_text()
-perf=perf.replace('# RTL 性能结果','# 程序片段的60条RTL样本')
+perf=perf.replace('# RTL 性能结果','## 程序片段的60条RTL样本')
 pairs=wave['fu_pairs'];fu_rows=['| 算术及微操作 | P | 输入边沿 | 结果边沿 | 周期 |','|---|---:|---:|---:|---:|']
 for name in ('multiply','reduce','vdot'):
  for p in pairs[name]:fu_rows.append(f'| {name} uop{p["uop"]} | {p["pdest"]} | {p["input_edge"]} | {p["output_edge"]} | {p["cycles"]} |')
@@ -163,6 +163,7 @@ stage3=('# 阶段三：协同仿真与实测性能最终结果\n\n'+common+
         '## 实际算术路径与独立突发吞吐\n\n'+'\n'.join(fu_rows)+'\n\n'
         f'此次等价基线首个乘法接收到最终归约结果为{wave["baseline_input_to_final_result_cycles"]}周期，含配置、清零及依赖调度；'
         f'vdot输入至结果为{wave["vdot_input_to_result_cycles"]}周期。归约uop0写内部临时物理目的，uop1才写v12完整结果8，不能把部分和当作最终结果。\n\n'
+        '扩宽乘法uop0包含8个有效16位乘积，uop1为未参与本次归约的尾部；后者的物理结果不作为点积语义值。\n\n'
         '![实际算术路径](../figures/clean-latency-timeline.svg)\n\n'
         f'另有{len(pipeline["independent_bursts"])}组×8条独立vdot的输入和输出连续逐周期握手，逐条核对实际两源的黄金和、完整128位结果、ROB、P与提交。'
         '这些突发的实测接收/输出间隔为1周期，不代表任意负载的持续吞吐上限。片段周期不能称为FU延迟。\n\n'

@@ -3,6 +3,9 @@
 这些入口整理真实验收证据，不代替处理器构建和测试。执行顺序如下；实际目录参数以本轮报告为准，不能把占位路径当作已有结果。
 
 ```bash
+# 从本轮已完成构建导出生成RTL及来源；重新复现时改用新的构建报告。
+python3 scripts/export_generated_rtl.py /absolute/path/to/completed-vdot-build-report
+
 # 完整干净验收生成acceptance.json后，整理最终文档与原始CSV。
 python3 scripts/summarize_acceptance.py /absolute/path/to/completed-acceptance
 
@@ -15,6 +18,8 @@ python3 scripts/record_terminal.py scripts/demo_stage3.sh --output output/video-
 ```
 
 先审阅所有文档、原始数据及录屏，再提交最终源码，保持Git工作区干净。绑定器比较处理器、NEMU、资源、工作负载、配置和关键构建/分析入口的字节；允许并记录后续报告/演示工具增加。子模块比较路径、SHA和初始化状态，不把不同克隆中的git-describe标签当作代码差异。rtl/中的两份生成模块另与本次完整构建的实际文件、FIR及补丁摘要比较，不把来源未明的生成文件混入交付。
+
+仓库中已有的rtl/provenance.json记录首次交付构建，不能冒充另一次构建。若要重新生成整套报告和提交包，先用上述导出入口更新本轮构建来源，再提交这些非处理器源文件变化；绑定器会保留新验收提交和最终归档提交的区别。普通功能复现只需构建与verify_reproduction.sh，无须重发提交材料。
 
 ```bash
 python3 scripts/bind_evidence.py /absolute/path/to/completed-acceptance \

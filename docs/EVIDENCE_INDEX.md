@@ -1,6 +1,6 @@
 # 开发证据索引
 
-核对日期：2026-11-05。下列为真实开发运行，尚未作为最终干净复现提交包发布。所有目录相对本机工程根/home/yh/cie/vdot-kmhv2；大体积FST及原始部署输出保留本机，最终按UPLOAD_MANIFEST.md选择并打包。
+下列为2026-11-05真实开发运行，目录相对/home/yh/cie/vdot-kmhv2。正式交付入口为[完整干净验收](FINAL_RESULTS.md)及data/clean/provenance.json；开发期与新检出证据分别保留。大体积FST及部署输出按UPLOAD_MANIFEST.md进入官网评审证明包。
 
 ## 当前有效证据
 

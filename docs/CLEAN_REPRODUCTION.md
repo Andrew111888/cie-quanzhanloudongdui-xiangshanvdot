@@ -19,7 +19,7 @@
 
 原核emu SHA256为b887f745a2c04b9bc2db4e9b8d0d47125068dcf69772a403b5e9677a01b1a878，原版NEMU参考库为88c6eb01871691981e2e5e095e337239acad63d006489ace4248fd61abb513de。该二者仅证明标准向量原核环境，不具有vdot实现。
 
-## vdot扩展核：构建通过，完整验收进行中
+## vdot扩展核：完整构建与验收均已通过
 
 在源提交3424efe下应用两个固定补丁，重放后4个香山文件和5个NEMU文件与补丁一致。Python4项、独立Chisel/Verilator数据通路、全部裸机工作负载构建及NEMU的vadd、vdot smoke/完整随机、latency、pipeline、register、benchmark功能均已通过，证据在独立目录reports/extension-preparation/。
 
@@ -35,7 +35,19 @@
 
 上述为各阶段/usr/bin/time原始计量，包含宿主I/O等开销，不是处理器指令延迟。扩展核FIR SHA256为9aca2ac7704e2e6a28dbd62cfdb81e6575686f45d16ebaa69ebf9bf94dc8d77e。rtl/中的生成模块与该构建逐字节对应，完整平台RTL仍由脚本从固定源码重新生成。
 
-主工程后台构建vdot-extension-clean-20261105T0502.service已成功结束，入口日志reports/extension-clean-driver.log。完整验证服务vdot-extension-acceptance-20261105T0510.service已启动，目录reports/acceptance-20261105T063406Z-3723760/；verify_reproduction.sh正在执行真实差分、故障注入恢复、完整随机、压力、边界寄存器、性能与波形分析。构建通过不等于完整验收通过，最终以acceptance.json及源摘要为准。
+完整验证目录为reports/acceptance-20261105T063406Z-3723760/。verify_reproduction.sh已正常完成，acceptance.json记录status=passed、source_unchanged=true，后台服务退出0。7项整核运行均有完成标记、Difftest、GOOD TRAP、原始退出0和输入摘要复核；故障参考库反例与恢复另行验证。
+
+| 完整验收项 | 实际结果 |
+|---|---|
+| 标准vadd、vdot smoke与寄存器边界 | 均通过，包含v0/v31、正负数、边界值和7种非法形式 |
+| 固定随机 | 1000组×5模式，4000次合法随机vdot及1000次基线；786591指令/593917周期 |
+| 流水压力 | 64组、1664条vdot，28次taken/36次not-taken；290027指令/181649周期 |
+| 真实比较器反例 | REF9/DUT8的v12_low差异、ABORT、退出1；正确/错误/恢复三次输入摘要受控 |
+| 性能 | 60条RTL样本完整通过，片段中位数加速比2.607–4.634 |
+| 实际波形 | vdot输入至结果2周期；3条已写回错路指令未提交；5组×8条独立突发的握手间隔1周期 |
+| 最终源码 | 构建与全部验收期间，平台、资源、项目关键输入的前后摘要一致 |
+
+控制FST另用28000周期预算采集。该诊断按预算停止，未记作功能PASS；只有在与完整压力运行4项输入SHA相同时才用于分析。全部正式结果、CSV和FST来源摘要见FINAL_RESULTS.md及data/clean/provenance.json。三段真实录屏分别为62.7、101.7、122.7秒，命令退出0、源码前后摘要不变。
 
 ## 真实失败与修复
 
@@ -44,4 +56,4 @@
 3. 原核文件映射模型生成受磁盘回写拖慢：进程组上限从5500MiB在线调至7GiB，记录memory-limit-adjustment.json。改用普通分配器的7GiB限时资源试验被进程组OOM终止，单独分类为失败探测；原模型暂停后恢复，最终正常完成。
 4. CHIRRTL到firtool的第一次长运行被停止：恢复门禁核对源身份与FIR；故意提供错误FIR摘要时被拒绝，见主工程reports/resume-guard-negative.log。
 
-以上资源实验只影响宿主构建方式，不改变RTL架构时序，也不用于计算处理器加速比。最终提交前仍须取得扩展核完整验收、录屏与报告的统一绑定。
+以上资源实验只影响宿主构建方式，不改变RTL架构时序，也不用于计算处理器加速比。最终归档用source-binding.json关联上述实际构建提交与最终源码提交，核对处理器、参考模型、工作负载、配置、关键脚本及生成RTL，不改写早期运行的身份。

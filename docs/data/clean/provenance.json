@@ -1,0 +1,69 @@
+{
+  "status": "completed_clean_acceptance",
+  "tested_project_head": "3424efe852a1b4e2b26fa3efc25b233d94aec9a4",
+  "acceptance_directory": "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/acceptance-20261105T063406Z-3723760",
+  "acceptance_sha256": "baa1f0787eb339491ac71e8e9edbae20afbcb76d0930a5fa0a2c16b974d7c78d",
+  "repositories": {
+    "XiangShan": {
+      "head": "7b16188f7f18a97be69c9b1a2dae8a446eec3b47",
+      "changed_source_sha256": {
+        "src/main/scala/xiangshan/backend/decode/VecDecoder.scala": "1fcc8840dbe5d8b78166d1e1663e434ee4561b820868939533891cb529688bcd",
+        "src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala": "4e0800b70699eb24557352b144741e8ed480ce51de64aa2dbccee3c4c72d2f50",
+        "src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala": "1845e685513507b724ba7e37ab46eb42c7b32c7fa2477644c4d728230a508fce",
+        "src/main/scala/xiangshan/backend/fu/vector/Vdot.scala": "d758aff49a6d10c0369a6d06968a5782cc8d1e13cad2c6a967d919b782adf6b4"
+      }
+    },
+    "NEMU": {
+      "head": "d772a9d9e06f663d529bd1c6518480c1ee59ded2",
+      "changed_source_sha256": {
+        "src/isa/riscv64/include/isa-all-instr.h": "e63c8bfed52d3d743640e38781662cdccf0a6bf78bdb3209fc61bd1e2661f967",
+        "src/isa/riscv64/instr/decode.c": "c943967ae3a95cb71515730d9d27639828f7db8dbb92bc979b2865b032dfcf5c",
+        "src/isa/riscv64/instr/rvv/vcompute.h": "d4595d0be4b5de3f65253efa5ca8180579466af6b2a091e04338fe31a503b39f",
+        "src/isa/riscv64/local-include/trapinfo.h": "33a116212fb154a012714d865c0adf159bfc98981f3f3033aa560edfaa3560f8",
+        "src/isa/riscv64/system/intr.c": "0be24282d16cad03330b5caec4b17f7d03d58970b372e5ee86380788c5511df7"
+      }
+    },
+    "xs-env": {
+      "head": "822e3581a2757d4a9848b065fd2a3057957b401e",
+      "changed_source_sha256": {}
+    },
+    "NEMU-softfloat": {
+      "head": "07ebd29db0cfb55723a79fbbffe99103ef38e305",
+      "changed_source_sha256": {}
+    },
+    "NEMU-nanopb": {
+      "head": "625837ed2eedacc887ee6b747576b85a1f4b82b4",
+      "changed_source_sha256": {}
+    },
+    "NEMU-LibCheckpoint": {
+      "head": "1d8905cc2803c242ef257569128c2e68bf4272aa",
+      "changed_source_sha256": {}
+    },
+    "NEMU-gcpt_restore": {
+      "head": "5169da768d18f4682a489eaabe7c071df6d6ef88",
+      "changed_source_sha256": {}
+    }
+  },
+  "emu_sha256": "dd1f0323f96d567e26e9ba25336db5f9cbcc3a9ebb55821665110fc993e30e31",
+  "reference_sha256": "baa2f11e3190d4dd3e7d6107c46ca6795c9b574978a070fdd7bdfafaf8372225",
+  "raw_log_sha256": {
+    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-vadd_test-20261105T063407Z-3781349/run.log": "bdff182ab18ca0183797778a0213aab9cf62636600044b52e49045cb83aec7ea",
+    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-vdot_smoke-20261105T063449Z-3782269/run.log": "a609309ab06690028d87894bc3ca5653a662def129cfd0bacbc909dc6fa5d270",
+    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-register_test-20261105T063527Z-3782987/run.log": "728d33899324ff75aae5a0f8b303fc086ed12c606553681ea4ee470bfe0db049",
+    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-vdot_test-20261105T063741Z-3787236/run.log": "69599baef25372044bdea5d8df38a568485865a51772836af36206e278afdd1f",
+    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-pipeline_test-20261105T063741Z-3787237/run.log": "d09e8839676d73699ab6915179f76d636814377e5d7143cd3740a28b85c9cb09",
+    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-benchmark-20261105T063741Z-3787238/run.log": "d791870211e90a78117cf677f972770d31ed5cefd82683427c7ca88ffe7b66a1",
+    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-latency_probe-20261105T063741Z-3787239/run.log": "e76265a1343cd30c8108cd54d690ebb975165167bd301561e518e94e3c51726a"
+  },
+  "csv_sha256": {
+    "benchmark.csv": "7c03a1584b5c515d4af5e3ea01b3add6dd505c6045da45dcef203a94de8d1e1d",
+    "wave-events.csv": "8d4ee6dec42c82972f5f51e0d475cae9eb3cbdcac832c362982b9d59495d4de0",
+    "flush-events.csv": "78a496afbd70c6c9ff404b3c199588b9b69bbd163d2ec51391056b64947b141e",
+    "burst-throughput.csv": "7335e1b49a875abccb697fe65b39fe158457e78921cac6fd3f71859b0758be77"
+  },
+  "fst_sha256": {
+    "vadd": "7e8f110d196d3fbd45b402f172c6308af2e299ddb801dd099f4e12b3e420d275",
+    "latency": "abac6e30b091b2063e1b3f36cf76685015d05350906260280c9a353d246c0646",
+    "pipeline": "a4e160e4db802b50f7cb20e3fd1728631aa75ac799a52aab3ab9ef480481a895"
+  }
+}
