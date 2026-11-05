@@ -2,29 +2,30 @@
   "status": "development_evidence_not_final_clean_reproduction",
   "files": {
     "benchmark-development-20261105.csv": {
-      "sha256": "0dff0ba4e53728d7277311fe5bec829af34229dd4585c418c1bd6ce0887e1466",
+      "sha256": "7c03a1584b5c515d4af5e3ea01b3add6dd505c6045da45dcef203a94de8d1e1d",
       "source_sha256": {
         "reports/rtl-benchmark-20261105T013446Z-3572189/run.log": "cbda457c1985529d5eb30e1634e9c1ac01e392252341a8299e4944daa20e9a79"
       }
     },
     "wave-events-development-20261105.csv": {
-      "sha256": "15056437f6cf22d261ab8f0d615b61a0469c466972d182a895c492c829e86be6",
+      "sha256": "a8c4e23140561d6290468b339f4a93ff8b47b37b3f80d465c2a3faaf28aa7683",
       "source_sha256": {
         "reports/rtl-vadd_test-20261105T013458Z-3573289/wave.fst": "814558a612886ffd845a8ea3bb73cc61ed114e5c8558e0ef59c0bc218bdb6b92",
         "reports/rtl-latency_probe-20261105T013554Z-3573999/wave.fst": "8b26c067f6335ff0403e5391507b1153d6989912e4abc7317723237b770a6ec1"
       }
     },
     "flush-events-development-20261105.csv": {
-      "sha256": "4f17b785648073e277a7bdadd1c22b18b5712387353bff8ef3173e03d7d75745",
+      "sha256": "78a496afbd70c6c9ff404b3c199588b9b69bbd163d2ec51391056b64947b141e",
       "source_sha256": {
         "reports/rtl-pipeline_test-20261105T023307Z-3609286/wave.fst": "3ab7c70e4738d69be3827fd7743b7e685955548f774b07a0a6de635789a01ce6"
       }
     },
     "burst-throughput-development-20261105.csv": {
-      "sha256": "7f2572115a11d0d2f23ab768ed6daad3d288ff5d7429959b9b016c7f1097bc16",
+      "sha256": "7335e1b49a875abccb697fe65b39fe158457e78921cac6fd3f71859b0758be77",
       "source_sha256": {
         "reports/rtl-pipeline_test-20261105T023307Z-3609286/wave.fst": "3ab7c70e4738d69be3827fd7743b7e685955548f774b07a0a6de635789a01ce6"
       }
     }
-  }
+  },
+  "csv_line_endings": "LF; exported values unchanged from their source records"
 }

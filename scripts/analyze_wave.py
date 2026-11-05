@@ -69,7 +69,7 @@ def event_table(path, instructions):
     fields = ['instruction', 'edge', 'tick', 'kind', 'source', 'rob_flag',
               'rob_value', 'pdest', 'ldest', 'uop', 'op', 'data_hex']
     with path.open('w', newline='') as stream:
-        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator='\n')
         writer.writeheader()
         for label, instruction in instructions.items():
             for event in sorted(instruction['events'], key=lambda e: e['edge']):

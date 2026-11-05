@@ -36,6 +36,6 @@ for dep in (0, 1):
         result.append(f'| {"有" if dep else "无"} | {count} | {b[0]:g}（{b[1]}–{b[2]}） | {d[0]:g}（{d[1]}–{d[2]}） | {b[0]/d[0]:.3f} |')
 args.output.write_text('\n'.join(result) + '\n')
 with args.output.with_suffix('.csv').open('w') as file:
-    writer = csv.writer(file)
+    writer = csv.writer(file, lineterminator='\n')
     writer.writerow(['dependent','baseline','iterations','repeat','cycles'])
     writer.writerows(rows)

@@ -156,7 +156,7 @@ result = {'metadata': metadata, 'completed_pressure_run': str(args.full_run.reso
           'coverage_limit': 'These vdots completed FU output before redirect. No claim of redirect while a vdot remains inside its two FU stages.'}
 (args.output / 'pipeline-analysis.json').write_text(json.dumps(result, indent=2) + '\n')
 with (args.output / 'pipeline-events.csv').open('w', newline='') as file:
-    writer = csv.writer(file)
+    writer = csv.writer(file, lineterminator='\n')
     writer.writerow(['case', 'stage', 'edge', 'tick', 'pc', 'rob_flag', 'rob_value', 'pdest', 'ldest', 'data'])
     for index, case in enumerate(cases):
         for stage, event in case.items():
@@ -169,7 +169,8 @@ with (args.output / 'pipeline-events.csv').open('w', newline='') as file:
                              hex(event['data']) if 'data' in event else ''])
 with (args.output / 'burst-throughput.csv').open('w', newline='') as file:
     writer = csv.DictWriter(file, fieldnames=['burst', 'input_edge', 'output_edge', 'commit_edge',
-                                             'pc', 'rob_flag', 'rob_value', 'pdest', 'ldest', 'result_hex'])
+                                             'pc', 'rob_flag', 'rob_value', 'pdest', 'ldest', 'result_hex'],
+                            lineterminator='\n')
     writer.writeheader()
     for index, burst in enumerate(bursts):
         writer.writerows({'burst': index, **operation} for operation in burst['operations'])
