@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 source "$(dirname -- "$0")/env.sh"
+vdot_resume_fir=
+if (( $# )); then
+  if [[ $# != 2 || "$1" != --resume-fir ]]; then
+    printf 'Usage: %s [--resume-fir PRIOR_BUILD_REPORT]\n' "$0" >&2
+    exit 2
+  fi
+  vdot_resume_fir=$(realpath -- "$2")
+fi
 
 vdot_config=${VDOT_CONFIG:-MinimalConfig}
 vdot_heap=${VDOT_JAVA_HEAP:-8G}
@@ -51,10 +59,54 @@ run_stage() {
 
 cd "$NOOP_HOME"
 # Keep the Java process and native firtool out of each other's memory budget.
+if [[ -n "$vdot_resume_fir" ]]; then
+  python3 - "$vdot_resume_fir" "$vdot_report" "$NOOP_HOME" "$vdot_config" <<'PY'
+import hashlib
+import json
+from pathlib import Path
+import shlex
+import sys
+prior, current, noop = map(Path, sys.argv[1:4])
+config = sys.argv[4]
+if (prior / 'chisel-exit-status.txt').read_text().strip() != '0':
+    raise SystemExit('Resume rejected: prior Chisel stage did not complete')
+before = json.loads((prior / 'source-before.json').read_text())
+now = json.loads((current / 'source-before.json').read_text())
+if before['repositories'] != now['repositories']:
+    raise SystemExit('Resume rejected: upstream source identity changed')
+old_files = before['project_files_sha256']
+new_files = now['project_files_sha256']
+changed = sorted(key for key in set(old_files) | set(new_files)
+                 if old_files.get(key) != new_files.get(key))
+if set(changed) - {'scripts/build_emu.sh'}:
+    raise SystemExit('Resume rejected: project inputs changed: ' + ', '.join(changed))
+command = shlex.split((prior / 'chisel-command.txt').read_text())
+for flag, value in {'--config': config, '--num-cores': '1', '--issue': 'E.b', '--target': 'chirrtl'}.items():
+    if command.count(flag) != 1 or command[command.index(flag) + 1] != value:
+        raise SystemExit('Resume rejected: incompatible prior Chisel flag ' + flag)
+for flag in ('--disable-perf', '--disable-alwaysdb', '--enable-difftest'):
+    if flag not in command:
+        raise SystemExit('Resume rejected: missing prior Chisel flag ' + flag)
+expected = (prior / 'fir.sha256').read_text().split()[0]
+digest = hashlib.sha256()
+with (noop / 'build/rtl/SimTop.fir').open('rb') as stream:
+    for block in iter(lambda: stream.read(1024 * 1024), b''):
+        digest.update(block)
+if digest.hexdigest() != expected:
+    raise SystemExit('Resume rejected: FIR digest differs from completed Chisel output')
+record = {'prior_report': str(prior.resolve()), 'fir_sha256': expected,
+          'upstream_sources_unchanged': True, 'changed_project_files': changed,
+          'prior_project_head': before['project_head'], 'current_project_head': now['project_head'],
+          'chisel_reexecuted': False}
+(current / 'chisel-reuse.json').write_text(json.dumps(record, indent=2) + '\n')
+print('CHISEL_REUSED_VERIFIED', expected)
+PY
+else
 run_stage chisel "$vdot_chisel_limit" mill -i -j 1 \
   "-Djvm-xmx=$vdot_heap" -Djvm-xss=8m xiangshan.test.runMain top.XiangShanSim \
   --target-dir build/rtl --config "$vdot_config" --num-cores 1 --issue E.b \
   --disable-perf --disable-alwaysdb --enable-difftest --target chirrtl --full-stacktrace
+fi
 
 sha256sum build/rtl/SimTop.fir > "$vdot_report/fir.sha256"
 run_stage firtool "$vdot_firtool_limit" "$vdot_firtool" build/rtl/SimTop.fir \
