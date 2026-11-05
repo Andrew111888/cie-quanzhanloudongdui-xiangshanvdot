@@ -52,6 +52,26 @@ python3 "$vdot_root/scripts/performance_report.py" "$vdot_bench/run.log" --engin
 cat "$vdot_acceptance/video-performance.md"
 sleep 7
 clear
+printf '下面直接读取本轮真实FST分析结果，列出微操作的输入与输出握手：\n'
+python3 - "$vdot_acceptance/wave-analysis/analysis.json" <<'PY'
+import json,sys
+from pathlib import Path
+wave=json.loads(Path(sys.argv[1]).read_text())
+source=wave['latency_source']
+print('FST: '+source['fst'])
+print('SHA256: '+source['fst_sha256'])
+print('采样：后端上升沿前；edge为采集内序号，不是cycle CSR。\n')
+print('operation/uop       P     input    output   cycles   result[127:0]')
+for name in ('multiply','reduce','vdot'):
+ for pair in wave['fu_pairs'][name]:
+  print('%-15s %5d %8d %9d %8d   %s'%
+        (name+'/'+str(pair['uop']),pair['pdest'],pair['input_edge'],
+         pair['output_edge'],pair['cycles'],pair['result_hex']))
+print('\n归约uop0是内部部分和；uop1才写完整v12=8。')
+print('结果以实际ROB动态区间和物理目的关联，不按相邻波形拼接。')
+PY
+sleep 10
+clear
 python3 - "$vdot_acceptance" <<'PY'
 import json,sys
 from pathlib import Path
@@ -63,6 +83,12 @@ print('基线归约包含2个微操作：首个是部分和，第二个才是v12
 print('独立突发组数：',len(pipeline['independent_bursts']))
 print('每组8条，实测接收/输出间隔1周期，逐个核对结果、ROB、物理目的及提交。')
 print('已完成写回后被分支冲刷、未提交的错路vdot：',len(pipeline['cases']))
+print('\n第一组独立突发的真实握手：')
+print('input  output  commit  ROB      P   vd')
+for op in pipeline['independent_bursts'][0]['operations']:
+ print('%5d %7d %7d  (%d,%3d) %3d  v%d'%
+       (op['input_edge'],op['output_edge'],op['commit_edge'],op['rob_flag'],
+        op['rob_value'],op['pdest'],op['ldest']))
 print('\n性能表属于含必要配置与循环的片段，不能称为FU延迟。')
 print('没有综合、时序或功耗测量，不声称面积、频率或能效收益。')
 PY
