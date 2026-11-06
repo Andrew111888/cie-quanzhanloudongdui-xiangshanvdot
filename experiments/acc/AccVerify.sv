@@ -22,7 +22,11 @@ module AccVerify(
   VdotAccRetimed retimed(.clock(clock),.enable1(enable1),.enable2(enable2),.vs1(vs1),.vs2(vs2),.acc(acc),.result(result_retimed));
   VdotAccCsaPrefixOr prefix_or(.clock(clock),.enable1(enable1),.enable2(enable2),.vs1(vs1),.vs2(vs2),.acc(acc),.result(result_prefix_or));
 `ifdef ACC_WITH_CHISEL_RETIMED
-  VdotAccRetimedDatapath chisel_retimed(.clock(clock),.reset(1'b0),.io_enable1(enable1),.io_enable2(enable2),.io_vs1(vs1),.io_vs2(vs2),.io_acc(acc),.io_result(result_chisel_retimed));
+  VdotAccRetimedDatapath chisel_retimed(.clock(clock),
+`ifndef ACC_CHISEL_RETIMED_NO_RESET
+    .reset(1'b0),
+`endif
+    .io_enable1(enable1),.io_enable2(enable2),.io_vs1(vs1),.io_vs2(vs2),.io_acc(acc),.io_result(result_chisel_retimed));
 `else
   assign result_chisel_retimed = result_retimed;
 `endif

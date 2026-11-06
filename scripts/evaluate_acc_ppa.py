@@ -87,6 +87,9 @@ if args.chisel_prefix:
     verification_sources.append(evidence/'inputs/VdotAccCsaPrefixDatapath.sv');verification_defines.append('-DACC_WITH_CHISEL_PREFIX')
 if args.chisel_retimed:
     verification_sources.append(evidence/'inputs/VdotAccRetimedDatapath.sv');verification_defines.append('-DACC_WITH_CHISEL_RETIMED')
+    # Full-core firtool removes the unused reset port; test elaboration retains it.
+    if not re.search(r'input\s+(?:\[[^]]+\]\s+)?reset\b',args.chisel_retimed.read_text()):
+        verification_defines.append('-DACC_CHISEL_RETIMED_NO_RESET')
 run([args.verilator,'--cc','--exe','--top-module','AccVerify','-DSYNTHESIS','-Wno-fatal','--Mdir',objects,
      '-CFLAGS','-std=c++17 -O2',*verification_defines,*verification_sources,evidence/'inputs/VdotDatapath.sv',evidence/'inputs/VdotAccPlain.sv',
      evidence/'inputs/VdotAccCsa.sv',evidence/'inputs/VdotAccCsaPrefix.sv',evidence/'inputs/VdotAccCsaPrefixOr.sv',evidence/'inputs/VdotAccRetimed.sv',evidence/'inputs/AccVerify.sv',evidence/'inputs/acc_arithmetic.cpp'],evidence/'verification-generate.log')
@@ -188,6 +191,8 @@ for design,filename,mod in designs:
     connections=('.clock(clock),.io_enable1(enable),.io_enable2(enable),.io_vs1(vs1),.io_vs2(vs2),.io_result(result)' if design=='original' else
                  '.clock(clock),.reset(1\'b0),.io_enable1(enable),.io_enable2(enable),.io_vs1(vs1),.io_vs2(vs2),.io_acc(acc),.io_result(result)' if design.startswith('chisel_') else
                  '.clock(clock),.enable1(enable),.enable2(enable),.vs1(vs1),.vs2(vs2),.acc(acc),.result(result)')
+    if design=='chisel_retimed' and '-DACC_CHISEL_RETIMED_NO_RESET' in verification_defines:
+        connections=connections.replace(".reset(1'b0),",'')
     wrapper.write_text('module PpaTop(input clock,input enable,input [127:0] vs1,input [127:0] vs2,input [31:0] acc,output [127:0] result);\n'+mod+' dut('+connections+');\nendmodule\n')
     script=directory/'synthesis.ys'
     script.write_text(f'''read_liberty -lib {library}

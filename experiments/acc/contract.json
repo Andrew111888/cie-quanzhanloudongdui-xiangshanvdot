@@ -4,14 +4,38 @@
   "mask": "0xfc00707f",
   "match": "0x0400000b",
   "fu_op_type": "0x101",
-  "supported": {"vlen": 128, "sew": 8, "lmul": 1, "vl": 8, "vstart": 0, "vm": 1},
+  "supported": {
+    "vlen": 128,
+    "sew": 8,
+    "lmul": 1,
+    "vl": 8,
+    "vstart": 0,
+    "vm": 1
+  },
   "operation": "vd.low32 = (old_vd.low32 + sum(signed8(vs1[i])*signed8(vs2[i]), i=0..7)) mod 2^32; vd.high96 = 0",
   "old_destination_is_true_source": true,
   "tail_policy_changes_operation": false,
   "read_all_sources_before_destination_write": true,
   "unsupported": "illegal_instruction_with_unchanged_destination_and_vstart",
-  "configuration_fault": {"cause": 2, "xtval": 0},
-  "nonzero_vstart_fault": {"cause": 2, "xtval": "instruction_bits"},
+  "configuration_fault": {
+    "cause": 2,
+    "xtval": 0,
+    "scope": "late functional-unit configuration checks after vector decode legality checks"
+  },
+  "nonzero_vstart_fault": {
+    "cause": 2,
+    "xtval": "instruction_bits"
+  },
   "original_vdot_semantics_changed": false,
-  "standard_isa_compatibility_claimed": false
+  "standard_isa_compatibility_claimed": false,
+  "decode_fault": {
+    "cause": 2,
+    "xtval": "instruction_bits",
+    "conditions": [
+      "vill or vector state disabled",
+      "nonzero vstart",
+      "integer LMUL source or destination register misalignment",
+      "vm=0 with vd=v0"
+    ]
+  }
 }

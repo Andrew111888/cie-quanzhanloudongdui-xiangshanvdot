@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="425" viewBox="0 0 1200 425">
+<defs><marker id="a" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0 0L9 3.5L0 7Z" fill="#42637b"/></marker></defs>
+<rect width="1200" height="425" fill="white"/><g font-family="DejaVu Sans,sans-serif" fill="#163c56">
+<text x="30" y="37" font-size="24" font-weight="bold">Fused dot8 + accumulator: two enabled stages, II = 1</text>
+<text x="30" y="67" font-size="15">Signed int8 inputs; modulo-2^32 accumulation; original vdot selects acc = 0</text>
+<rect x="24" y="125" width="145" height="80" rx="7" fill="#e8eff6"/><text x="96" y="157" text-anchor="middle" font-size="16">vs1 / vs2</text><text x="96" y="184" text-anchor="middle" font-size="15">low 8 lanes</text>
+<rect x="205" y="125" width="142" height="80" rx="7" fill="#e8eff6"/><text x="276" y="157" text-anchor="middle" font-size="16">8 x signed 8x8</text><text x="276" y="184" text-anchor="middle" font-size="15">multipliers</text>
+<rect x="205" y="270" width="142" height="63" rx="7" fill="#f2eee3"/><text x="276" y="295" text-anchor="middle" font-size="15">acc select</text><text x="276" y="318" text-anchor="middle" font-size="14">0 / old vd[31:0]</text>
+<rect x="390" y="125" width="135" height="80" rx="7" fill="#e8eff6"/><text x="457" y="156" text-anchor="middle" font-size="16">first 3:2</text><text x="457" y="183" text-anchor="middle" font-size="15">compression</text>
+<rect x="563" y="113" width="58" height="104" rx="5" fill="#dbece1"/><text x="592" y="150" text-anchor="middle" font-size="17" font-weight="bold">R1</text><text x="592" y="177" text-anchor="middle" font-size="13">6 terms</text>
+<rect x="660" y="125" width="135" height="80" rx="7" fill="#e8eff6"/><text x="727" y="157" text-anchor="middle" font-size="16">6 to 2 terms</text><text x="727" y="184" text-anchor="middle" font-size="15">compression</text>
+<rect x="832" y="125" width="130" height="80" rx="7" fill="#e8eff6"/><text x="897" y="157" text-anchor="middle" font-size="16">32-bit prefix</text><text x="897" y="184" text-anchor="middle" font-size="15">final adder</text>
+<rect x="1000" y="113" width="58" height="104" rx="5" fill="#dbece1"/><text x="1029" y="150" text-anchor="middle" font-size="17" font-weight="bold">R2</text><text x="1029" y="177" text-anchor="middle" font-size="13">32 bits</text>
+<text x="1123" y="156" text-anchor="middle" font-size="15">128-bit vd</text><text x="1123" y="182" text-anchor="middle" font-size="13">high 96 = 0</text>
+<g fill="none" stroke="#42637b" stroke-width="2" marker-end="url(#a)"><path d="M169 165H205"/><path d="M347 165H390"/><path d="M347 302H370V190H390"/><path d="M525 165H563"/><path d="M621 165H660"/><path d="M795 165H832"/><path d="M962 165H1000"/><path d="M1058 165H1080"/></g>
+<text x="365" y="100" text-anchor="middle" font-size="14">multiply + first compression</text><text x="808" y="100" text-anchor="middle" font-size="14">remaining compression + carry propagation</text>
+<text x="592" y="247" text-anchor="middle" font-size="14">enable1</text><text x="1029" y="247" text-anchor="middle" font-size="14">enable2</text>
+<rect x="24" y="362" width="1150" height="39" rx="5" fill="#f0f4f8"/><text x="599" y="387" text-anchor="middle" font-size="14">Existing vector FU pipeline carries valid, destination, ROB, configuration checks and flush control.</text>
+</g></svg>

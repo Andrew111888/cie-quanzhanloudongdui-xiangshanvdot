@@ -2,6 +2,13 @@
 #include "console.h"
 
 volatile uint32_t expected_illegal;
+#ifndef ACC_BENCH_SHARD
+#define ACC_BENCH_SHARD 0
+#endif
+#ifndef ACC_BENCH_SHARDS
+#define ACC_BENCH_SHARDS 1
+#endif
+#define SELECT_GROUP(x) ((x) % ACC_BENCH_SHARDS == ACC_BENCH_SHARD)
 enum { MAX_K=512, LONG_VARIANTS=4, CHAIN_VARIANTS=2, SIZES=3,
        CHAIN_COUNTS=4, REPEATS=5, MAX_CHAINS=8 };
 static int8_t input_a[MAX_K] __attribute__((aligned(64)));
@@ -178,6 +185,8 @@ int main(void) {
   const unsigned counts[CHAIN_COUNTS]={1,2,4,8};
   const unsigned directed_sizes[2]={32,512};
   const int edges[6][2]={{1,1},{-1,1},{-128,-128},{-128,127},{127,127},{0,-128}};
+  unsigned long_count=0,chain_count=0;
+  if (ACC_BENCH_SHARD==0) {
   for (unsigned size=0;size<2;++size)
     for (unsigned test=0;test<6;++test) {
       unsigned k=directed_sizes[size];
@@ -198,25 +207,31 @@ int main(void) {
         chain_directed[test][variant][count]=output_checksum(counts[count]);
       }
   }
+  }
   uint32_t state=20261106;
   for (unsigned i=0;i<MAX_K;++i) { input_a[i]=(int8_t)random_word(&state); input_b[i]=(int8_t)random_word(&state); }
   for (unsigned variant=0;variant<LONG_VARIANTS;++variant)
     for (unsigned size=0;size<SIZES;++size) {
+      if (!SELECT_GROUP(variant*SIZES+size)) continue;
       expected_result=golden(sizes[size]);
       (void)long_functions[variant](sizes[size]);
       for (unsigned repeat=0;repeat<REPEATS;++repeat) long_samples[variant][size][repeat]=long_functions[variant](sizes[size]);
       long_results[variant][size]=(int32_t)output[0];
+      long_count+=REPEATS;
     }
   chain_seed=0x7ffffff0u;chain_dot=(uint32_t)golden(8);
   for (unsigned variant=0;variant<CHAIN_VARIANTS;++variant)
     for (unsigned count=0;count<CHAIN_COUNTS;++count)
       for (unsigned size=0;size<SIZES;++size) {
+        if (!SELECT_GROUP(12+variant*CHAIN_COUNTS*SIZES+count*SIZES+size)) continue;
         (void)chain_functions[variant][count](sizes[size]);
         for (unsigned repeat=0;repeat<REPEATS;++repeat)
           chain_samples[variant][count][size][repeat]=chain_functions[variant][count](sizes[size]);
         for (unsigned i=0;i<counts[count];++i)
           for (unsigned j=0;j<4;++j) chain_results[variant][count][size][i][j]=chain_output[i][j];
+        chain_count+=REPEATS;
       }
+  if (ACC_BENCH_SHARD==0) {
   puts_uart("ACC_LONG_DIRECTED_PASS cases=12 variants=4 executions=48\n");
   for (unsigned size=0;size<2;++size)
     for (unsigned test=0;test<6;++test) {
@@ -233,9 +248,11 @@ int main(void) {
         puts_uart("ACC_CHAIN_DIR,");print_uint(test);putch(',');print_uint(variant);putch(',');
         print_uint(counts[count]);putch(',');print_uint(chain_directed[test][variant][count]);putch('\n');
       }
+  }
   puts_uart("ACC_LONG_HEADER,variant,k,c0,c1,c2,c3,c4,result\n");
   for (unsigned variant=0;variant<LONG_VARIANTS;++variant)
     for (unsigned size=0;size<SIZES;++size) {
+      if (!SELECT_GROUP(variant*SIZES+size)) continue;
       puts_uart("ACC_LONG,");print_uint(variant);putch(',');print_uint(sizes[size]);
       for (unsigned repeat=0;repeat<REPEATS;++repeat) { putch(',');print_uint(long_samples[variant][size][repeat]); }
       putch(',');print_signed(long_results[variant][size]);putch('\n');
@@ -244,6 +261,7 @@ int main(void) {
   for (unsigned variant=0;variant<CHAIN_VARIANTS;++variant)
     for (unsigned count=0;count<CHAIN_COUNTS;++count)
       for (unsigned size=0;size<SIZES;++size) {
+        if (!SELECT_GROUP(12+variant*CHAIN_COUNTS*SIZES+count*SIZES+size)) continue;
         puts_uart("ACC_CHAIN,");print_uint(variant);putch(',');print_uint(counts[count]);putch(',');print_uint(sizes[size]);
         for (unsigned repeat=0;repeat<REPEATS;++repeat) { putch(',');print_uint(chain_samples[variant][count][size][repeat]); }
         putch('\n');
@@ -253,6 +271,7 @@ int main(void) {
           putch('\n');
         }
       }
-  puts_uart("ACC_BENCH_PASS long_samples=60 chain_samples=120 full_128bit_results=1\n");
+  puts_uart("ACC_BENCH_PASS long_samples=");print_uint(long_count);
+  puts_uart(" chain_samples=");print_uint(chain_count);puts_uart(" full_128bit_results=1\n");
   return 0;
 }

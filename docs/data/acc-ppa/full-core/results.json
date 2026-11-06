@@ -1,0 +1,398 @@
+{
+  "status": "passed",
+  "source_head_at_start": "dc5d8cd58eafbbb6ccae80ac28492b37ec5af250",
+  "source_head_at_end": "dc5d8cd58eafbbb6ccae80ac28492b37ec5af250",
+  "source_files_sha256": {
+    "rtl/VdotDatapath.sv": "868ca4b2f21e499a37c14161c72e0776817086eb73a27354102722008de20b89",
+    "experiments/acc/VdotAccPlain.sv": "66af879e2a8c78a1dbd0755558ec83a82b12c44aec0169dd6e19bdc3ce7b869f",
+    "experiments/acc/VdotAccCsa.sv": "dc017af7bba9cb2b7cf3d002144860ac201055202a2522d987fd03b72a2c25fc",
+    "experiments/acc/VdotAccCsaPrefix.sv": "fc974d7d935d7a28c7681f8cc9e0c51aaf65555d8513b1b6e1ff3324970538fd",
+    "experiments/acc/VdotAccCsaPrefixOr.sv": "ebba6647b3a7b07461f28db1d4c52876bdf5e0e33ea3b8eb8978725ff05ab59c",
+    "experiments/acc/VdotAccRetimed.sv": "27f5e3b8808a4aeed91d728d5420487f773a7c20c6f45f9711c2ecdba70faf2c",
+    "experiments/acc/AccVerify.sv": "189594fd82a6a8977abd0793ac536a2eaedb396f721c1ec55867f096170ab1a9",
+    "verification/acc_arithmetic.cpp": "1a7f8b362f8322b8899a35e7c000bcdb46afa31b3a3c25cedf329a34588f4df3",
+    "scripts/evaluate_acc_ppa.py": "03826ce7369eafa00b6e467afcc14681d9ca2a8ef5e17b8a2e59b9e50de84bee",
+    "/home/yh/cie/vdot-acc-prototype/docs/data/acc-ppa/inputs/VdotAccPlainDatapath.sv": "2583105ad138cfcff9aee0bfc84d39254cdea5e46597ccc63ffaf13952148c64",
+    "/home/yh/cie/vdot-acc-prototype/docs/data/acc-ppa/inputs/VdotAccCsaDatapath.sv": "f47fde04eea397dbdcf43dc86dc0430456ed4c440ec5ae3daaba69b0236e4c7a",
+    "/home/yh/cie/vdot-acc-prototype/docs/data/acc-ppa/inputs/VdotAccCsaPrefixDatapath.sv": "cc642d3900dc17458a91e15dcb1b3224723ba28a30029a07585d1746aa008c92",
+    "/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/third_party/XiangShan/build/rtl/VdotAccRetimedDatapath.sv": "4723293e599df8d4221797422ec742e7f1db149308a6fa929bc1cfa52e6f654e",
+    "/home/yh/cie/vdot-acc-prototype/third_party/XiangShan/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala": "61d6ce2c5a969b9b7e3ce50a5550fd40632d74728e9c8165b5de8c8f0b77edfb"
+  },
+  "selected_source_inputs_unchanged": true,
+  "toolchain": {
+    "yosys": {
+      "path": "/home/yh/cie/vdot-kmhv2/tools/synthesis-local/sysroot/usr/bin/yosys",
+      "sha256": "30aa795bec7533dac08bad56309edb6ac70dd33f017c28082d3c1dae1012112f",
+      "version": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)"
+    },
+    "abc": {
+      "path": "/home/yh/cie/vdot-kmhv2/tools/synthesis-local/sysroot/usr/bin/yosys-abc",
+      "sha256": "21869d0f63b6a2962ad7e54044e7a694f6cc392db6443ad7bf70cdb8ad6ca16a",
+      "version": "ABC command line: \"version\".\n\nUC Berkeley, ABC 1.01 (compiled May  4 2025 16:37:33)"
+    },
+    "sta": {
+      "path": "/home/yh/cie/vdot-kmhv2/tools/synthesis-local/sysroot/usr/bin/sta",
+      "sha256": "7b9994f6e26be12db7285c4fdfb0a8e3dbac0a65de328dd1b448005cc9b0edd8",
+      "version": "2.0.17"
+    },
+    "verilator": {
+      "path": "/home/yh/chipyard/.conda-env/bin/verilator",
+      "sha256": "8f524b25347f8cf62eccf30adbc58d056f9d8a4497dea4e6640381a6e13e8c07",
+      "version": "Verilator 5.022 2024-02-24 rev conda-forge build 1"
+    }
+  },
+  "verification": {
+    "directed_cases": 12,
+    "random_vectors": 4096,
+    "continuous_checked_each": 4108,
+    "total_checked_each": 8217,
+    "first_stage_captures": 6805,
+    "result_captures": 7369,
+    "enable1_hold_cycles": 1413,
+    "enable2_hold_cycles": 848,
+    "models_checked": [
+      "original",
+      "plain",
+      "csa",
+      "prefix",
+      "prefix_or",
+      "retimed",
+      "chisel_plain",
+      "chisel_csa",
+      "chisel_prefix",
+      "chisel_retimed"
+    ],
+    "status": "passed",
+    "result_bits": 128,
+    "latency_cycles": 2,
+    "initiation_interval_cycles": 1,
+    "seed": 20261106,
+    "scope": "standalone arithmetic with independently controlled register enables"
+  },
+  "constraints": {
+    "clock_periods_ns": [
+      1.0,
+      1.5,
+      2.5
+    ],
+    "clock_uncertainty_ns": 0.02,
+    "input_delay_ns": 0.1,
+    "output_delay_ns": 0.1,
+    "input_transition_ns": 0.05,
+    "output_capacitance_fF": 5.0,
+    "interconnect_R_C": 0,
+    "clock_network": "ideal",
+    "corner": "Nangate45 typical 1.10V 25C",
+    "synthesis_abc_target_ps": 1000,
+    "mapping_policy": "one mapped netlist per design, unchanged for both STA clock periods",
+    "area_unit": "Liberty area attribute units"
+  },
+  "results": [
+    {
+      "design": "original",
+      "pipeline_stages": 2,
+      "accepted_input_interval_cycles": 1,
+      "sequential_cells": 147,
+      "combinational_cells": 3748,
+      "total_cells": 3895,
+      "combinational_area_library_units": 4279.674,
+      "sequential_area_library_units": 664.734,
+      "total_area_library_units": 4944.408,
+      "maximum_combinational_cell_levels": 23,
+      "mapped_netlist_sha256": "795a29348b4c86d3a37e55501b6a4735fba0f9822c1b9d81f6cb705e9773d995",
+      "cell_type_counts": {
+        "AND2_X1": 271,
+        "AND3_X1": 87,
+        "AND4_X1": 13,
+        "AOI211_X1": 2,
+        "AOI21_X1": 315,
+        "AOI22_X1": 87,
+        "DFF_X1": 147,
+        "INV_X1": 263,
+        "MUX2_X1": 70,
+        "NAND2_X1": 494,
+        "NAND3_X1": 107,
+        "NAND4_X1": 18,
+        "NOR2_X1": 429,
+        "NOR3_X1": 35,
+        "OAI211_X1": 10,
+        "OAI21_X1": 323,
+        "OAI221_X1": 12,
+        "OAI22_X1": 43,
+        "OR2_X1": 96,
+        "OR3_X1": 107,
+        "OR4_X1": 12,
+        "XNOR2_X1": 499,
+        "XOR2_X1": 455
+      },
+      "timing": [
+        {
+          "clock_period_ns": 1.0,
+          "worst_setup_slack_ns": -0.148259,
+          "total_negative_setup_slack_ns": -3.259213,
+          "setup_critical_path": {
+            "startpoint": "_7645_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7789_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.087338,
+            "data_required_ns": 0.939079,
+            "slack_ns": -0.148259,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_7[2]"
+              ],
+              "endpoint": [
+                "dut.result[18]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108366,
+            "data_required_ns": 0.02171,
+            "slack_ns": 0.086656,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_1[1]"
+              ],
+              "endpoint": [
+                "dut.products_1[1]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 1.5,
+          "worst_setup_slack_ns": 0.351741,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "_7645_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7789_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.087338,
+            "data_required_ns": 1.439079,
+            "slack_ns": 0.351741,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_7[2]"
+              ],
+              "endpoint": [
+                "dut.result[18]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108366,
+            "data_required_ns": 0.02171,
+            "slack_ns": 0.086656,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_1[1]"
+              ],
+              "endpoint": [
+                "dut.products_1[1]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 2.5,
+          "worst_setup_slack_ns": 1.351742,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "_7645_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7789_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.087338,
+            "data_required_ns": 2.439079,
+            "slack_ns": 1.351742,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_7[2]"
+              ],
+              "endpoint": [
+                "dut.result[18]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108366,
+            "data_required_ns": 0.02171,
+            "slack_ns": 0.086656,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_1[1]"
+              ],
+              "endpoint": [
+                "dut.products_1[1]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        }
+      ]
+    },
+    {
+      "design": "chisel_retimed",
+      "pipeline_stages": 2,
+      "accepted_input_interval_cycles": 1,
+      "sequential_cells": 159,
+      "combinational_cells": 4210,
+      "total_cells": 4369,
+      "combinational_area_library_units": 4800.502,
+      "sequential_area_library_units": 718.998,
+      "total_area_library_units": 5519.5,
+      "maximum_combinational_cell_levels": 25,
+      "mapped_netlist_sha256": "2427eafa4eb4dba88d63e001177ab8dbfc6636b11ac7391dc708e3169fc4854a",
+      "cell_type_counts": {
+        "AND2_X1": 248,
+        "AND3_X1": 88,
+        "AND4_X1": 37,
+        "AOI211_X1": 9,
+        "AOI21_X1": 333,
+        "AOI221_X1": 1,
+        "AOI22_X1": 99,
+        "DFF_X1": 159,
+        "INV_X1": 309,
+        "MUX2_X1": 90,
+        "NAND2_X1": 551,
+        "NAND3_X1": 73,
+        "NAND4_X1": 13,
+        "NOR2_X1": 530,
+        "NOR3_X1": 100,
+        "NOR4_X1": 2,
+        "OAI211_X1": 29,
+        "OAI21_X1": 337,
+        "OAI221_X1": 6,
+        "OAI22_X1": 60,
+        "OAI33_X1": 1,
+        "OR2_X1": 119,
+        "OR3_X1": 105,
+        "OR4_X1": 15,
+        "XNOR2_X1": 616,
+        "XOR2_X1": 439
+      },
+      "timing": [
+        {
+          "clock_period_ns": 1.0,
+          "worst_setup_slack_ns": -0.363571,
+          "total_negative_setup_slack_ns": -18.303257,
+          "setup_critical_path": {
+            "startpoint": "_8724_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8609_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.302822,
+            "data_required_ns": 0.939252,
+            "slack_ns": -0.363571,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_level1_1[3]"
+              ],
+              "endpoint": [
+                "dut.result[30]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8673_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8673_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.105679,
+            "data_required_ns": 0.021691,
+            "slack_ns": 0.083988,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_level1_5[31]"
+              ],
+              "endpoint": [
+                "dut.nextResult_level1_5[31]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 1.5,
+          "worst_setup_slack_ns": 0.136429,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "_8724_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8609_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.302822,
+            "data_required_ns": 1.439252,
+            "slack_ns": 0.136429,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_level1_1[3]"
+              ],
+              "endpoint": [
+                "dut.result[30]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8673_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8673_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.105679,
+            "data_required_ns": 0.021691,
+            "slack_ns": 0.083988,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_level1_5[31]"
+              ],
+              "endpoint": [
+                "dut.nextResult_level1_5[31]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 2.5,
+          "worst_setup_slack_ns": 1.136429,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "_8724_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8609_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.302822,
+            "data_required_ns": 2.439252,
+            "slack_ns": 1.136429,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_level1_1[3]"
+              ],
+              "endpoint": [
+                "dut.result[30]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8673_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8673_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.105679,
+            "data_required_ns": 0.021691,
+            "slack_ns": 0.083988,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_level1_5[31]"
+              ],
+              "endpoint": [
+                "dut.nextResult_level1_5[31]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        }
+      ]
+    }
+  ],
+  "scope": "isolated two-stage arithmetic only; acc selection mux, scheduler and processor integration excluded",
+  "limitations": [
+    "No full-core area or power measurement",
+    "No physical placement, routing, parasitic extraction or CTS",
+    "A passing module constraint does not establish whole-chip frequency",
+    "Independent-enable arithmetic verification does not establish FU flush/ROB correctness"
+  ]
+}

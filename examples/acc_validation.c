@@ -2,8 +2,17 @@
 #include "console.h"
 
 volatile uint32_t expected_illegal;
-enum { RANDOM_CASES = 1000, MODES = 6, CHAIN_STEPS = 128 };
-static uint32_t random_state = 20261106;
+#ifndef ACC_FIRST_CASE
+#define ACC_FIRST_CASE 0
+#endif
+#ifndef ACC_CASE_COUNT
+#define ACC_CASE_COUNT 1006
+#endif
+#ifndef ACC_RANDOM_STATE
+#define ACC_RANDOM_STATE 20261106
+#endif
+enum { MODES = 6, CHAIN_STEPS = 128 };
+static uint32_t random_state = ACC_RANDOM_STATE;
 static uint32_t random_word(void) {
   random_state ^= random_state << 13;
   random_state ^= random_state >> 17;
@@ -126,7 +135,7 @@ int main(void) {
   uint32_t old[4] __attribute__((aligned(16)));
   uint32_t out[4] __attribute__((aligned(16)));
   uint32_t checksum = 0;
-  for (unsigned test = 0; test < 6 + RANDOM_CASES; ++test) {
+  for (unsigned test = ACC_FIRST_CASE; test < ACC_FIRST_CASE + ACC_CASE_COUNT; ++test) {
     for (unsigned i = 0; i < 16; ++i) {
       a[i] = test < 6 ? limits[test][0] : (int8_t)random_word();
       b[i] = test < 6 ? limits[test][1] : (int8_t)random_word();
@@ -159,7 +168,12 @@ int main(void) {
   int status = accumulator_chains(1); if (status) return error(status);
   status = accumulator_chains(4); if (status) return error(status);
   status = illegal_forms(); if (status) return error(status);
-  puts_uart("ACC_VALIDATION_PASS random_cases=1000 directed_cases=6 modes=6 tail_policies=2 high_source_pairs=6 chain_instructions=640 illegal_cases=7 checksum=");
+  unsigned directed_count = ACC_FIRST_CASE < 6 ? (ACC_CASE_COUNT < 6-ACC_FIRST_CASE ? ACC_CASE_COUNT : 6-ACC_FIRST_CASE) : 0;
+  puts_uart("ACC_RANGE first="); print_uint(ACC_FIRST_CASE); puts_uart(" count="); print_uint(ACC_CASE_COUNT); putch('\n');
+  puts_uart("ACC_VALIDATION_PASS random_cases="); print_uint(ACC_CASE_COUNT-directed_count);
+  puts_uart(" directed_cases="); print_uint(directed_count);
+  puts_uart(" modes=6 tail_policies=2 high_source_pairs="); print_uint(directed_count);
+  puts_uart(" chain_instructions=640 illegal_cases=7 checksum=");
   print_uint(checksum); putch('\n');
   return 0;
 }

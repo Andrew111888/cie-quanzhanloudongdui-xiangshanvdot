@@ -1,0 +1,845 @@
+{
+  "status": "passed",
+  "source_head_at_start": "dc5d8cd58eafbbb6ccae80ac28492b37ec5af250",
+  "source_head_at_end": "dc5d8cd58eafbbb6ccae80ac28492b37ec5af250",
+  "source_files_sha256": {
+    "rtl/VdotDatapath.sv": "868ca4b2f21e499a37c14161c72e0776817086eb73a27354102722008de20b89",
+    "experiments/acc/VdotAccPlain.sv": "66af879e2a8c78a1dbd0755558ec83a82b12c44aec0169dd6e19bdc3ce7b869f",
+    "experiments/acc/VdotAccCsa.sv": "dc017af7bba9cb2b7cf3d002144860ac201055202a2522d987fd03b72a2c25fc",
+    "experiments/acc/VdotAccCsaPrefix.sv": "fc974d7d935d7a28c7681f8cc9e0c51aaf65555d8513b1b6e1ff3324970538fd",
+    "experiments/acc/VdotAccCsaPrefixOr.sv": "ebba6647b3a7b07461f28db1d4c52876bdf5e0e33ea3b8eb8978725ff05ab59c",
+    "experiments/acc/VdotAccRetimed.sv": "27f5e3b8808a4aeed91d728d5420487f773a7c20c6f45f9711c2ecdba70faf2c",
+    "experiments/acc/AccVerify.sv": "22dbb64d00610e5b8ad7c73e03749ab402e206815bb84bef78ad2bcbebcad24a",
+    "verification/acc_arithmetic.cpp": "1a7f8b362f8322b8899a35e7c000bcdb46afa31b3a3c25cedf329a34588f4df3",
+    "scripts/evaluate_acc_ppa.py": "1e4ec64c16de26ea566bcbc991da78c1bac9536522746c9b581c84b304ae2260",
+    "/home/yh/cie/vdot-acc-prototype/out/datapath/test/test.dest/sandbox/test_run_dir/VdotAccDatapath_should_preserve_modulo_arithmetic_and_independent_enables_carrySavefalse_prefixfalse_retimefalse/VdotAccPlainDatapath.sv": "2583105ad138cfcff9aee0bfc84d39254cdea5e46597ccc63ffaf13952148c64",
+    "/home/yh/cie/vdot-acc-prototype/out/datapath/test/test.dest/sandbox/test_run_dir/VdotAccDatapath_should_preserve_modulo_arithmetic_and_independent_enables_carrySavetrue_prefixfalse_retimefalse/VdotAccCsaDatapath.sv": "f47fde04eea397dbdcf43dc86dc0430456ed4c440ec5ae3daaba69b0236e4c7a",
+    "/home/yh/cie/vdot-acc-prototype/out/datapath/test/test.dest/sandbox/test_run_dir/VdotAccDatapath_should_preserve_modulo_arithmetic_and_independent_enables_carrySavetrue_prefixtrue_retimefalse/VdotAccCsaPrefixDatapath.sv": "cc642d3900dc17458a91e15dcb1b3224723ba28a30029a07585d1746aa008c92",
+    "/home/yh/cie/vdot-acc-prototype/out/datapath/test/test.dest/sandbox/test_run_dir/VdotAccDatapath_should_preserve_modulo_arithmetic_and_independent_enables_carrySavetrue_prefixtrue_retimetrue/VdotAccRetimedDatapath.sv": "09facfd26fd17905484ceda7311a4228bf8243a4691516da2f9fda06a8e8dd77",
+    "/home/yh/cie/vdot-acc-prototype/third_party/XiangShan/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala": "61d6ce2c5a969b9b7e3ce50a5550fd40632d74728e9c8165b5de8c8f0b77edfb"
+  },
+  "selected_source_inputs_unchanged": true,
+  "toolchain": {
+    "yosys": {
+      "path": "/home/yh/cie/vdot-kmhv2/tools/synthesis-local/sysroot/usr/bin/yosys",
+      "sha256": "30aa795bec7533dac08bad56309edb6ac70dd33f017c28082d3c1dae1012112f",
+      "version": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)"
+    },
+    "abc": {
+      "path": "/home/yh/cie/vdot-kmhv2/tools/synthesis-local/sysroot/usr/bin/yosys-abc",
+      "sha256": "21869d0f63b6a2962ad7e54044e7a694f6cc392db6443ad7bf70cdb8ad6ca16a",
+      "version": "ABC command line: \"version\".\n\nUC Berkeley, ABC 1.01 (compiled May  4 2025 16:37:33)"
+    },
+    "sta": {
+      "path": "/home/yh/cie/vdot-kmhv2/tools/synthesis-local/sysroot/usr/bin/sta",
+      "sha256": "7b9994f6e26be12db7285c4fdfb0a8e3dbac0a65de328dd1b448005cc9b0edd8",
+      "version": "2.0.17"
+    },
+    "verilator": {
+      "path": "/home/yh/chipyard/.conda-env/bin/verilator",
+      "sha256": "8f524b25347f8cf62eccf30adbc58d056f9d8a4497dea4e6640381a6e13e8c07",
+      "version": "Verilator 5.022 2024-02-24 rev conda-forge build 1"
+    }
+  },
+  "verification": {
+    "directed_cases": 12,
+    "random_vectors": 4096,
+    "continuous_checked_each": 4108,
+    "total_checked_each": 8217,
+    "first_stage_captures": 6805,
+    "result_captures": 7369,
+    "enable1_hold_cycles": 1413,
+    "enable2_hold_cycles": 848,
+    "models_checked": [
+      "original",
+      "plain",
+      "csa",
+      "prefix",
+      "prefix_or",
+      "retimed",
+      "chisel_plain",
+      "chisel_csa",
+      "chisel_prefix",
+      "chisel_retimed"
+    ],
+    "status": "passed",
+    "result_bits": 128,
+    "latency_cycles": 2,
+    "initiation_interval_cycles": 1,
+    "seed": 20261106,
+    "scope": "standalone arithmetic with independently controlled register enables"
+  },
+  "constraints": {
+    "clock_periods_ns": [
+      1.0,
+      1.5,
+      2.5
+    ],
+    "clock_uncertainty_ns": 0.02,
+    "input_delay_ns": 0.1,
+    "output_delay_ns": 0.1,
+    "input_transition_ns": 0.05,
+    "output_capacitance_fF": 5.0,
+    "interconnect_R_C": 0,
+    "clock_network": "ideal",
+    "corner": "Nangate45 typical 1.10V 25C",
+    "synthesis_abc_target_ps": 1000,
+    "mapping_policy": "one mapped netlist per design, unchanged for both STA clock periods",
+    "area_unit": "Liberty area attribute units"
+  },
+  "results": [
+    {
+      "design": "original",
+      "pipeline_stages": 2,
+      "accepted_input_interval_cycles": 1,
+      "sequential_cells": 147,
+      "combinational_cells": 3748,
+      "total_cells": 3895,
+      "combinational_area_library_units": 4279.674,
+      "sequential_area_library_units": 664.734,
+      "total_area_library_units": 4944.408,
+      "maximum_combinational_cell_levels": 23,
+      "mapped_netlist_sha256": "795a29348b4c86d3a37e55501b6a4735fba0f9822c1b9d81f6cb705e9773d995",
+      "cell_type_counts": {
+        "AND2_X1": 271,
+        "AND3_X1": 87,
+        "AND4_X1": 13,
+        "AOI211_X1": 2,
+        "AOI21_X1": 315,
+        "AOI22_X1": 87,
+        "DFF_X1": 147,
+        "INV_X1": 263,
+        "MUX2_X1": 70,
+        "NAND2_X1": 494,
+        "NAND3_X1": 107,
+        "NAND4_X1": 18,
+        "NOR2_X1": 429,
+        "NOR3_X1": 35,
+        "OAI211_X1": 10,
+        "OAI21_X1": 323,
+        "OAI221_X1": 12,
+        "OAI22_X1": 43,
+        "OR2_X1": 96,
+        "OR3_X1": 107,
+        "OR4_X1": 12,
+        "XNOR2_X1": 499,
+        "XOR2_X1": 455
+      },
+      "timing": [
+        {
+          "clock_period_ns": 1.0,
+          "worst_setup_slack_ns": -0.148259,
+          "total_negative_setup_slack_ns": -3.259213,
+          "setup_critical_path": {
+            "startpoint": "_7645_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7789_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.087338,
+            "data_required_ns": 0.939079,
+            "slack_ns": -0.148259,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_7[2]"
+              ],
+              "endpoint": [
+                "dut.result[18]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108366,
+            "data_required_ns": 0.02171,
+            "slack_ns": 0.086656,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_1[1]"
+              ],
+              "endpoint": [
+                "dut.products_1[1]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 1.5,
+          "worst_setup_slack_ns": 0.351741,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "_7645_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7789_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.087338,
+            "data_required_ns": 1.439079,
+            "slack_ns": 0.351741,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_7[2]"
+              ],
+              "endpoint": [
+                "dut.result[18]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108366,
+            "data_required_ns": 0.02171,
+            "slack_ns": 0.086656,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_1[1]"
+              ],
+              "endpoint": [
+                "dut.products_1[1]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 2.5,
+          "worst_setup_slack_ns": 1.351742,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "_7645_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7789_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.087338,
+            "data_required_ns": 2.439079,
+            "slack_ns": 1.351742,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_7[2]"
+              ],
+              "endpoint": [
+                "dut.result[18]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_7740_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108366,
+            "data_required_ns": 0.02171,
+            "slack_ns": 0.086656,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.products_1[1]"
+              ],
+              "endpoint": [
+                "dut.products_1[1]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        }
+      ]
+    },
+    {
+      "design": "chisel_plain",
+      "pipeline_stages": 2,
+      "accepted_input_interval_cycles": 1,
+      "sequential_cells": 192,
+      "combinational_cells": 3993,
+      "total_cells": 4185,
+      "combinational_area_library_units": 4562.964,
+      "sequential_area_library_units": 868.224,
+      "total_area_library_units": 5431.188,
+      "maximum_combinational_cell_levels": 35,
+      "mapped_netlist_sha256": "5b43299933eb70550acdc46d8fa06af8835bcb99f5d59c7dc8b40c42d5c99f78",
+      "cell_type_counts": {
+        "AND2_X1": 260,
+        "AND3_X1": 85,
+        "AND4_X1": 17,
+        "AOI211_X1": 4,
+        "AOI21_X1": 330,
+        "AOI221_X1": 1,
+        "AOI22_X1": 91,
+        "DFF_X1": 192,
+        "INV_X1": 287,
+        "MUX2_X1": 104,
+        "NAND2_X1": 519,
+        "NAND3_X1": 124,
+        "NAND4_X1": 15,
+        "NOR2_X1": 485,
+        "NOR3_X1": 40,
+        "OAI211_X1": 10,
+        "OAI21_X1": 352,
+        "OAI221_X1": 9,
+        "OAI22_X1": 29,
+        "OAI33_X1": 2,
+        "OR2_X1": 99,
+        "OR3_X1": 106,
+        "OR4_X1": 13,
+        "XNOR2_X1": 530,
+        "XOR2_X1": 481
+      },
+      "timing": [
+        {
+          "clock_period_ns": 1.0,
+          "worst_setup_slack_ns": -1.061671,
+          "total_negative_setup_slack_ns": -17.02597,
+          "setup_critical_path": {
+            "startpoint": "_8245_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8209_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 2.000923,
+            "data_required_ns": 0.939252,
+            "slack_ns": -1.061671,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_7[3]"
+              ],
+              "endpoint": [
+                "dut.result[31]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8246_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8246_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.107602,
+            "data_required_ns": 0.021666,
+            "slack_ns": 0.085936,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_7[4]"
+              ],
+              "endpoint": [
+                "dut.nextResult_products_7[4]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 1.5,
+          "worst_setup_slack_ns": -0.561671,
+          "total_negative_setup_slack_ns": -5.245748,
+          "setup_critical_path": {
+            "startpoint": "_8245_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8209_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 2.000923,
+            "data_required_ns": 1.439252,
+            "slack_ns": -0.561671,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_7[3]"
+              ],
+              "endpoint": [
+                "dut.result[31]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8246_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8246_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.107602,
+            "data_required_ns": 0.021666,
+            "slack_ns": 0.085936,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_7[4]"
+              ],
+              "endpoint": [
+                "dut.nextResult_products_7[4]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 2.5,
+          "worst_setup_slack_ns": 0.438329,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "_8245_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8209_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 2.000923,
+            "data_required_ns": 2.439252,
+            "slack_ns": 0.438329,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_7[3]"
+              ],
+              "endpoint": [
+                "dut.result[31]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8246_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8246_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.107602,
+            "data_required_ns": 0.021666,
+            "slack_ns": 0.085936,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_7[4]"
+              ],
+              "endpoint": [
+                "dut.nextResult_products_7[4]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        }
+      ]
+    },
+    {
+      "design": "chisel_csa",
+      "pipeline_stages": 2,
+      "accepted_input_interval_cycles": 1,
+      "sequential_cells": 192,
+      "combinational_cells": 4281,
+      "total_cells": 4473,
+      "combinational_area_library_units": 4865.672,
+      "sequential_area_library_units": 868.224,
+      "total_area_library_units": 5733.896,
+      "maximum_combinational_cell_levels": 36,
+      "mapped_netlist_sha256": "cff092bf658f57616b36fa7ba1df0c699ae232012058eca4a6b371127b3f7e1c",
+      "cell_type_counts": {
+        "AND2_X1": 252,
+        "AND3_X1": 86,
+        "AND4_X1": 19,
+        "AOI211_X1": 7,
+        "AOI21_X1": 347,
+        "AOI22_X1": 93,
+        "DFF_X1": 192,
+        "INV_X1": 299,
+        "MUX2_X1": 113,
+        "NAND2_X1": 581,
+        "NAND3_X1": 121,
+        "NAND4_X1": 18,
+        "NOR2_X1": 533,
+        "NOR3_X1": 56,
+        "OAI211_X1": 14,
+        "OAI21_X1": 410,
+        "OAI221_X1": 7,
+        "OAI22_X1": 20,
+        "OAI33_X1": 2,
+        "OR2_X1": 127,
+        "OR3_X1": 107,
+        "OR4_X1": 10,
+        "XNOR2_X1": 555,
+        "XOR2_X1": 504
+      },
+      "timing": [
+        {
+          "clock_period_ns": 1.0,
+          "worst_setup_slack_ns": -0.720036,
+          "total_negative_setup_slack_ns": -10.155141,
+          "setup_critical_path": {
+            "startpoint": "_8900_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8785_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.64346,
+            "data_required_ns": 0.923424,
+            "slack_ns": -0.720036,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_2[2]"
+              ],
+              "endpoint": [
+                "dut.result[31]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8848_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8848_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.104982,
+            "data_required_ns": 0.02165,
+            "slack_ns": 0.083332,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_6[14]"
+              ],
+              "endpoint": [
+                "dut.nextResult_products_6[14]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 1.5,
+          "worst_setup_slack_ns": -0.220036,
+          "total_negative_setup_slack_ns": -0.96185,
+          "setup_critical_path": {
+            "startpoint": "_8900_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8785_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.64346,
+            "data_required_ns": 1.423424,
+            "slack_ns": -0.220036,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_2[2]"
+              ],
+              "endpoint": [
+                "dut.result[31]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8848_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8848_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.104982,
+            "data_required_ns": 0.02165,
+            "slack_ns": 0.083332,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_6[14]"
+              ],
+              "endpoint": [
+                "dut.nextResult_products_6[14]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 2.5,
+          "worst_setup_slack_ns": 0.779964,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "_8900_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8785_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.64346,
+            "data_required_ns": 2.423424,
+            "slack_ns": 0.779964,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_2[2]"
+              ],
+              "endpoint": [
+                "dut.result[31]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8848_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8848_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.104982,
+            "data_required_ns": 0.02165,
+            "slack_ns": 0.083332,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_6[14]"
+              ],
+              "endpoint": [
+                "dut.nextResult_products_6[14]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        }
+      ]
+    },
+    {
+      "design": "chisel_prefix",
+      "pipeline_stages": 2,
+      "accepted_input_interval_cycles": 1,
+      "sequential_cells": 192,
+      "combinational_cells": 4368,
+      "total_cells": 4560,
+      "combinational_area_library_units": 4961.964,
+      "sequential_area_library_units": 868.224,
+      "total_area_library_units": 5830.188,
+      "maximum_combinational_cell_levels": 26,
+      "mapped_netlist_sha256": "1fa1300854f5438448293dce8ba4fb5433cc6fdd7511c4cc2dae193b991f5114",
+      "cell_type_counts": {
+        "AND2_X1": 284,
+        "AND3_X1": 86,
+        "AND4_X1": 17,
+        "AOI211_X1": 11,
+        "AOI21_X1": 341,
+        "AOI22_X1": 88,
+        "DFF_X1": 192,
+        "INV_X1": 285,
+        "MUX2_X1": 113,
+        "NAND2_X1": 643,
+        "NAND3_X1": 114,
+        "NAND4_X1": 14,
+        "NOR2_X1": 496,
+        "NOR3_X1": 66,
+        "OAI211_X1": 23,
+        "OAI21_X1": 412,
+        "OAI221_X1": 8,
+        "OAI22_X1": 19,
+        "OAI33_X1": 2,
+        "OR2_X1": 159,
+        "OR3_X1": 119,
+        "OR4_X1": 9,
+        "XNOR2_X1": 563,
+        "XOR2_X1": 496
+      },
+      "timing": [
+        {
+          "clock_period_ns": 1.0,
+          "worst_setup_slack_ns": -0.555645,
+          "total_negative_setup_slack_ns": -9.136136,
+          "setup_critical_path": {
+            "startpoint": "_9023_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8959_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.494897,
+            "data_required_ns": 0.939252,
+            "slack_ns": -0.555645,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_6[15]"
+              ],
+              "endpoint": [
+                "dut.result[31]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_9088_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_9088_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108769,
+            "data_required_ns": 0.021695,
+            "slack_ns": 0.087075,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_1[0]"
+              ],
+              "endpoint": [
+                "dut.nextResult_products_1[0]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 1.5,
+          "worst_setup_slack_ns": -0.055645,
+          "total_negative_setup_slack_ns": -0.136707,
+          "setup_critical_path": {
+            "startpoint": "_9023_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8959_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.494897,
+            "data_required_ns": 1.439252,
+            "slack_ns": -0.055645,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_6[15]"
+              ],
+              "endpoint": [
+                "dut.result[31]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_9088_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_9088_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108769,
+            "data_required_ns": 0.021695,
+            "slack_ns": 0.087075,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_1[0]"
+              ],
+              "endpoint": [
+                "dut.nextResult_products_1[0]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 2.5,
+          "worst_setup_slack_ns": 0.944355,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "_9023_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8959_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.494897,
+            "data_required_ns": 2.439252,
+            "slack_ns": 0.944355,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_6[15]"
+              ],
+              "endpoint": [
+                "dut.result[31]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_9088_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_9088_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108769,
+            "data_required_ns": 0.021695,
+            "slack_ns": 0.087075,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_products_1[0]"
+              ],
+              "endpoint": [
+                "dut.nextResult_products_1[0]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        }
+      ]
+    },
+    {
+      "design": "chisel_retimed",
+      "pipeline_stages": 2,
+      "accepted_input_interval_cycles": 1,
+      "sequential_cells": 159,
+      "combinational_cells": 4271,
+      "total_cells": 4430,
+      "combinational_area_library_units": 4889.346,
+      "sequential_area_library_units": 718.998,
+      "total_area_library_units": 5608.344,
+      "maximum_combinational_cell_levels": 25,
+      "mapped_netlist_sha256": "5bc4cc3968e6749f7557cda72110c0b5143b0630bfeba1d33d168d093ca1560c",
+      "cell_type_counts": {
+        "AND2_X1": 238,
+        "AND3_X1": 84,
+        "AND4_X1": 38,
+        "AOI211_X1": 14,
+        "AOI21_X1": 333,
+        "AOI221_X1": 2,
+        "AOI22_X1": 102,
+        "DFF_X1": 159,
+        "INV_X1": 269,
+        "MUX2_X1": 95,
+        "NAND2_X1": 602,
+        "NAND3_X1": 73,
+        "NAND4_X1": 9,
+        "NOR2_X1": 509,
+        "NOR3_X1": 103,
+        "NOR4_X1": 1,
+        "OAI211_X1": 20,
+        "OAI21_X1": 396,
+        "OAI221_X1": 2,
+        "OAI22_X1": 25,
+        "OR2_X1": 143,
+        "OR3_X1": 104,
+        "OR4_X1": 10,
+        "XNOR2_X1": 648,
+        "XOR2_X1": 451
+      },
+      "timing": [
+        {
+          "clock_period_ns": 1.0,
+          "worst_setup_slack_ns": -0.399302,
+          "total_negative_setup_slack_ns": -16.349211,
+          "setup_critical_path": {
+            "startpoint": "vs2[55] (input port clocked by clk)",
+            "endpoint": "_8748_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.347723,
+            "data_required_ns": 0.948421,
+            "slack_ns": -0.399302,
+            "register_net_aliases": {
+              "startpoint": [
+                "vs2[55]"
+              ],
+              "endpoint": [
+                "dut.nextResult_level1_4[15]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8765_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8765_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108832,
+            "data_required_ns": 0.021692,
+            "slack_ns": 0.087139,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_level1_5[1]"
+              ],
+              "endpoint": [
+                "dut.nextResult_level1_5[1]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 1.5,
+          "worst_setup_slack_ns": 0.100698,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "vs2[55] (input port clocked by clk)",
+            "endpoint": "_8748_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.347723,
+            "data_required_ns": 1.448421,
+            "slack_ns": 0.100698,
+            "register_net_aliases": {
+              "startpoint": [
+                "vs2[55]"
+              ],
+              "endpoint": [
+                "dut.nextResult_level1_4[15]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8765_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8765_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108832,
+            "data_required_ns": 0.021692,
+            "slack_ns": 0.087139,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_level1_5[1]"
+              ],
+              "endpoint": [
+                "dut.nextResult_level1_5[1]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        },
+        {
+          "clock_period_ns": 2.5,
+          "worst_setup_slack_ns": 1.100698,
+          "total_negative_setup_slack_ns": 0.0,
+          "setup_critical_path": {
+            "startpoint": "vs2[55] (input port clocked by clk)",
+            "endpoint": "_8748_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 1.347723,
+            "data_required_ns": 2.448421,
+            "slack_ns": 1.100698,
+            "register_net_aliases": {
+              "startpoint": [
+                "vs2[55]"
+              ],
+              "endpoint": [
+                "dut.nextResult_level1_4[15]"
+              ]
+            }
+          },
+          "hold_critical_path": {
+            "startpoint": "_8765_ (rising edge-triggered flip-flop clocked by clk)",
+            "endpoint": "_8765_ (rising edge-triggered flip-flop clocked by clk)",
+            "data_arrival_ns": 0.108832,
+            "data_required_ns": 0.021692,
+            "slack_ns": 0.087139,
+            "register_net_aliases": {
+              "startpoint": [
+                "dut.nextResult_level1_5[1]"
+              ],
+              "endpoint": [
+                "dut.nextResult_level1_5[1]"
+              ]
+            }
+          },
+          "constant_zero_outputs_without_timing_paths": 96
+        }
+      ]
+    }
+  ],
+  "scope": "isolated two-stage arithmetic only; acc selection mux, scheduler and processor integration excluded",
+  "limitations": [
+    "No full-core area or power measurement",
+    "No physical placement, routing, parasitic extraction or CTS",
+    "A passing module constraint does not establish whole-chip frequency",
+    "Independent-enable arithmetic verification does not establish FU flush/ROB correctness"
+  ]
+}

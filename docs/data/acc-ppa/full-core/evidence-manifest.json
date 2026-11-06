@@ -1,0 +1,356 @@
+{
+  "status": "verified",
+  "local_evidence_directory": "/home/yh/cie/vdot-acc-prototype/reports/acc-ppa-20261106T134430Z-638751/evidence",
+  "files": [
+    {
+      "file": "SHA256SUMS",
+      "sha256": "df9c7a726a28532514082ef57b271b5bde1f5e3d4827820969a24b22332e25db",
+      "bytes": 6463
+    },
+    {
+      "file": "abc-version.log",
+      "sha256": "40000b609a2a8d706832e64bd0874d8ba03323397498a03e8a724e0d80d82b56",
+      "bytes": 84
+    },
+    {
+      "file": "abc-version.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "chisel_retimed/mapped.json",
+      "sha256": "886ef553cdf8c4e6db47a3cd6aa056ca4590c01e502d1cd280b3786a66ce27ea",
+      "bytes": 2868864
+    },
+    {
+      "file": "chisel_retimed/mapped.v",
+      "sha256": "2427eafa4eb4dba88d63e001177ab8dbfc6636b11ac7391dc708e3169fc4854a",
+      "bytes": 436926
+    },
+    {
+      "file": "chisel_retimed/result.json",
+      "sha256": "8182d08e0b8d89faa0829989ec29f766f7c76f2bc2a9fce3fcaa79a9e343c82c",
+      "bytes": 4562
+    },
+    {
+      "file": "chisel_retimed/synthesis.log",
+      "sha256": "9962628d7040218f06a44abd4c0f3e386effbeab51ba49353c3e115b67275d08",
+      "bytes": 43191
+    },
+    {
+      "file": "chisel_retimed/synthesis.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "chisel_retimed/synthesis.ys",
+      "sha256": "a62e54ce1a2f4b1733bd937aa9d2342590a9754ad3d745417cf7c420197f3360",
+      "bytes": 1204
+    },
+    {
+      "file": "chisel_retimed/timing-1p0.log",
+      "sha256": "8b96be5e49a804ee3329a8c4fd38188cc5afa9e1cb8d0e951eeeb4b4ee4a739c",
+      "bytes": 29566
+    },
+    {
+      "file": "chisel_retimed/timing-1p0.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "chisel_retimed/timing-1p0.tcl",
+      "sha256": "b69b6eb1b703465188f5874725adf0852fcf43c2fa5c5ab9b1ccbc63949ebacb",
+      "bytes": 1176
+    },
+    {
+      "file": "chisel_retimed/timing-1p5.log",
+      "sha256": "4db430aa18533eecbd2a041e96b1df25b9e0300fbe269b4dc70089e8aee887dc",
+      "bytes": 29548
+    },
+    {
+      "file": "chisel_retimed/timing-1p5.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "chisel_retimed/timing-1p5.tcl",
+      "sha256": "3732cd2f0f9edb39c98315e852f10bdd6a3f2732f00ca9d198adf14dda73eb19",
+      "bytes": 1176
+    },
+    {
+      "file": "chisel_retimed/timing-2p5.log",
+      "sha256": "26435d6ce9ef0a71b78abc1f85a11eb8563646c71bd161dda787702214af5b5d",
+      "bytes": 29548
+    },
+    {
+      "file": "chisel_retimed/timing-2p5.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "chisel_retimed/timing-2p5.tcl",
+      "sha256": "0f1eafaf3c61a8cdd0a47aebfdb33a26baecb91904572479c2045a43800f7ceb",
+      "bytes": 1176
+    },
+    {
+      "file": "commands.json",
+      "sha256": "95a68a2bc540ab444eeebb2fa931bf4c1c96c7df07dd3a2ff75e0947b4fe6857",
+      "bytes": 7235
+    },
+    {
+      "file": "inputs/AccVerify.sv",
+      "sha256": "189594fd82a6a8977abd0793ac536a2eaedb396f721c1ec55867f096170ab1a9",
+      "bytes": 2345
+    },
+    {
+      "file": "inputs/OpenCellLibraryLicenseSi2.txt",
+      "sha256": "ceee811023a06fe8ed9ba3369fc7e8b9d8035a0b2a7d7b321384c4e2051de3c8",
+      "bytes": 2108
+    },
+    {
+      "file": "inputs/PpaTop-chisel_retimed.sv",
+      "sha256": "7b81f89218c386cec89e6013b5714faec1cd00a0068713bf638a095aed5611f8",
+      "bytes": 267
+    },
+    {
+      "file": "inputs/PpaTop-original.sv",
+      "sha256": "a2e01cacfbba9803623c288ace58bfface97db11e344cf77fc806a021de3ec85",
+      "bytes": 244
+    },
+    {
+      "file": "inputs/Vdot.scala",
+      "sha256": "61d6ce2c5a969b9b7e3ce50a5550fd40632d74728e9c8165b5de8c8f0b77edfb",
+      "bytes": 4804
+    },
+    {
+      "file": "inputs/VdotAccCsa.sv",
+      "sha256": "dc017af7bba9cb2b7cf3d002144860ac201055202a2522d987fd03b72a2c25fc",
+      "bytes": 1843
+    },
+    {
+      "file": "inputs/VdotAccCsaDatapath.sv",
+      "sha256": "f47fde04eea397dbdcf43dc86dc0430456ed4c440ec5ae3daaba69b0236e4c7a",
+      "bytes": 22610
+    },
+    {
+      "file": "inputs/VdotAccCsaPrefix.sv",
+      "sha256": "fc974d7d935d7a28c7681f8cc9e0c51aaf65555d8513b1b6e1ff3324970538fd",
+      "bytes": 2860
+    },
+    {
+      "file": "inputs/VdotAccCsaPrefixDatapath.sv",
+      "sha256": "cc642d3900dc17458a91e15dcb1b3224723ba28a30029a07585d1746aa008c92",
+      "bytes": 102184
+    },
+    {
+      "file": "inputs/VdotAccCsaPrefixOr.sv",
+      "sha256": "ebba6647b3a7b07461f28db1d4c52876bdf5e0e33ea3b8eb8978725ff05ab59c",
+      "bytes": 2878
+    },
+    {
+      "file": "inputs/VdotAccPlain.sv",
+      "sha256": "66af879e2a8c78a1dbd0755558ec83a82b12c44aec0169dd6e19bdc3ce7b869f",
+      "bytes": 1234
+    },
+    {
+      "file": "inputs/VdotAccPlainDatapath.sv",
+      "sha256": "2583105ad138cfcff9aee0bfc84d39254cdea5e46597ccc63ffaf13952148c64",
+      "bytes": 12078
+    },
+    {
+      "file": "inputs/VdotAccRetimed.sv",
+      "sha256": "27f5e3b8808a4aeed91d728d5420487f773a7c20c6f45f9711c2ecdba70faf2c",
+      "bytes": 2767
+    },
+    {
+      "file": "inputs/VdotAccRetimedDatapath.sv",
+      "sha256": "4723293e599df8d4221797422ec742e7f1db149308a6fa929bc1cfa52e6f654e",
+      "bytes": 30013
+    },
+    {
+      "file": "inputs/VdotDatapath.sv",
+      "sha256": "868ca4b2f21e499a37c14161c72e0776817086eb73a27354102722008de20b89",
+      "bytes": 5739
+    },
+    {
+      "file": "inputs/acc_arithmetic.cpp",
+      "sha256": "1a7f8b362f8322b8899a35e7c000bcdb46afa31b3a3c25cedf329a34588f4df3",
+      "bytes": 4340
+    },
+    {
+      "file": "inputs/evaluate_acc_ppa.py",
+      "sha256": "03826ce7369eafa00b6e467afcc14681d9ca2a8ef5e17b8a2e59b9e50de84bee",
+      "bytes": 20092
+    },
+    {
+      "file": "inputs/library-original.lib",
+      "sha256": "8d540a4d4cf6d09d27c87ad067857a9c0c2eeb023ab7a56e058cd3113db4e9b1",
+      "bytes": 6692032
+    },
+    {
+      "file": "inputs/library-zero-wire.lib",
+      "sha256": "d177915d3331dde4b6d5c8b90c4dff9f9d5e5d6a20ee47f9cfbbea8ef4eec500",
+      "bytes": 6692140
+    },
+    {
+      "file": "library-derivation.json",
+      "sha256": "332bd46295ef244e8499aa059810af1e35f250755e6fc4b1bb3accb97860bbaa",
+      "bytes": 713
+    },
+    {
+      "file": "original/mapped.json",
+      "sha256": "04cade18c9141f853578a3ebc9403b25dd6ce63385119f8c892513aaafb97c9c",
+      "bytes": 2551416
+    },
+    {
+      "file": "original/mapped.v",
+      "sha256": "795a29348b4c86d3a37e55501b6a4735fba0f9822c1b9d81f6cb705e9773d995",
+      "bytes": 376594
+    },
+    {
+      "file": "original/result.json",
+      "sha256": "03da015a47f7e4fcfa8d2d3f39814a6750cf1497d1147c52db381e613bc719e1",
+      "bytes": 4410
+    },
+    {
+      "file": "original/synthesis.log",
+      "sha256": "b2db9e59a6ad39bc9f0fcd1e643a6b153c488eb43791d07cdfa6c398f9cfd897",
+      "bytes": 56217
+    },
+    {
+      "file": "original/synthesis.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "original/synthesis.ys",
+      "sha256": "224f4793cf337521a15b1484b04e8a7c8cf36afdeef939d8842e57a8f9562bdc",
+      "bytes": 1176
+    },
+    {
+      "file": "original/timing-1p0.log",
+      "sha256": "3262b79da9a2228670c4582bc63d07bb503d6ef896e2d29c2a8ae71e83ac2e18",
+      "bytes": 28868
+    },
+    {
+      "file": "original/timing-1p0.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "original/timing-1p0.tcl",
+      "sha256": "38f1a0081b6e303bae4201dcdc99463ec20d19845b6a39fec5ce77b3cb97fb15",
+      "bytes": 1170
+    },
+    {
+      "file": "original/timing-1p5.log",
+      "sha256": "ce1cdaf748bb82f3c0dafa0f4ee3c48182f9188fad5204a3275c089b6a478dd6",
+      "bytes": 28851
+    },
+    {
+      "file": "original/timing-1p5.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "original/timing-1p5.tcl",
+      "sha256": "8d96dc21fa94009f8ac1d8a606493e43ce2ceb6845dba5a2201ff9c80c05da65",
+      "bytes": 1170
+    },
+    {
+      "file": "original/timing-2p5.log",
+      "sha256": "d1b1c41b81f6b9df180c9c1466a373473695f831d099dd4ffac40b558096b5f2",
+      "bytes": 28851
+    },
+    {
+      "file": "original/timing-2p5.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "original/timing-2p5.tcl",
+      "sha256": "de9ca3d99c37a9899562f6327247c0a73fbd355c03e70e7d291981542a0334c8",
+      "bytes": 1170
+    },
+    {
+      "file": "results.json",
+      "sha256": "8bf1d0071594e9a90cdbc08982a58bc91c4b38e33c88ba6608b4d96676580da4",
+      "bytes": 14923
+    },
+    {
+      "file": "sta-version.log",
+      "sha256": "8a4d165e93729e579c12f73ceb42127673c62db24e8be7d4c5dcbf6c0f08266e",
+      "bytes": 7
+    },
+    {
+      "file": "sta-version.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "summary.csv",
+      "sha256": "ed343cbe01ab8cd9cc8b5368cf7ed35e488f3a6cacc4578230bb5c843f518b7d",
+      "bytes": 256
+    },
+    {
+      "file": "toolchain.json",
+      "sha256": "cc98b87ec25a39f42513ee46e30fa38c084ca1eb77bca9c90aab7ec7346779af",
+      "bytes": 989
+    },
+    {
+      "file": "verification-build.log",
+      "sha256": "f52acc186437a6cce901b4871b61f61295cb139ea3f9a3e4597feaf6a670e0ca",
+      "bytes": 8235
+    },
+    {
+      "file": "verification-build.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "verification-generate.log",
+      "sha256": "094e08d12e138215c2e4b20c3d3a4e9a2581c16cf26e6380d39caa11f5852431",
+      "bytes": 5148
+    },
+    {
+      "file": "verification-generate.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "verification.json",
+      "sha256": "0fe888a0b741d6ed4c88036563d86227eff56a1afc28b084192d14cc892d6f75",
+      "bytes": 636
+    },
+    {
+      "file": "verification.log",
+      "sha256": "f08ef411b4fe951fbe16527e00ad8dbc17e91882b19d3c0c3b27df96e37ef10c",
+      "bytes": 255
+    },
+    {
+      "file": "verification.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "verilator-version.log",
+      "sha256": "48101062dfdffb5f868f900eced6959928509656e9828d16259654feed5c44e7",
+      "bytes": 51
+    },
+    {
+      "file": "verilator-version.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    {
+      "file": "yosys-version.log",
+      "sha256": "239d92e36e753a9dff4e79d97878ed5d55304b675d411895ec57508bc134e28e",
+      "bytes": 63
+    },
+    {
+      "file": "yosys-version.log.exit-status.txt",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    }
+  ]
+}

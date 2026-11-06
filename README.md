@@ -1,39 +1,30 @@
-# 香山昆明湖 V2 vdot 指令项目
+# 香山昆明湖 V2 点积累加融合实验
 
-当前分支为累加融合实验：在已验收vdot基础上新增vdot.acc，使用共用乘法器、提前一级压缩与并行前缀加法的两级路径。实验设计见[累加融合架构](docs/累加融合架构.md)，语义和验证入口见[累加指令契约](docs/累加指令契约.md)、[累加融合性能方法](docs/累加融合性能方法.md)。原三阶段提交以已发布813be85版本为基线；新实验的硬件、功能和性能结果分别以实际输入绑定的回执记录。
+本分支在原vdot.vv赛题实现之外增加实验性vdot.acc：旧vd低32位与低8对有符号int8点积融合累加，按模2^32回绕，高96位清零。原vdot保留不累加语义；两条指令共用乘法、压缩和写回路径。
 
-2026 CIE 赛题独立工程，队伍：全栈漏洞队。已完成自定义vdot.vv的Chisel/RTL和NEMU扩展；优化版于2026-11-06在新的独立检出中完成整核构建、三阶段内部验收与性能复测。
+队伍：全栈漏洞队。参赛单位：西安电子科技大学。
 
-按赛题1.1至3.3的交付入口见[提交成果索引](docs/SUBMISSION.md)，三份阶段报告源稿分别为[第一阶段](docs/submission/stage1.md)、[第二阶段](docs/submission/stage2.md)、[第三阶段](docs/submission/stage3.md)。另提供[逐例正负数/边界程序](examples/vdot_basic.c)及[真实整核运行入口](scripts/run_basic_validation.sh)。三段官网录屏由参赛者自行完成，操作入口见[录屏指南](docs/RECORDING_GUIDE.md)；本轮不制作PPT，官网材料继续暂停替换。
+## 设计与实现
 
-本轮新增RVV序列对比、含访存内核及旧目标依赖消除，重新构建的全核功能回归和前后540条真实性能样本均已通过。512次TU独立点积的片段周期由3639降至625（改善5.822倍）；TA、真实依赖链和含访存内核未因这次调度修改降低中位周期。候选RVV序列在部分场景更慢，报告以两条实测RVV序列中较快者作为主要基线。详见[方法](docs/OPTIMIZATION.md)、[结果与限制](docs/OPTIMIZATION_RESULTS.md)及[原始数据](docs/data/optimization/README.md)。
+- [指令契约](docs/累加指令契约.md)：编码、支持范围、别名、结果布局和异常优先级。
+- [两级架构](docs/累加融合架构.md)：乘法级提前3:2压缩、第二级并行前缀加法，保留两级延迟和一拍接收间隔。
+- [香山Chisel补丁](patches/xiangshan.patch)、[NEMU补丁](patches/nemu.patch)：接入现有向量译码、真实旧目标依赖、VIMacU、ROB及写回；NEMU镜像早期译码与晚期配置异常。
+- [实际整核生成RTL与完整修改文件](experiments/acc/generated/README.md)：分别保存硬件构建、初始参考及异常修正参考身份。
 
-补充完成[干净提交构建与关键验收](docs/干净提交验收.md)，新增模型自然打印dirty: 0；[访存瓶颈分析](docs/访存瓶颈分析.md)以40条正式样本和真实加载波形定位保尾依赖，128块TU固定加载寄存器2120周期、四对轮换956周期。指令宽度与量化全连接/GEMV的对应关系见[设计说明](docs/DESIGN.md)。
+## 实验与复现
 
-深化实验增加三项可复现对照：[边界RTL故障变异](docs/边界故障变异验证.md)分别检出18位截断、负数零扩展及目标高位错误，并通过恢复验证；[真实长点积](docs/长点积内核分析.md)新增45条整核样本，K=32/128/512相对两条较快RVV候选的比例为1.068/0.945/0.804，长归约中RVV16更快；[模块资源与时序](docs/资源与时序评估.md)比较两级与四级，面积增加17.856%，两者仍未通过1 ns建立约束。正式整核保留两级，不把隔离原型或较慢场景写成性能提升。
+[复现入口](docs/累加融合复现.md)包含构建、分片差分、性能测量、错误参考及恢复、交叉异常和资源对照命令。[性能方法](docs/累加融合性能方法.md)定义相同K的完整长点积、较强RVV基线，以及单/多条累加链的计时边界。NEMU独立计数不作为硬件性能。
 
-赛题：[官方说明](https://rv.cie.org.cn/direction?id=8)。指令结果位宽等赛题未明确事项采用的暂定解释见 [contract.json](contract.json) 和 [待确认问题](docs/QUESTIONS.md)，尚未获得赛题方确认。
+源码包含1000组唯一随机输入的分片检查、正负回绕和6种寄存器关系、TA/TU、累加流水与v0/v31、故障参考检出及恢复。48例交叉异常探针覆盖两种点积、整数与分数LMUL、mask/v0、vill和vstart，保留修正前的反例与修正后的真实差分。
 
-固定昆明湖V2单核MinimalConfig，复用现有向量译码、调度、读源、VIMac执行槽位、写回及ROB通路。新增8路有符号8×8乘法与17/18/19位加法树，两级流水；同时交付[生成RTL及来源](rtl/README.md)，不依赖编译器认识新助记符。
+[模块对照数据](docs/data/acc-ppa/README.md)采用同库同约束，另绑定整核实际生成的算术模块。实际模块较原点积增加11.631%的映射面积，1.5 ns约束下建立裕量+0.136429 ns，1 ns仍未通过。这是理想时钟、零互连条件下的算术模块结果，不代表全核频率、物理面积或功耗。
 
-本轮正式结果来自[独立检出完整验收](docs/FINAL_RESULTS.md)，包括1000组固定种子输入、4000次合法随机vdot、1000次等价基线、1664条流水压力和v0/v31边界寄存器检查。真实错误参考库能触发v12_low的9/8差异，恢复正确库后通过。实际FST确认vdot输入至结果2周期，以及5组×8条独立指令逐周期握手。
+最终整核结果与逐次数据由scripts/summarize_acc_experiment.py从完整验收回执生成，只有通过检查的运行才记为passed。实验包由scripts/package_acc_experiment.py绑定最终源码、PDF、原始日志和逐文件校验值。
 
-本轮复测的60条基础RTL性能样本中，相对此处公开等价序列的程序片段中位数加速比为2.607–4.634；范围包含必要配置、循环及结果存储，没有测量所有软件组合的最优结果。测量边界、原始CSV与来源摘要见[阶段三报告](docs/results/stage3-clean.md)和[干净数据](docs/data/clean/provenance.json)。资源与时序补充仅覆盖算术模块的库映射和布局前STA，未测全核面积、功耗或端到端LLM。
+## 原赛题材料
 
-`vdot_vstart_probe` 是独立探测程序：它尝试在非零 `vstart` 下执行普通 `vmul`。固定版本NEMU原有实现对此报非法指令；该探测不属于vdot主回归的通过项，也不单独证明规范问题。vdot自身的非零vstart非法行为已由整核差分检查。
+原三阶段实现和交付基线保持在主分支813be85版本，本实验在独立工作树开发。既有阶段材料入口为[提交成果索引](docs/SUBMISSION.md)，历史实验和已发布数据保留在相应文档中，不当作新增累加指令的验收证据。
 
-全核构建继续采用官方 `MinimalConfig`，通过 `DISABLE_PERF=1 DISABLE_ALWAYSDB=1` 减少仿真统计与数据库逻辑。此前的 `VdotSimConfig` 精简实验还遇到软 PTW 和缓存索引问题，不作为可用配置。
+三段官网录屏由参赛者自行完成；本补充实验的[录屏要点](docs/累加融合录屏要点.md)单独提供。当前不制作PPT，官网材料继续暂停更新。
 
-本轮新FST再次核实2周期算术延迟、错路冲刷与独立突发；直接比较独立生成的前后1868个SV模块，只有DecodeUnit改变。当前按赛题编号的PDF、源码和原始证据统一保存在本机output/按赛题要求提交，状态与校验值见其中README.md和提交清单.json。三段官网录屏由参赛者自行完成，此前录屏保留为历史记录；当前不制作PPT。官网继续暂停更新，官方加密提交和PR同步状态单独记入最新提交回执。
-
-实现说明见 [设计文档](docs/DESIGN.md)，当前工具、构建命令和限制见 [构建与运行记录](docs/BUILDING.md)。
-
-历史未修改原核构建与vadd证据保留在上一轮独立目录；本轮另建目录，从固定源码生成优化版RTL、C++及NEMU并完成完整验收，详见[干净复现记录](docs/CLEAN_REPRODUCTION.md)。复用固定外部工具和下载缓存，未做全新操作系统验证。实际构建提交与最终文档/工具提交在发布包source-binding.json中分别记录，并逐字节核对关键输入。代码与依赖来源见[NOTICE](NOTICE.md)。
-
-从[环境准备](docs/BOOTSTRAP.md)获取固定源码和工具后，运行scripts/build_workloads.sh、scripts/build_nemu.sh、scripts/build_emu.sh，再用scripts/verify_reproduction.sh执行完整验收。具体参数、资源和恢复条件见[构建说明](docs/BUILDING.md)。当前三阶段非视频材料由scripts/render_requirement_reports.py和scripts/package_requirements.py生成，命令参数见各脚本--help；[此前材料工作流](docs/ARTIFACTS.md)保留历史录屏与四类ZIP的复现方法。
-
-官网四栏逐项来源见[要求核对](docs/REQUIREMENTS_AUDIT.md)，阶段材料见[交付清单](docs/DELIVERY_CHECKLIST.md)。[历史发布页](https://github.com/Andrew111888/cie-quanzhanloudongdui-xiangshanvdot/releases/latest)保留旧归档与旧提交回执，本轮本地新稿不据此视为已同步官网；技术验收通过不代表官方评审通过。
-
-`patches/` 保存相对固定上游版本的源代码改动，`workloads/` 是裸机测试与基准程序，`tests/` 是独立语义参考模型。编译工具和上游仓库保存在本地 `tools/` 与 `third_party/`，默认不上传。
-
-提交信息模板见[submission-info.template.txt](docs/submission-info.template.txt)。联系邮箱只保存在本地private/并进入官方公钥加密的信息；原始环境日志及FST保留在官网评审证明材料包，公开源码包含小型CSV与来源摘要。
+上游版本与许可见[来源说明](NOTICE.md)和[LICENSE](LICENSE)。上游完整源码、工具、构建产物和本机配置不纳入作品Git树，按固定版本获取后应用补丁。

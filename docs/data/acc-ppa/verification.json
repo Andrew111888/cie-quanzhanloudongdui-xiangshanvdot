@@ -1,0 +1,28 @@
+{
+  "directed_cases": 12,
+  "random_vectors": 4096,
+  "continuous_checked_each": 4108,
+  "total_checked_each": 8217,
+  "first_stage_captures": 6805,
+  "result_captures": 7369,
+  "enable1_hold_cycles": 1413,
+  "enable2_hold_cycles": 848,
+  "models_checked": [
+    "original",
+    "plain",
+    "csa",
+    "prefix",
+    "prefix_or",
+    "retimed",
+    "chisel_plain",
+    "chisel_csa",
+    "chisel_prefix",
+    "chisel_retimed"
+  ],
+  "status": "passed",
+  "result_bits": 128,
+  "latency_cycles": 2,
+  "initiation_interval_cycles": 1,
+  "seed": 20261106,
+  "scope": "standalone arithmetic with independently controlled register enables"
+}

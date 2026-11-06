@@ -24,10 +24,10 @@ index 11290c8..c7c5ef9 100644
  #endif // CONFIG_RVV
  #ifdef CONFIG_RV_AME
 diff --git a/src/isa/riscv64/instr/rvv/vcompute.h b/src/isa/riscv64/instr/rvv/vcompute.h
-index 2bcb6aa..36ff75e 100644
+index 2bcb6aa..f076480 100644
 --- a/src/isa/riscv64/instr/rvv/vcompute.h
 +++ b/src/isa/riscv64/instr/rvv/vcompute.h
-@@ -19,6 +19,33 @@
+@@ -19,6 +19,38 @@
  #include "vcompute_impl.h"
  #include "vcommon.h"
  
@@ -37,6 +37,11 @@ index 2bcb6aa..36ff75e 100644
 +#define CUSTOM_VDOT(accumulate) do { \
 +  require_vector(true); \
 +  if (vstart->val != 0) longjmp_exception(EX_II); \
++  /* Mirror the existing vector decoder's early legality checks. */ \
++  const unsigned custom_lmul = vtype->vlmul; \
++  if ((custom_lmul >= 1 && custom_lmul <= 3 && \
++       ((id_src1->reg | id_src2->reg | id_dest->reg) & ((1u << custom_lmul) - 1u))) || \
++      (!s->vm && id_dest->reg == 0)) longjmp_exception(EX_II); \
 +  if (VLEN != 128 || vtype->vsew != 0 || vtype->vlmul != 0 || \
 +      vl->val != 8 || !s->vm) { \
 +    cpu.trapInfo.vdot_config_fault = true; \

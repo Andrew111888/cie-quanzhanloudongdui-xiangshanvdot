@@ -4,7 +4,7 @@
 
 | 来源 | 固定提交 | 本项目处理 |
 |---|---|---|
-| OpenXiangShan/XiangShan | 7b16188f7f18a97be69c9b1a2dae8a446eec3b47 | 在其128位向量实现中增加vdot，分发相对该提交的4文件补丁 |
+| OpenXiangShan/XiangShan | 7b16188f7f18a97be69c9b1a2dae8a446eec3b47 | 在其128位向量实现中增加vdot及实验性vdot.acc，分发相对该提交的5文件补丁 |
 | OpenXiangShan/NEMU | d772a9d9e06f663d529bd1c6518480c1ee59ded2 | 分发5文件译码、语义及异常元数据补丁 |
 | OpenXiangShan/xs-env | 822e3581a2757d4a9848b065fd2a3057957b401e | 作为固定环境参考，不假定其默认平台就是昆明湖V2 |
 | Difftest | 3729300ae233816d332d057f170472ebe35147b0 | 沿用真实向量比较机制，没有修改checker源码 |

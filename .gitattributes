@@ -3,3 +3,6 @@ docs/data/boundary-mutations/** -whitespace
 docs/data/long-dot/*.log -whitespace
 docs/data/ppa/OpenCellLibraryLicenseSi2.txt -whitespace
 patches/*.patch -whitespace
+docs/data/acc-ppa/** -whitespace
+docs/data/acc-results/** -whitespace
+experiments/acc/generated/** -whitespace
