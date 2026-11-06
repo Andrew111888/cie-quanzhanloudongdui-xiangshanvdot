@@ -55,11 +55,13 @@ for item in pdfs['reports']:
     copy(src,stages[item['stage']]/src.name)
 for n,p in stages.items():
     copy(args.binding,p/'source-binding.json')
-    copy(root/f'docs/submission/stage{n}.md',p/'报告源稿.md')
-    copy(root/'docs/SUBMISSION.md',p/'赛题条目对应.md')
+    (p/'赛题条目对应.md').write_text(f'# 本阶段交付入口\n\n[完整赛题编号索引](源码与报告原稿/docs/SUBMISSION.md)\n\n[本阶段报告源稿](源码与报告原稿/docs/submission/stage{n}.md)\n\nPDF与原始证据位于本目录；源码和报告原稿保留完整的相对目录结构。\n')
     copy(args.pdf_dir/'reports-manifest.json',p/'reports-manifest.json')
-tree(args.stage1_evidence/'1.1-environment-validation',stages[1]/'1.1-环境输出',exclude=('recording-origin',))
-tree(args.stage1_evidence/'1.2-operation-logs',stages[1]/'1.2-部署操作日志')
+tree(args.stage1_evidence/'1.1-environment-validation',stages[1]/'1.1-环境输出',exclude=('recording-origin','README.md'))
+(stages[1]/'1.1-环境输出/README.md').write_text('# 1.1 实际环境输出\n\n[正式验收原始日志](acceptance-run/run.log)及[退出码](acceptance-run/exit-status.txt)。\n\n[既有真实终端画面](environment-output.png)对应另一份[复跑日志](recording-run/run.log)。两次来源分开保存；本包不含视频，官网录屏由参赛者另行完成。\n')
+tree(args.stage1_evidence/'1.2-operation-logs',stages[1]/'1.2-部署操作日志',exclude=('reference-procedures','部署操作索引.md'))
+log_index=(args.stage1_evidence/'1.2-operation-logs/部署操作索引.md').read_text().replace('reference-procedures/','../源码与报告原稿/docs/')
+(stages[1]/'1.2-部署操作日志/部署操作索引.md').write_text(log_index)
 tree(args.stage1_evidence/'1.3-vector-addition',stages[1]/'1.3-向量加法波形')
 copy(root/'workloads/vadd_test.c',stages[1]/'1.1-环境输出/vadd_test.c')
 
@@ -117,6 +119,8 @@ for name in tracked:
     assert Path(name).parts[0] not in {'private','reports','output','third_party','tools','build','out','tmp'}
     payload=(root/name).read_bytes();assert contact not in payload,name
     source_files['源码/'+name]=root/name
+    for stage in stages.values():
+        copy(root/name,stage/'源码与报告原稿'/name)
 
 def archive(path,files,readme):
     sums=[]
@@ -155,9 +159,9 @@ readme=f'''# 参赛提交材料：按赛题要求
 
 | 官网位置 | 本地材料 | 配套证据 |
 |---|---|---|
-| 文档：第一阶段 | 01-第一阶段/第一阶段-环境部署与向量加法.pdf | 1.1实际问候与IP；1.2完整225份记录及顺序索引；1.3原始FST与执行过程 |
-| 文档：第二阶段 | 02-第二阶段/第二阶段-vdot设计与基础测试.pdf | 2.1设计；2.2展开Chisel、补丁、生成RTL；2.3逐例实际输出及完整回归 |
-| 文档：第三阶段 | 03-第三阶段/第三阶段-协同仿真与延迟分析.pdf | 3.1 NEMU及真实差分反例；3.2等价基线；3.3波形、周期、加速比和原始样本 |
+| 文档：第一阶段 | [第一阶段PDF](01-第一阶段/第一阶段-环境部署与向量加法.pdf) | 1.1实际问候与IP；1.2完整225份记录及顺序索引；1.3原始FST与执行过程 |
+| 文档：第二阶段 | [第二阶段PDF](02-第二阶段/第二阶段-vdot设计与基础测试.pdf) | 2.1设计；2.2展开Chisel、补丁、生成RTL；2.3逐例实际输出及完整回归 |
+| 文档：第三阶段 | [第三阶段PDF](03-第三阶段/第三阶段-协同仿真与延迟分析.pdf) | 3.1 NEMU及真实差分反例；3.2等价基线；3.3波形、周期、加速比和原始样本 |
 | 代码仓库 | 仓库地址.txt | 04-源码与复现.zip可作代码附件；GitHub作品仓库为正式源码入口 |
 | 视频：三阶段 | 待参赛者提供 | 录屏操作指南.md给出命令及讲解要点 |
 
