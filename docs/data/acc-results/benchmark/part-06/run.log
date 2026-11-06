@@ -1,0 +1,27 @@
+ACC_LONG_HEADER,variant,k,c0,c1,c2,c3,c4,result
+ACC_LONG,2,32,128,128,128,128,128,46348
+ACC_CHAIN_HEADER,variant,chains,rounds,c0,c1,c2,c3,c4
+ACC_CHAIN,0,1,512,3167,3137,3137,3137,3137
+ACC_CHAIN_RESULT_PACK,0,1,512,2147934192
+ACC_CHAIN,0,8,128,2552,2519,2518,2519,2519
+ACC_CHAIN_RESULT_PACK,0,8,128,2147596272,2147662323,2147728374,2147794425,2147860476,2147926527,2147992578,2148058629
+ACC_CHAIN,1,4,32,309,283,283,283,283
+ACC_CHAIN_RESULT_PACK,1,4,32,2147511792,2147577843,2147643894,2147709945
+ACC_BENCH_PASS long_samples=5 chain_samples=15 full_128bit_results=1
+emu compiled at Nov  6 2026, 21:44:03
+%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 31476' or larger
+Using simulated 1048576B flash
+use /home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/workloads/flash.bin as flash bin
+Core  0's Commit SHA is: 14c8b3489a, dirty: 0
+Using simulated 128MB RAM
+The image is /home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/test.bin
+The reference model is /home/yh/cie/vdot-acc-prototype/build/acc-nemu-precedence/reference/riscv64-nemu-interpreter-so
+The first instruction of core 0 has commited. Difftest enabled. 
+[1;34m[src/monitor/image_loader.c:219,load_img] Loading flash image: /home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/workloads/flash.bin
+[0m
+[1;34m[src/monitor/image_loader.c:264,load_img] Read 8 bytes from file /home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/workloads/flash.bin to 0x0xf0000000[0m
+Core 0: [32mHIT GOOD TRAP at pc = 0x80000054
+[0m[35mCore-0 instrCnt = 69,160, cycleCnt = 113,676, IPC = 0.608396
+[0m[34mSeed=0 Guest cycle spent: 113,682 (this will be different from cycleCnt if emu loads a snapshot)
+[0m[34mHost time spent: 621,655ms
+[0m

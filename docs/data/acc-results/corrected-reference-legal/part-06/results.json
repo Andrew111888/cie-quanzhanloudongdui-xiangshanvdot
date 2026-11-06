@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "part": 6,
+  "first_case": 377,
+  "case_count": 63,
+  "random_cases": 63,
+  "directed_cases": 0,
+  "checksum": 3747579898,
+  "reported_core_commit_prefix": null,
+  "raw_exit_status": 0,
+  "run_log_sha256": "6bfc21b600b0b1dc06ebfd440163111af9ce0627db14193b2ef1c2ed7e27acee",
+  "binary_sha256": "a6f674cb1f9f36c1ddfa57df2e49ab725b83765ad501152b5c5a57d423afc97c"
+}

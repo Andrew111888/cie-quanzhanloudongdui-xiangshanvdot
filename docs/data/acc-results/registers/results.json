@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "scope": "rtl_nemu_difftest",
+  "forms": 6,
+  "policies": 2,
+  "input_sha256": {
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-registers-20261106T140354Z/workload/acc-registers.bin": "8d86620b75c0e60326a22e8f800b5fc03340c5a6404bd4fde31f5646bb2111a8",
+    "/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/workloads/flash.bin": "12b791f69e01db906377cac6d6b15c4cce7cd09c226515f181f7687186f786bd",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-registers-20261106T140354Z/inputs/acc_registers.c": "10b59fb9789bf721ba57774637a11fe475420459009258a1cf69f3f1b077fb3e",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-registers-20261106T140354Z/inputs/console.h": "d104a747b9592229154b5696854b7df63f45e647acfad39888573d8c31f7ed58",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-registers-20261106T140354Z/inputs/link.ld": "1c6dd14937e88ae5e5ea0fa95cd3b4abfe9b0c3121caa9c8b1605380cdfd5d8a",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-registers-20261106T140354Z/inputs/run_acc_registers.py": "a4fa27c7b9d653aa0d1c5733929430e6f537ef7b5d0a272562b0207bdb21bd8c",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-registers-20261106T140354Z/inputs/start.S": "3c8cc301c699d2e2eb2a605353b5f91b3f2d9e03f723f7e2ef5d9ff1da2a7883",
+    "/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/third_party/XiangShan/build/verilator-compile/emu": "07dd955d3d41d927e89be93035feef0145fa2dd894db327cd8c0bb3ae0cc6150",
+    "/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/nemu/reference/riscv64-nemu-interpreter-so": "3f8ca9c238fe2293e2bf83008d2f2f6b7b6173aa7ebf31c09444a2a8411ca8dd"
+  },
+  "runs": [
+    {
+      "label": "rtl",
+      "command": [
+        "/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/third_party/XiangShan/build/verilator-compile/emu",
+        "-i",
+        "/home/yh/cie/vdot-acc-prototype/reports/acc-registers-20261106T140354Z/workload/acc-registers.bin",
+        "-F",
+        "/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/workloads/flash.bin",
+        "--ram-size=128MB",
+        "--diff=/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/nemu/reference/riscv64-nemu-interpreter-so",
+        "--no-squash",
+        "-C",
+        "200000"
+      ],
+      "log_sha256": "79d17839ab7329900bc93ab129d92330f04c59b6806a1efea401934caac8581b"
+    }
+  ]
+}

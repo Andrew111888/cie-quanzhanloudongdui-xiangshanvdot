@@ -1,0 +1,19 @@
+[
+  "riscv64-unknown-elf-gcc",
+  "-march=rv64gcv",
+  "-mabi=lp64d",
+  "-mcmodel=medany",
+  "-O2",
+  "-fno-tree-vectorize",
+  "-ffreestanding",
+  "-fno-builtin",
+  "-nostdlib",
+  "-nostartfiles",
+  "-I/home/yh/cie/vdot-acc-prototype/reports/acc-precedence-20261106T145533Z/inputs",
+  "-Wl,--no-relax",
+  "-Wl,-T,/home/yh/cie/vdot-acc-prototype/reports/acc-precedence-20261106T145533Z/inputs/link.ld",
+  "/home/yh/cie/vdot-acc-prototype/reports/acc-precedence-20261106T145533Z/inputs/start.S",
+  "/home/yh/cie/vdot-acc-prototype/reports/acc-precedence-20261106T145533Z/inputs/acc_illegal_precedence.c",
+  "-o",
+  "/home/yh/cie/vdot-acc-prototype/reports/acc-precedence-20261106T145533Z/test.elf"
+]

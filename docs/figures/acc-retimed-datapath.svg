@@ -12,7 +12,21 @@
 <rect x="832" y="125" width="130" height="80" rx="7" fill="#e8eff6"/><text x="897" y="157" text-anchor="middle" font-size="16">32-bit prefix</text><text x="897" y="184" text-anchor="middle" font-size="15">final adder</text>
 <rect x="1000" y="113" width="58" height="104" rx="5" fill="#dbece1"/><text x="1029" y="150" text-anchor="middle" font-size="17" font-weight="bold">R2</text><text x="1029" y="177" text-anchor="middle" font-size="13">32 bits</text>
 <text x="1123" y="156" text-anchor="middle" font-size="15">128-bit vd</text><text x="1123" y="182" text-anchor="middle" font-size="13">high 96 = 0</text>
-<g fill="none" stroke="#42637b" stroke-width="2" marker-end="url(#a)"><path d="M169 165H205"/><path d="M347 165H390"/><path d="M347 302H370V190H390"/><path d="M525 165H563"/><path d="M621 165H660"/><path d="M795 165H832"/><path d="M962 165H1000"/><path d="M1058 165H1080"/></g>
+<line x1="169" y1="165" x2="201" y2="165" stroke="#42637b" stroke-width="2"/>
+<polygon points="205,165 197,161 197,169" fill="#42637b"/>
+<line x1="347" y1="165" x2="386" y2="165" stroke="#42637b" stroke-width="2"/>
+<polygon points="390,165 382,161 382,169" fill="#42637b"/>
+<line x1="525" y1="165" x2="559" y2="165" stroke="#42637b" stroke-width="2"/>
+<polygon points="563,165 555,161 555,169" fill="#42637b"/>
+<line x1="621" y1="165" x2="656" y2="165" stroke="#42637b" stroke-width="2"/>
+<polygon points="660,165 652,161 652,169" fill="#42637b"/>
+<line x1="795" y1="165" x2="828" y2="165" stroke="#42637b" stroke-width="2"/>
+<polygon points="832,165 824,161 824,169" fill="#42637b"/>
+<line x1="962" y1="165" x2="996" y2="165" stroke="#42637b" stroke-width="2"/>
+<polygon points="1000,165 992,161 992,169" fill="#42637b"/>
+<line x1="1058" y1="165" x2="1076" y2="165" stroke="#42637b" stroke-width="2"/>
+<polygon points="1080,165 1072,161 1072,169" fill="#42637b"/>
+<line x1="347" y1="302" x2="370" y2="302" stroke="#42637b" stroke-width="2"/><line x1="370" y1="302" x2="370" y2="190" stroke="#42637b" stroke-width="2"/><line x1="370" y1="190" x2="386" y2="190" stroke="#42637b" stroke-width="2"/><polygon points="390,190 382,186 382,194" fill="#42637b"/>
 <text x="365" y="100" text-anchor="middle" font-size="14">multiply + first compression</text><text x="808" y="100" text-anchor="middle" font-size="14">remaining compression + carry propagation</text>
 <text x="592" y="247" text-anchor="middle" font-size="14">enable1</text><text x="1029" y="247" text-anchor="middle" font-size="14">enable2</text>
 <rect x="24" y="362" width="1150" height="39" rx="5" fill="#f0f4f8"/><text x="599" y="387" text-anchor="middle" font-size="14">Existing vector FU pipeline carries valid, destination, ROB, configuration checks and flush control.</text>

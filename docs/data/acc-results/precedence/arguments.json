@@ -1,0 +1,11 @@
+{
+  "emu": "build/acc-core-20261106/third_party/XiangShan/build/emu",
+  "nemu": "build/acc-nemu-precedence/standalone/riscv64-nemu-interpreter",
+  "reference": "build/acc-nemu-precedence/reference/riscv64-nemu-interpreter-so",
+  "flash": "build/acc-core-20261106/build/workloads/flash.bin",
+  "old_nemu": "build/nemu/standalone/riscv64-nemu-interpreter",
+  "old_reference": "build/acc-core-20261106/build/nemu/reference/riscv64-nemu-interpreter-so",
+  "wait_build_receipt": "reports/acc-reference-precedence-build/results.json",
+  "wait_seconds": 3600,
+  "max_cycles": 2000000
+}

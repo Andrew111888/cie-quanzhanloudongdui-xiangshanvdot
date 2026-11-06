@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "part": 0,
+  "groups": [
+    0,
+    8,
+    16,
+    24,
+    32
+  ],
+  "raw_exit_status": 0,
+  "long_samples": 10,
+  "chain_samples": 15,
+  "run_log_sha256": "dfa161dc606bc35783c33dd731af741978226be2c6406e68e253666e03ded466",
+  "binary_sha256": "6d01534f81e267a3e20ca23f1732fb81f1b5d094ea3e04a716539e71170bdcfa"
+}

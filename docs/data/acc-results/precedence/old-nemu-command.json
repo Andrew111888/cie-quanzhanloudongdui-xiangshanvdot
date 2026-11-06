@@ -1,0 +1,6 @@
+[
+  "/home/yh/cie/vdot-acc-prototype/build/nemu/standalone/riscv64-nemu-interpreter",
+  "--batch",
+  "--flash-image=/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/workloads/flash.bin",
+  "/home/yh/cie/vdot-acc-prototype/reports/acc-precedence-20261106T145533Z/test.bin"
+]

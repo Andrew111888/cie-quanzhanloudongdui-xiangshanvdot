@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "scope": "rtl_nemu_difftest",
+  "raw_exit_status": 0,
+  "acc_instructions": 1664,
+  "bursts": 64,
+  "taken": 36,
+  "not_taken": 28,
+  "checksum": 2107511945,
+  "checks": [
+    "eight independent destinations with distinct old values",
+    "vadd producer",
+    "16-step aliased accumulator/source chain",
+    "both branch outcomes and untouched sentinel"
+  ],
+  "input_sha256": {
+    "/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/third_party/XiangShan/build/verilator-compile/emu": "07dd955d3d41d927e89be93035feef0145fa2dd894db327cd8c0bb3ae0cc6150",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-pipeline-20261106T135401Z-649053/workload/acc-pipeline.bin": "834786610873b7502b09fff089650bb6e099613d724dd8875ec2d765367b7b67",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-pipeline-20261106T135401Z-649053/workload/flash.bin": "12b791f69e01db906377cac6d6b15c4cce7cd09c226515f181f7687186f786bd",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-pipeline-20261106T135401Z-649053/inputs/acc_pipeline.c": "3465bef743b8f2521ed6cf7d512b848470fb9030ceda87487e5b8353b94c3ed2",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-pipeline-20261106T135401Z-649053/inputs/console.h": "d104a747b9592229154b5696854b7df63f45e647acfad39888573d8c31f7ed58",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-pipeline-20261106T135401Z-649053/inputs/flash.S": "e8c3bb58b6da7586aa93a0c9435aa2ebf56869643baf8fc0daf579605b8dd671",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-pipeline-20261106T135401Z-649053/inputs/link.ld": "1c6dd14937e88ae5e5ea0fa95cd3b4abfe9b0c3121caa9c8b1605380cdfd5d8a",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-pipeline-20261106T135401Z-649053/inputs/run_acc_pipeline.py": "2e42a75609d486e1fdb83fc2ce8f4d9ce65983a45c1739bb0f90f161cc1b4e1a",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-pipeline-20261106T135401Z-649053/inputs/start.S": "3c8cc301c699d2e2eb2a605353b5f91b3f2d9e03f723f7e2ef5d9ff1da2a7883",
+    "/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/nemu/reference/riscv64-nemu-interpreter-so": "3f8ca9c238fe2293e2bf83008d2f2f6b7b6173aa7ebf31c09444a2a8411ca8dd"
+  },
+  "run_log_sha256": "0b7a957274394e737180cf3b7abefa0c492ff90e9f7b11fe4575dee7ba853747",
+  "internal_flush_timing_claimed": false,
+  "core_dirty": 0
+}

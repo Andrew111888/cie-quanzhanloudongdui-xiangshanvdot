@@ -53,7 +53,7 @@ def paragraph(text,style=body):
     text=re.sub(r'\[([^]]+)\]\([^)]+\)',r'\1',text)
     return Paragraph(mixed(text.replace('**','').replace('`','')),style)
 
-lines=source.read_text().splitlines();story=[];pending=[];i=0
+lines=source.read_text().splitlines();story=[];pending=[];i=0;figure_hashes={}
 def flush():
     if pending:story.append(paragraph(' '.join(pending)));pending.clear()
 while i<len(lines):
@@ -79,6 +79,7 @@ while i<len(lines):
     match=re.fullmatch(r'!\[([^]]*)\]\(([^)]+)\)',line)
     if match:
         flush();path=(source.parent/match[2]).resolve(strict=True)
+        figure_hashes[str(path)]=digest(path)
         if path.suffix=='.svg':
             png=temporary/(path.stem+'.png');subprocess.run(['/usr/bin/convert','-density','160','-background','white',str(path),str(png)],check=True);path=png
         picture=Image(str(path));scale=min(width/picture.imageWidth,240/picture.imageHeight)
@@ -104,4 +105,5 @@ for number in reader.xref.get(0,{}):
     if isinstance(obj,dict):assert not {str(key).casefold() for key in obj}&{key.casefold() for key in ('/Company','/Organization','/Unit','/LastModifiedBy','/LastSavedBy','/LastAuthor','/Creator','/CreatorTool','/Producer','/CreationDate','/ModDate','/ModifyDate','/LastModified','/Metadata','/MetadataDate')}
     if hasattr(obj,'get_data'):assert all(ban.encode(encoding) not in obj.get_data().lower() for encoding in ('ascii','utf-16-be','utf-16-le'))
 record={'status':'rendered_pending_visual_review','file':str(args.output.resolve()),'sha256':digest(args.output),'pages':len(reader.pages),'author':'全栈漏洞队','metadata':dict(reader.metadata),'xmp_present':False,'source_sha256':digest(source),'receipt_sha256':digest(args.receipt),'footer':'centered_page_number_only'}
+record.update({'figures_sha256':figure_hashes,'renderer_sha256':digest(Path(__file__))})
 args.output.with_suffix('.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n');print(json.dumps(record,ensure_ascii=False))

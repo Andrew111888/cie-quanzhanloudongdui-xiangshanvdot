@@ -1,0 +1,1 @@
+/home/yh/chipyard/.conda-env/riscv-tools/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/bin/ld: warning: /home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/test.elf has a LOAD segment with RWX permissions

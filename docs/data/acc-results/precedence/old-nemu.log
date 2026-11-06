@@ -1,0 +1,45 @@
+PRECEDENCE_CASE,1,50629643,50629643,0,0,1
+PRECEDENCE_CASE,2,51645451,51645451,0,0,1
+PRECEDENCE_CASE,3,50597003,50597003,0,0,1
+PRECEDENCE_CASE,4,50629643,50629643,0,0,1
+PRECEDENCE_CASE,5,51645451,51645451,0,0,1
+PRECEDENCE_CASE,6,50597003,50597003,0,0,1
+PRECEDENCE_CASE,7,50629643,50629643,0,0,1
+PRECEDENCE_CASE,8,51645451,51645451,0,0,1
+PRECEDENCE_CASE,9,50597003,50597003,0,0,1
+PRECEDENCE_CASE,13,17039371,17039371,0,0,1
+PRECEDENCE_CASE,25,117738507,117738507,0,0,1
+PRECEDENCE_CASE,26,118754315,118754315,0,0,1
+PRECEDENCE_CASE,27,117705867,117705867,0,0,1
+PRECEDENCE_CASE,28,117738507,117738507,0,0,1
+PRECEDENCE_CASE,29,118754315,118754315,0,0,1
+PRECEDENCE_CASE,30,117705867,117705867,0,0,1
+PRECEDENCE_CASE,31,117738507,117738507,0,0,1
+PRECEDENCE_CASE,32,118754315,118754315,0,0,1
+PRECEDENCE_CASE,33,117705867,117705867,0,0,1
+PRECEDENCE_CASE,37,84148235,84148235,0,0,1
+ACC_PRECEDENCE_FAIL cases=48 failures=20 checksum=201326592
+[1;34m[src/isa/riscv64/init.c:266,init_isa] NEMU will start from pc 0x10000000[0m
+[1;34m[src/device/io/port-io.c:35,add_pio_map_with_diff] Add port-io map 'uart16550' at [0x000003f8, 0x00000417][0m
+[1;34m[src/device/io/port-io.c:35,add_pio_map_with_diff] Add port-io map 'uartlite' at [0x000003f8, 0x00000404][0m
+[1;34m[src/device/io/port-io.c:35,add_pio_map_with_diff] Add port-io map 'screen' at [0x00000100, 0x00000107][0m
+[1;34m[src/device/io/port-io.c:35,add_pio_map_with_diff] Add port-io map 'keyboard' at [0x00000060, 0x00000063][0m
+[1;34m[src/device/sdcard.c:137,init_sdcard] Can not find sdcard image: [0m
+[1;34m[src/monitor/image_loader.c:219,load_img] Loading image (checkpoint/bare metal app/bbl) from cmdline: /home/yh/cie/vdot-acc-prototype/reports/acc-precedence-20261106T145533Z/test.bin
+[0m
+[1;34m[src/monitor/image_loader.c:264,load_img] Read 20152 bytes from file /home/yh/cie/vdot-acc-prototype/reports/acc-precedence-20261106T145533Z/test.bin to 0x0x79742a600000[0m
+[1;34m[src/monitor/image_loader.c:219,load_img] Loading flash image from cmdline: /home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/workloads/flash.bin
+[0m
+[1;34m[src/monitor/image_loader.c:264,load_img] Read 8 bytes from file /home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/workloads/flash.bin to 0x0xf0000000[0m
+[1;34m[src/monitor/monitor.c:63,welcome] Debug: [1;32mOFF[0m[0m
+[1;34m[src/monitor/monitor.c:68,welcome] Build time: 21:04:08, Nov  6 2026[0m
+Welcome to [1;41m[1;33mriscv64[0m-NEMU!
+For help, type "help"
+[1;34m[/home/yh/cie/vdot-acc-prototype/third_party/NEMU/src/isa/riscv64/include/../instr/special.h:38,execute] nemu_trap case 5b[0m
+[1;34m[src/cpu/cpu-exec.c:1081,cpu_exec] nemu: [1;31mHIT BAD TRAP[0m at pc = 0x0000000080000054[0m
+[1;34m[src/cpu/cpu-exec.c:1087,cpu_exec] trap code:91[0m
+[1;34m[src/cpu/cpu-exec.c:179,monitor_statistic] host time spent = 19597 us[0m
+[1;34m[src/cpu/cpu-exec.c:181,monitor_statistic] total guest instructions = 20203[0m
+[1;34m[src/cpu/cpu-exec.c:187,monitor_statistic] vst count = 0, vst unit count = 0, vst unit optimized count = 0[0m
+[1;34m[src/cpu/cpu-exec.c:190,monitor_statistic] simulation frequency = 1030923 instr/s[0m
+[1;34m[src/utils/state.c:28,is_exit_status_bad] NEMU exit with bad state: 2, halt ret: 91[0m

@@ -122,6 +122,18 @@ for count in (1,2,4,8):
     cmp=next(x for x in bench['chain_comparisons'] if x['chains']==count and x['rounds']==512);inc=next(x for x in chain_increment if x['chains']==count)
     chain_lines.append(f"| {count} | {cmp['dot_plus_add_median']} | {cmp['acc_median']} | {cmp['dot_plus_add_over_acc']:.3f} | {inc['fused_fragment_increment_cycles_per_dot']:.3f} |")
 timing=next(x for x in chosen['timing'] if x['clock_period_ns']==1.5)
+rvv_description='；'.join(f"K={r['k']}为{r['rvv_over_acc']:.3f}倍" for r in bench['long_comparisons'])
+old_description='、'.join(f"{r['old_vdot_over_acc']:.3f}" for r in bench['long_comparisons'])
+single=next(r for r in bench['chain_comparisons'] if r['chains']==1 and r['rounds']==512)
+eight=next(r for r in bench['chain_comparisons'] if r['chains']==8 and r['rounds']==512)
+faster_k=[str(r['k']) for r in bench['long_comparisons'] if r['rvv_over_acc']>1]
+slower_k=[str(r['k']) for r in bench['long_comparisons'] if r['rvv_over_acc']<1]
+long_interpretation=f"相对较快RVV的周期比为：{rvv_description}。相对原vdot+显式加法，三个K的周期比分别为{old_description}倍。"
+if faster_k:long_interpretation+='融合路径在K='+ '/'.join(faster_k)+'的片段周期更短。'
+if slower_k:long_interpretation+='K='+ '/'.join(slower_k)+'仍由较强RVV路径取得更短周期。'
+chain_interpretation='原路径的点积不读取累加器，循环真实递推只经过显式vadd；融合路径的真实递推经过点积指令，两个程序的依赖图不同。'
+if single['dot_plus_add_over_acc']<1:chain_interpretation+='本轮单链融合更慢，不能宣称它降低了单链延迟。'
+if eight['dot_plus_add_over_acc']>1:chain_interpretation+='8条独立链的融合片段更快，收益应按该并行条件报告。'
 body=f'''# 累加融合实验报告
 
 香山昆明湖V2向量点积扩展。队伍：全栈漏洞队。参赛单位：西安电子科技大学。
@@ -161,6 +173,8 @@ vd.high96 = 0
 
 前五项为同轮结构对照，最后一项另绑定整核firtool优化后的实际SV并通过同样黄金检查。整核实际算术模块较原模块增加{receipt['mapped_area_increase_percent']:.3f}%映射面积，159个触发器；1 ns仍有负建立裕量。面积单位保留Liberty属性单位，不换算为物理面积；这些数据不代表全核频率或功耗。
 
+同轮前缀结构在提前一级压缩后，面积由5830.188降至5608.344，减少3.805%；1.5 ns建立裕量由-0.055645 ns转为+0.100698 ns。改进来自两级组合逻辑重新分配，接收间隔仍为1拍。
+
 ## 四、整核功能与差分
 
 从已提交的香山/NEMU扩展源码重新生成整核与参考库，模型自然打印dirty: 0。随机用例按全局序号拆成16片，保持原固定种子输入序列，逐片独立差分后检查1006个序号无遗漏、无重复。{val['legal_instruction_executions']}次合法点积覆盖1000组随机、6组定向、6种别名、TA/TU、正负溢出及源高位；每片另重复640条累加链和7种非法形式，重复项不增加唯一随机输入数量。非法配置检查目的及vstart保持，并核对各异常的预期mtval。额外1664条累加流水测试覆盖独立目的、vadd生产者、别名链及两个分支方向；v0/v31另有6形式、两种策略的整核差分。
@@ -177,6 +191,8 @@ vd.high96 = 0
 |---:|---|---|---|---|---:|
 {chr(10).join(long_lines)}
 
+{long_interpretation}
+
 四路径每32项循环指令数为28、28、16、22。融合路径消除4条显式向量加法及两次循环内配置切换，保留四个独立累加器。各分片的同名内核函数入口PC相同；输入数组基址可不同，两个源之间的512字节间距及64字节对齐保持一致，各组独立预热。指令数减少不等同于周期同比下降；与较强RVV16的结果按实际数值判断。
 
 ## 六、单链与多链
@@ -187,6 +203,10 @@ vd.high96 = 0
 |---:|---:|---:|---:|---:|
 {chr(10).join(chain_lines)}
 
+512轮单链的原路径/融合周期比为{single['dot_plus_add_over_acc']:.3f}倍，8条独立链为{eight['dot_plus_add_over_acc']:.3f}倍。融合每轮消除对应链数的显式向量加法及两次配置切换；单链保留真实累加反馈，多链则提供相互独立的调度输入。这些比值对应表中的完整程序片段。
+
+{chain_interpretation}
+
 ![整核程序片段的实测周期比](figures/acc-fragment-ratios.png)
 
 ## 七、复现与交付
@@ -196,6 +216,6 @@ vd.high96 = 0
 本轮报告区分算术模块、整核程序片段和不同归约粒度。采用累加、压缩树和前缀加法等已有机制，工程改进集中在昆明湖V2的共享路径、跨级逻辑分配、真实依赖保护及可复现对照。
 '''
 (root/'docs/累加融合实验结果.md').write_text(body)
-(public/'README.md').write_text(f'# 累加融合整核实验数据\n\n[实验报告](../../累加融合实验结果.md)、[复现入口](../../累加融合复现.md)。\n\nvalidation保存{val["legal_instruction_executions"]}次功能执行，包含1000组唯一随机输入；benchmark保存60条长点积及120条累加链样本，pipeline保存1664条流水测试，registers保存v0/v31别名，fault保存真实错误参考及恢复。每组均含输入快照、二进制、命令、原始日志与退出码；全部为实际RTL/NEMU证据。\n\n[长点积逐次样本](benchmark/long-samples.csv)、[链逐次样本](benchmark/chain-samples.csv)、[完整性能结果](benchmark/results.json)、[功能结果](validation/results.json)、[流水结果](pipeline/results.json)、[边界寄存器](registers/results.json)、[错误与恢复](fault/results.json)。\n')
+(public/'README.md').write_text(f'# 累加融合整核实验数据\n\n[实验报告](../../累加融合实验结果.md)、[复现入口](../../累加融合复现.md)。\n\nvalidation保存{val["legal_instruction_executions"]}次功能执行，包含1000组唯一随机输入；benchmark保存60条长点积及120条累加链样本，pipeline保存1664条流水测试，registers保存v0/v31别名，fault保存真实错误参考及恢复。每组均含输入快照、二进制、命令、原始日志与退出码。validation、benchmark、pipeline、registers、fault及precedence保留真实RTL/NEMU差分；corrected-reference-legal仅为修正库的NEMU独立回归，不能替代整核差分。\n\n[长点积逐次样本](benchmark/long-samples.csv)、[链逐次样本](benchmark/chain-samples.csv)、[完整性能结果](benchmark/results.json)、[功能结果](validation/results.json)、[流水结果](pipeline/results.json)、[边界寄存器](registers/results.json)、[错误与恢复](fault/results.json)。\n\n[异常优先级差分](precedence/results.json)、[修正库NEMU独立回归](corrected-reference-legal/results.json)。\n')
 (public/'package-manifest.json').write_text(json.dumps({'status':'verified','files_sha256':{str(p.relative_to(public)):digest(p) for p in sorted(public.rglob('*')) if p.is_file()}},ensure_ascii=False,indent=2)+'\n')
 print(json.dumps({'status':'passed','receipt':str((args.output/'results.json').resolve()),'long_comparisons':bench['long_comparisons'],'chain_512':[r for r in bench['chain_comparisons'] if r['rounds']==512]},ensure_ascii=False))

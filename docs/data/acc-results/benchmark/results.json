@@ -1,0 +1,3764 @@
+{
+  "status": "passed",
+  "directory": "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622",
+  "raw_exit_status": 0,
+  "project_head_at_preparation": "c77f5cc8ff6bed02deaf843ce29a36fd503543f3",
+  "project_head_at_completion": "c77f5cc8ff6bed02deaf843ce29a36fd503543f3",
+  "selected_inputs_unchanged": true,
+  "difftest_enabled": true,
+  "reported_core_commit_prefix": "14c8b3489a",
+  "reported_core_dirty": 0,
+  "dirty_core_explicitly_allowed": false,
+  "wave_dump_enabled": false,
+  "golden_results": {
+    "8": 880,
+    "32": 46348,
+    "128": 12398,
+    "512": -38688
+  },
+  "long_sample_count": 60,
+  "chain_sample_count": 120,
+  "repeats": 5,
+  "lengths": [
+    32,
+    128,
+    512
+  ],
+  "independent_chain_counts": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "long_directed": [
+    {
+      "k": 32,
+      "case": 0,
+      "expected": 32,
+      "actual": [
+        32,
+        32,
+        32,
+        32
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 32,
+      "case": 1,
+      "expected": -32,
+      "actual": [
+        -32,
+        -32,
+        -32,
+        -32
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 32,
+      "case": 2,
+      "expected": 524288,
+      "actual": [
+        524288,
+        524288,
+        524288,
+        524288
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 32,
+      "case": 3,
+      "expected": -520192,
+      "actual": [
+        -520192,
+        -520192,
+        -520192,
+        -520192
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 32,
+      "case": 4,
+      "expected": 516128,
+      "actual": [
+        516128,
+        516128,
+        516128,
+        516128
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 32,
+      "case": 5,
+      "expected": 0,
+      "actual": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 512,
+      "case": 0,
+      "expected": 512,
+      "actual": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 512,
+      "case": 1,
+      "expected": -512,
+      "actual": [
+        -512,
+        -512,
+        -512,
+        -512
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 512,
+      "case": 2,
+      "expected": 8388608,
+      "actual": [
+        8388608,
+        8388608,
+        8388608,
+        8388608
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 512,
+      "case": 3,
+      "expected": -8323072,
+      "actual": [
+        -8323072,
+        -8323072,
+        -8323072,
+        -8323072
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 512,
+      "case": 4,
+      "expected": 8258048,
+      "actual": [
+        8258048,
+        8258048,
+        8258048,
+        8258048
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "k": 512,
+      "case": 5,
+      "expected": 0,
+      "actual": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    }
+  ],
+  "chain_directed": [
+    {
+      "case": 0,
+      "variant": 0,
+      "chains": 1,
+      "checksum": 2147483888,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 0,
+      "variant": 0,
+      "chains": 2,
+      "checksum": 66051,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 0,
+      "variant": 0,
+      "chains": 4,
+      "checksum": 12,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 0,
+      "variant": 0,
+      "chains": 8,
+      "checksum": 8,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 0,
+      "variant": 1,
+      "chains": 1,
+      "checksum": 2147483888,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 0,
+      "variant": 1,
+      "chains": 2,
+      "checksum": 66051,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 0,
+      "variant": 1,
+      "chains": 4,
+      "checksum": 12,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 0,
+      "variant": 1,
+      "chains": 8,
+      "checksum": 8,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 1,
+      "variant": 0,
+      "chains": 1,
+      "checksum": 2147483392,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 1,
+      "variant": 0,
+      "chains": 2,
+      "checksum": 4294901251,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 1,
+      "variant": 0,
+      "chains": 4,
+      "checksum": 4294965260,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 1,
+      "variant": 0,
+      "chains": 8,
+      "checksum": 4294963208,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 1,
+      "variant": 1,
+      "chains": 1,
+      "checksum": 2147483392,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 1,
+      "variant": 1,
+      "chains": 2,
+      "checksum": 4294901251,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 1,
+      "variant": 1,
+      "chains": 4,
+      "checksum": 4294965260,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 1,
+      "variant": 1,
+      "chains": 8,
+      "checksum": 4294963208,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 2,
+      "variant": 0,
+      "chains": 1,
+      "checksum": 2151677936,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 2,
+      "variant": 0,
+      "chains": 2,
+      "checksum": 8322563,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 2,
+      "variant": 0,
+      "chains": 4,
+      "checksum": 8386572,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 2,
+      "variant": 0,
+      "chains": 8,
+      "checksum": 8385544,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 2,
+      "variant": 1,
+      "chains": 1,
+      "checksum": 2151677936,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 2,
+      "variant": 1,
+      "chains": 2,
+      "checksum": 8322563,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 2,
+      "variant": 1,
+      "chains": 4,
+      "checksum": 8386572,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 2,
+      "variant": 1,
+      "chains": 8,
+      "checksum": 8385544,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 3,
+      "variant": 0,
+      "chains": 1,
+      "checksum": 2143322112,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 3,
+      "variant": 0,
+      "chains": 2,
+      "checksum": 66051,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 3,
+      "variant": 0,
+      "chains": 4,
+      "checksum": 12,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 3,
+      "variant": 0,
+      "chains": 8,
+      "checksum": 8,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 3,
+      "variant": 1,
+      "chains": 1,
+      "checksum": 2143322112,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 3,
+      "variant": 1,
+      "chains": 2,
+      "checksum": 66051,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 3,
+      "variant": 1,
+      "chains": 4,
+      "checksum": 12,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 3,
+      "variant": 1,
+      "chains": 8,
+      "checksum": 8,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 4,
+      "variant": 0,
+      "chains": 1,
+      "checksum": 2151612656,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 4,
+      "variant": 0,
+      "chains": 2,
+      "checksum": 8323587,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 4,
+      "variant": 0,
+      "chains": 4,
+      "checksum": 8126476,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 4,
+      "variant": 0,
+      "chains": 8,
+      "checksum": 7864328,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 4,
+      "variant": 1,
+      "chains": 1,
+      "checksum": 2151612656,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 4,
+      "variant": 1,
+      "chains": 2,
+      "checksum": 8323587,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 4,
+      "variant": 1,
+      "chains": 4,
+      "checksum": 8126476,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 4,
+      "variant": 1,
+      "chains": 8,
+      "checksum": 7864328,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 5,
+      "variant": 0,
+      "chains": 1,
+      "checksum": 2147483632,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 5,
+      "variant": 0,
+      "chains": 2,
+      "checksum": 4294901251,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 5,
+      "variant": 0,
+      "chains": 4,
+      "checksum": 4294965260,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 5,
+      "variant": 0,
+      "chains": 8,
+      "checksum": 4294964232,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 5,
+      "variant": 1,
+      "chains": 1,
+      "checksum": 2147483632,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 5,
+      "variant": 1,
+      "chains": 2,
+      "checksum": 4294901251,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 5,
+      "variant": 1,
+      "chains": 4,
+      "checksum": 4294965260,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    },
+    {
+      "case": 5,
+      "variant": 1,
+      "chains": 8,
+      "checksum": 4294964232,
+      "verification": "guest per-result check plus independent ordered-checksum comparison"
+    }
+  ],
+  "full_chain_results": [
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 128,
+      "index": 0,
+      "words32": [
+        2147596272,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 128,
+      "index": 1,
+      "words32": [
+        2147662323,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 32,
+      "index": 0,
+      "words32": [
+        2147511792,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 512,
+      "index": 0,
+      "words32": [
+        2147934192,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 512,
+      "index": 1,
+      "words32": [
+        2148000243,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 512,
+      "index": 2,
+      "words32": [
+        2148066294,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 512,
+      "index": 3,
+      "words32": [
+        2148132345,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 512,
+      "index": 0,
+      "words32": [
+        2147934192,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 512,
+      "index": 1,
+      "words32": [
+        2148000243,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 128,
+      "index": 0,
+      "words32": [
+        2147596272,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "index": 0,
+      "words32": [
+        2147511792,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "index": 1,
+      "words32": [
+        2147577843,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "index": 2,
+      "words32": [
+        2147643894,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "index": 3,
+      "words32": [
+        2147709945,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "index": 4,
+      "words32": [
+        2147775996,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "index": 5,
+      "words32": [
+        2147842047,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "index": 6,
+      "words32": [
+        2147908098,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "index": 7,
+      "words32": [
+        2147974149,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 32,
+      "index": 0,
+      "words32": [
+        2147511792,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 32,
+      "index": 1,
+      "words32": [
+        2147577843,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 32,
+      "index": 2,
+      "words32": [
+        2147643894,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 32,
+      "index": 3,
+      "words32": [
+        2147709945,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 512,
+      "index": 0,
+      "words32": [
+        2147934192,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "index": 0,
+      "words32": [
+        2147596272,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "index": 1,
+      "words32": [
+        2147662323,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "index": 2,
+      "words32": [
+        2147728374,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "index": 3,
+      "words32": [
+        2147794425,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "index": 4,
+      "words32": [
+        2147860476,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "index": 5,
+      "words32": [
+        2147926527,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "index": 6,
+      "words32": [
+        2147992578,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "index": 7,
+      "words32": [
+        2148058629,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 128,
+      "index": 0,
+      "words32": [
+        2147596272,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 128,
+      "index": 1,
+      "words32": [
+        2147662323,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 128,
+      "index": 2,
+      "words32": [
+        2147728374,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 128,
+      "index": 3,
+      "words32": [
+        2147794425,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 32,
+      "index": 0,
+      "words32": [
+        2147511792,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 32,
+      "index": 1,
+      "words32": [
+        2147577843,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "index": 0,
+      "words32": [
+        2147934192,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "index": 1,
+      "words32": [
+        2148000243,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "index": 2,
+      "words32": [
+        2148066294,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "index": 3,
+      "words32": [
+        2148132345,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "index": 4,
+      "words32": [
+        2148198396,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "index": 5,
+      "words32": [
+        2148264447,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "index": 6,
+      "words32": [
+        2148330498,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "index": 7,
+      "words32": [
+        2148396549,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 32,
+      "index": 0,
+      "words32": [
+        2147511792,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 512,
+      "index": 0,
+      "words32": [
+        2147934192,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 512,
+      "index": 1,
+      "words32": [
+        2148000243,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 512,
+      "index": 2,
+      "words32": [
+        2148066294,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 512,
+      "index": 3,
+      "words32": [
+        2148132345,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 128,
+      "index": 0,
+      "words32": [
+        2147596272,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 128,
+      "index": 1,
+      "words32": [
+        2147662323,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 128,
+      "index": 0,
+      "words32": [
+        2147596272,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "index": 0,
+      "words32": [
+        2147511792,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "index": 1,
+      "words32": [
+        2147577843,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "index": 2,
+      "words32": [
+        2147643894,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "index": 3,
+      "words32": [
+        2147709945,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "index": 4,
+      "words32": [
+        2147775996,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "index": 5,
+      "words32": [
+        2147842047,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "index": 6,
+      "words32": [
+        2147908098,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "index": 7,
+      "words32": [
+        2147974149,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 512,
+      "index": 0,
+      "words32": [
+        2147934192,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 512,
+      "index": 1,
+      "words32": [
+        2148000243,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 512,
+      "index": 0,
+      "words32": [
+        2147934192,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "index": 0,
+      "words32": [
+        2147596272,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "index": 1,
+      "words32": [
+        2147662323,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "index": 2,
+      "words32": [
+        2147728374,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "index": 3,
+      "words32": [
+        2147794425,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "index": 4,
+      "words32": [
+        2147860476,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "index": 5,
+      "words32": [
+        2147926527,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "index": 6,
+      "words32": [
+        2147992578,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "index": 7,
+      "words32": [
+        2148058629,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 32,
+      "index": 0,
+      "words32": [
+        2147511792,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 32,
+      "index": 1,
+      "words32": [
+        2147577843,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 32,
+      "index": 2,
+      "words32": [
+        2147643894,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 32,
+      "index": 3,
+      "words32": [
+        2147709945,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 32,
+      "index": 0,
+      "words32": [
+        2147511792,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 32,
+      "index": 1,
+      "words32": [
+        2147577843,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "index": 0,
+      "words32": [
+        2147934192,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "index": 1,
+      "words32": [
+        2148000243,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "index": 2,
+      "words32": [
+        2148066294,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "index": 3,
+      "words32": [
+        2148132345,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "index": 4,
+      "words32": [
+        2148198396,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "index": 5,
+      "words32": [
+        2148264447,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "index": 6,
+      "words32": [
+        2148330498,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "index": 7,
+      "words32": [
+        2148396549,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 128,
+      "index": 0,
+      "words32": [
+        2147596272,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 128,
+      "index": 1,
+      "words32": [
+        2147662323,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 128,
+      "index": 2,
+      "words32": [
+        2147728374,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 128,
+      "index": 3,
+      "words32": [
+        2147794425,
+        0,
+        0,
+        0
+      ],
+      "verification": "low32 independently checked from compact log; high96 checked by guest every invocation"
+    }
+  ],
+  "uart_result_format": "compact ordered directed checksums and packed chain low32",
+  "chain_high_words_check": "guest checks every 128-bit result and all unused sentinel slots; compact logs retain low32 values",
+  "long_rows": [
+    {
+      "variant": 0,
+      "k": 32,
+      "repeat": 0,
+      "cycles": 119,
+      "result": 46348
+    },
+    {
+      "variant": 0,
+      "k": 32,
+      "repeat": 1,
+      "cycles": 119,
+      "result": 46348
+    },
+    {
+      "variant": 0,
+      "k": 32,
+      "repeat": 2,
+      "cycles": 119,
+      "result": 46348
+    },
+    {
+      "variant": 0,
+      "k": 32,
+      "repeat": 3,
+      "cycles": 119,
+      "result": 46348
+    },
+    {
+      "variant": 0,
+      "k": 32,
+      "repeat": 4,
+      "cycles": 119,
+      "result": 46348
+    },
+    {
+      "variant": 2,
+      "k": 512,
+      "repeat": 0,
+      "cycles": 365,
+      "result": -38688
+    },
+    {
+      "variant": 2,
+      "k": 512,
+      "repeat": 1,
+      "cycles": 377,
+      "result": -38688
+    },
+    {
+      "variant": 2,
+      "k": 512,
+      "repeat": 2,
+      "cycles": 365,
+      "result": -38688
+    },
+    {
+      "variant": 2,
+      "k": 512,
+      "repeat": 3,
+      "cycles": 365,
+      "result": -38688
+    },
+    {
+      "variant": 2,
+      "k": 512,
+      "repeat": 4,
+      "cycles": 365,
+      "result": -38688
+    },
+    {
+      "variant": 0,
+      "k": 128,
+      "repeat": 0,
+      "cycles": 210,
+      "result": 12398
+    },
+    {
+      "variant": 0,
+      "k": 128,
+      "repeat": 1,
+      "cycles": 198,
+      "result": 12398
+    },
+    {
+      "variant": 0,
+      "k": 128,
+      "repeat": 2,
+      "cycles": 183,
+      "result": 12398
+    },
+    {
+      "variant": 0,
+      "k": 128,
+      "repeat": 3,
+      "cycles": 183,
+      "result": 12398
+    },
+    {
+      "variant": 0,
+      "k": 128,
+      "repeat": 4,
+      "cycles": 183,
+      "result": 12398
+    },
+    {
+      "variant": 3,
+      "k": 32,
+      "repeat": 0,
+      "cycles": 113,
+      "result": 46348
+    },
+    {
+      "variant": 3,
+      "k": 32,
+      "repeat": 1,
+      "cycles": 113,
+      "result": 46348
+    },
+    {
+      "variant": 3,
+      "k": 32,
+      "repeat": 2,
+      "cycles": 113,
+      "result": 46348
+    },
+    {
+      "variant": 3,
+      "k": 32,
+      "repeat": 3,
+      "cycles": 113,
+      "result": 46348
+    },
+    {
+      "variant": 3,
+      "k": 32,
+      "repeat": 4,
+      "cycles": 113,
+      "result": 46348
+    },
+    {
+      "variant": 0,
+      "k": 512,
+      "repeat": 0,
+      "cycles": 468,
+      "result": -38688
+    },
+    {
+      "variant": 0,
+      "k": 512,
+      "repeat": 1,
+      "cycles": 453,
+      "result": -38688
+    },
+    {
+      "variant": 0,
+      "k": 512,
+      "repeat": 2,
+      "cycles": 470,
+      "result": -38688
+    },
+    {
+      "variant": 0,
+      "k": 512,
+      "repeat": 3,
+      "cycles": 439,
+      "result": -38688
+    },
+    {
+      "variant": 0,
+      "k": 512,
+      "repeat": 4,
+      "cycles": 439,
+      "result": -38688
+    },
+    {
+      "variant": 3,
+      "k": 128,
+      "repeat": 0,
+      "cycles": 192,
+      "result": 12398
+    },
+    {
+      "variant": 3,
+      "k": 128,
+      "repeat": 1,
+      "cycles": 186,
+      "result": 12398
+    },
+    {
+      "variant": 3,
+      "k": 128,
+      "repeat": 2,
+      "cycles": 176,
+      "result": 12398
+    },
+    {
+      "variant": 3,
+      "k": 128,
+      "repeat": 3,
+      "cycles": 176,
+      "result": 12398
+    },
+    {
+      "variant": 3,
+      "k": 128,
+      "repeat": 4,
+      "cycles": 176,
+      "result": 12398
+    },
+    {
+      "variant": 1,
+      "k": 32,
+      "repeat": 0,
+      "cycles": 127,
+      "result": 46348
+    },
+    {
+      "variant": 1,
+      "k": 32,
+      "repeat": 1,
+      "cycles": 127,
+      "result": 46348
+    },
+    {
+      "variant": 1,
+      "k": 32,
+      "repeat": 2,
+      "cycles": 127,
+      "result": 46348
+    },
+    {
+      "variant": 1,
+      "k": 32,
+      "repeat": 3,
+      "cycles": 127,
+      "result": 46348
+    },
+    {
+      "variant": 1,
+      "k": 32,
+      "repeat": 4,
+      "cycles": 127,
+      "result": 46348
+    },
+    {
+      "variant": 3,
+      "k": 512,
+      "repeat": 0,
+      "cycles": 431,
+      "result": -38688
+    },
+    {
+      "variant": 3,
+      "k": 512,
+      "repeat": 1,
+      "cycles": 409,
+      "result": -38688
+    },
+    {
+      "variant": 3,
+      "k": 512,
+      "repeat": 2,
+      "cycles": 409,
+      "result": -38688
+    },
+    {
+      "variant": 3,
+      "k": 512,
+      "repeat": 3,
+      "cycles": 409,
+      "result": -38688
+    },
+    {
+      "variant": 3,
+      "k": 512,
+      "repeat": 4,
+      "cycles": 409,
+      "result": -38688
+    },
+    {
+      "variant": 1,
+      "k": 128,
+      "repeat": 0,
+      "cycles": 229,
+      "result": 12398
+    },
+    {
+      "variant": 1,
+      "k": 128,
+      "repeat": 1,
+      "cycles": 208,
+      "result": 12398
+    },
+    {
+      "variant": 1,
+      "k": 128,
+      "repeat": 2,
+      "cycles": 208,
+      "result": 12398
+    },
+    {
+      "variant": 1,
+      "k": 128,
+      "repeat": 3,
+      "cycles": 208,
+      "result": 12398
+    },
+    {
+      "variant": 1,
+      "k": 128,
+      "repeat": 4,
+      "cycles": 208,
+      "result": 12398
+    },
+    {
+      "variant": 1,
+      "k": 512,
+      "repeat": 0,
+      "cycles": 553,
+      "result": -38688
+    },
+    {
+      "variant": 1,
+      "k": 512,
+      "repeat": 1,
+      "cycles": 549,
+      "result": -38688
+    },
+    {
+      "variant": 1,
+      "k": 512,
+      "repeat": 2,
+      "cycles": 556,
+      "result": -38688
+    },
+    {
+      "variant": 1,
+      "k": 512,
+      "repeat": 3,
+      "cycles": 536,
+      "result": -38688
+    },
+    {
+      "variant": 1,
+      "k": 512,
+      "repeat": 4,
+      "cycles": 536,
+      "result": -38688
+    },
+    {
+      "variant": 2,
+      "k": 32,
+      "repeat": 0,
+      "cycles": 128,
+      "result": 46348
+    },
+    {
+      "variant": 2,
+      "k": 32,
+      "repeat": 1,
+      "cycles": 128,
+      "result": 46348
+    },
+    {
+      "variant": 2,
+      "k": 32,
+      "repeat": 2,
+      "cycles": 128,
+      "result": 46348
+    },
+    {
+      "variant": 2,
+      "k": 32,
+      "repeat": 3,
+      "cycles": 128,
+      "result": 46348
+    },
+    {
+      "variant": 2,
+      "k": 32,
+      "repeat": 4,
+      "cycles": 128,
+      "result": 46348
+    },
+    {
+      "variant": 2,
+      "k": 128,
+      "repeat": 0,
+      "cycles": 195,
+      "result": 12398
+    },
+    {
+      "variant": 2,
+      "k": 128,
+      "repeat": 1,
+      "cycles": 188,
+      "result": 12398
+    },
+    {
+      "variant": 2,
+      "k": 128,
+      "repeat": 2,
+      "cycles": 173,
+      "result": 12398
+    },
+    {
+      "variant": 2,
+      "k": 128,
+      "repeat": 3,
+      "cycles": 173,
+      "result": 12398
+    },
+    {
+      "variant": 2,
+      "k": 128,
+      "repeat": 4,
+      "cycles": 173,
+      "result": 12398
+    }
+  ],
+  "long_summary": [
+    {
+      "variant": 0,
+      "k": 32,
+      "median_cycles": 119,
+      "min_cycles": 119,
+      "max_cycles": 119,
+      "result": 46348
+    },
+    {
+      "variant": 2,
+      "k": 512,
+      "median_cycles": 365,
+      "min_cycles": 365,
+      "max_cycles": 377,
+      "result": -38688
+    },
+    {
+      "variant": 0,
+      "k": 128,
+      "median_cycles": 183,
+      "min_cycles": 183,
+      "max_cycles": 210,
+      "result": 12398
+    },
+    {
+      "variant": 3,
+      "k": 32,
+      "median_cycles": 113,
+      "min_cycles": 113,
+      "max_cycles": 113,
+      "result": 46348
+    },
+    {
+      "variant": 0,
+      "k": 512,
+      "median_cycles": 453,
+      "min_cycles": 439,
+      "max_cycles": 470,
+      "result": -38688
+    },
+    {
+      "variant": 3,
+      "k": 128,
+      "median_cycles": 176,
+      "min_cycles": 176,
+      "max_cycles": 192,
+      "result": 12398
+    },
+    {
+      "variant": 1,
+      "k": 32,
+      "median_cycles": 127,
+      "min_cycles": 127,
+      "max_cycles": 127,
+      "result": 46348
+    },
+    {
+      "variant": 3,
+      "k": 512,
+      "median_cycles": 409,
+      "min_cycles": 409,
+      "max_cycles": 431,
+      "result": -38688
+    },
+    {
+      "variant": 1,
+      "k": 128,
+      "median_cycles": 208,
+      "min_cycles": 208,
+      "max_cycles": 229,
+      "result": 12398
+    },
+    {
+      "variant": 1,
+      "k": 512,
+      "median_cycles": 549,
+      "min_cycles": 536,
+      "max_cycles": 556,
+      "result": -38688
+    },
+    {
+      "variant": 2,
+      "k": 32,
+      "median_cycles": 128,
+      "min_cycles": 128,
+      "max_cycles": 128,
+      "result": 46348
+    },
+    {
+      "variant": 2,
+      "k": 128,
+      "median_cycles": 173,
+      "min_cycles": 173,
+      "max_cycles": 195,
+      "result": 12398
+    }
+  ],
+  "long_comparisons": [
+    {
+      "k": 32,
+      "old_vdot_median": 119,
+      "rvv8_median": 127,
+      "rvv16_median": 128,
+      "acc_median": 113,
+      "selected_rvv_variant": 1,
+      "selected_rvv_median": 127,
+      "rvv_over_acc": 1.1238938053097345,
+      "old_vdot_over_acc": 1.0530973451327434
+    },
+    {
+      "k": 128,
+      "old_vdot_median": 183,
+      "rvv8_median": 208,
+      "rvv16_median": 173,
+      "acc_median": 176,
+      "selected_rvv_variant": 2,
+      "selected_rvv_median": 173,
+      "rvv_over_acc": 0.9829545454545454,
+      "old_vdot_over_acc": 1.0397727272727273
+    },
+    {
+      "k": 512,
+      "old_vdot_median": 453,
+      "rvv8_median": 549,
+      "rvv16_median": 365,
+      "acc_median": 409,
+      "selected_rvv_variant": 2,
+      "selected_rvv_median": 365,
+      "rvv_over_acc": 0.8924205378973105,
+      "old_vdot_over_acc": 1.1075794621026895
+    }
+  ],
+  "chain_rows": [
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "repeat": 0,
+      "cycles": 930
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "repeat": 1,
+      "cycles": 972
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "repeat": 2,
+      "cycles": 930
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "repeat": 3,
+      "cycles": 930
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "repeat": 4,
+      "cycles": 930
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "repeat": 0,
+      "cycles": 337
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "repeat": 1,
+      "cycles": 279
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "repeat": 2,
+      "cycles": 279
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "repeat": 3,
+      "cycles": 279
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "repeat": 4,
+      "cycles": 279
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "repeat": 0,
+      "cycles": 3643
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "repeat": 1,
+      "cycles": 3643
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "repeat": 2,
+      "cycles": 3643
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "repeat": 3,
+      "cycles": 3643
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "repeat": 4,
+      "cycles": 3643
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "repeat": 0,
+      "cycles": 3490
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "repeat": 1,
+      "cycles": 3490
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "repeat": 2,
+      "cycles": 3490
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "repeat": 3,
+      "cycles": 3490
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "repeat": 4,
+      "cycles": 3490
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "repeat": 0,
+      "cycles": 969
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "repeat": 1,
+      "cycles": 951
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "repeat": 2,
+      "cycles": 951
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "repeat": 3,
+      "cycles": 951
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "repeat": 4,
+      "cycles": 951
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "repeat": 0,
+      "cycles": 385
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "repeat": 1,
+      "cycles": 353
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "repeat": 2,
+      "cycles": 352
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "repeat": 3,
+      "cycles": 353
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "repeat": 4,
+      "cycles": 353
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "repeat": 0,
+      "cycles": 463
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "repeat": 1,
+      "cycles": 401
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "repeat": 2,
+      "cycles": 401
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "repeat": 3,
+      "cycles": 401
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "repeat": 4,
+      "cycles": 401
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "repeat": 0,
+      "cycles": 3656
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "repeat": 1,
+      "cycles": 3639
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "repeat": 2,
+      "cycles": 3639
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "repeat": 3,
+      "cycles": 3639
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "repeat": 4,
+      "cycles": 3639
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "repeat": 0,
+      "cycles": 1185
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "repeat": 1,
+      "cycles": 1153
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "repeat": 2,
+      "cycles": 1152
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "repeat": 3,
+      "cycles": 1153
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "repeat": 4,
+      "cycles": 1152
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "repeat": 0,
+      "cycles": 1519
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "repeat": 1,
+      "cycles": 1361
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "repeat": 2,
+      "cycles": 1361
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "repeat": 3,
+      "cycles": 1361
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "repeat": 4,
+      "cycles": 1361
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "repeat": 0,
+      "cycles": 299
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "repeat": 1,
+      "cycles": 280
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "repeat": 2,
+      "cycles": 280
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "repeat": 3,
+      "cycles": 280
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "repeat": 4,
+      "cycles": 280
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "repeat": 0,
+      "cycles": 4352
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "repeat": 1,
+      "cycles": 4353
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "repeat": 2,
+      "cycles": 4352
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "repeat": 3,
+      "cycles": 4353
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "repeat": 4,
+      "cycles": 4353
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "repeat": 0,
+      "cycles": 287
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "repeat": 1,
+      "cycles": 257
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "repeat": 2,
+      "cycles": 257
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "repeat": 3,
+      "cycles": 257
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "repeat": 4,
+      "cycles": 257
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "repeat": 0,
+      "cycles": 5201
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "repeat": 1,
+      "cycles": 5201
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "repeat": 2,
+      "cycles": 5201
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "repeat": 3,
+      "cycles": 5201
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "repeat": 4,
+      "cycles": 5201
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "repeat": 0,
+      "cycles": 971
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "repeat": 1,
+      "cycles": 952
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "repeat": 2,
+      "cycles": 952
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "repeat": 3,
+      "cycles": 952
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "repeat": 4,
+      "cycles": 952
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "repeat": 0,
+      "cycles": 863
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "repeat": 1,
+      "cycles": 833
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "repeat": 2,
+      "cycles": 833
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "repeat": 3,
+      "cycles": 833
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "repeat": 4,
+      "cycles": 833
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "repeat": 0,
+      "cycles": 728
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "repeat": 1,
+      "cycles": 694
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "repeat": 2,
+      "cycles": 695
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "repeat": 3,
+      "cycles": 694
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "repeat": 4,
+      "cycles": 695
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "repeat": 0,
+      "cycles": 3660
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "repeat": 1,
+      "cycles": 3640
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "repeat": 2,
+      "cycles": 3640
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "repeat": 3,
+      "cycles": 3640
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "repeat": 4,
+      "cycles": 3640
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "repeat": 0,
+      "cycles": 3167
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "repeat": 1,
+      "cycles": 3137
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "repeat": 2,
+      "cycles": 3137
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "repeat": 3,
+      "cycles": 3137
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "repeat": 4,
+      "cycles": 3137
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "repeat": 0,
+      "cycles": 2552
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "repeat": 1,
+      "cycles": 2519
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "repeat": 2,
+      "cycles": 2518
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "repeat": 3,
+      "cycles": 2519
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "repeat": 4,
+      "cycles": 2519
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "repeat": 0,
+      "cycles": 309
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "repeat": 1,
+      "cycles": 283
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "repeat": 2,
+      "cycles": 283
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "repeat": 3,
+      "cycles": 283
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "repeat": 4,
+      "cycles": 283
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "repeat": 0,
+      "cycles": 324
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "repeat": 1,
+      "cycles": 290
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "repeat": 2,
+      "cycles": 290
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "repeat": 3,
+      "cycles": 290
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "repeat": 4,
+      "cycles": 290
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "repeat": 0,
+      "cycles": 9814
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "repeat": 1,
+      "cycles": 9814
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "repeat": 2,
+      "cycles": 9815
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "repeat": 3,
+      "cycles": 9814
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "repeat": 4,
+      "cycles": 9815
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "repeat": 0,
+      "cycles": 982
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "repeat": 1,
+      "cycles": 955
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "repeat": 2,
+      "cycles": 955
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "repeat": 3,
+      "cycles": 955
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "repeat": 4,
+      "cycles": 955
+    }
+  ],
+  "chain_summary": [
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "median_cycles": 930,
+      "min_cycles": 930,
+      "max_cycles": 972,
+      "median_fragment_cycles_per_dot": 3.6328125
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "median_cycles": 279,
+      "min_cycles": 279,
+      "max_cycles": 337,
+      "median_fragment_cycles_per_dot": 8.71875
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "median_cycles": 3643,
+      "min_cycles": 3643,
+      "max_cycles": 3643,
+      "median_fragment_cycles_per_dot": 1.77880859375
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "median_cycles": 3490,
+      "min_cycles": 3490,
+      "max_cycles": 3490,
+      "median_fragment_cycles_per_dot": 3.408203125
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "median_cycles": 951,
+      "min_cycles": 951,
+      "max_cycles": 969,
+      "median_fragment_cycles_per_dot": 7.4296875
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "median_cycles": 353,
+      "min_cycles": 352,
+      "max_cycles": 385,
+      "median_fragment_cycles_per_dot": 1.37890625
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "median_cycles": 401,
+      "min_cycles": 401,
+      "max_cycles": 463,
+      "median_fragment_cycles_per_dot": 3.1328125
+    },
+    {
+      "variant": 1,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "median_cycles": 3639,
+      "min_cycles": 3639,
+      "max_cycles": 3656,
+      "median_fragment_cycles_per_dot": 7.107421875
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "median_cycles": 1153,
+      "min_cycles": 1152,
+      "max_cycles": 1185,
+      "median_fragment_cycles_per_dot": 1.1259765625
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "median_cycles": 1361,
+      "min_cycles": 1361,
+      "max_cycles": 1519,
+      "median_fragment_cycles_per_dot": 2.658203125
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "median_cycles": 280,
+      "min_cycles": 280,
+      "max_cycles": 299,
+      "median_fragment_cycles_per_dot": 4.375
+    },
+    {
+      "variant": 1,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "median_cycles": 4353,
+      "min_cycles": 4352,
+      "max_cycles": 4353,
+      "median_fragment_cycles_per_dot": 1.062744140625
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 32,
+      "dot_operations": 32,
+      "median_cycles": 257,
+      "min_cycles": 257,
+      "max_cycles": 287,
+      "median_fragment_cycles_per_dot": 8.03125
+    },
+    {
+      "variant": 0,
+      "chains": 4,
+      "rounds": 512,
+      "dot_operations": 2048,
+      "median_cycles": 5201,
+      "min_cycles": 5201,
+      "max_cycles": 5201,
+      "median_fragment_cycles_per_dot": 2.53955078125
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 128,
+      "dot_operations": 256,
+      "median_cycles": 952,
+      "min_cycles": 952,
+      "max_cycles": 971,
+      "median_fragment_cycles_per_dot": 3.71875
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 128,
+      "dot_operations": 128,
+      "median_cycles": 833,
+      "min_cycles": 833,
+      "max_cycles": 863,
+      "median_fragment_cycles_per_dot": 6.5078125
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 32,
+      "dot_operations": 256,
+      "median_cycles": 695,
+      "min_cycles": 694,
+      "max_cycles": 728,
+      "median_fragment_cycles_per_dot": 2.71484375
+    },
+    {
+      "variant": 1,
+      "chains": 2,
+      "rounds": 512,
+      "dot_operations": 1024,
+      "median_cycles": 3640,
+      "min_cycles": 3640,
+      "max_cycles": 3660,
+      "median_fragment_cycles_per_dot": 3.5546875
+    },
+    {
+      "variant": 0,
+      "chains": 1,
+      "rounds": 512,
+      "dot_operations": 512,
+      "median_cycles": 3137,
+      "min_cycles": 3137,
+      "max_cycles": 3167,
+      "median_fragment_cycles_per_dot": 6.126953125
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 128,
+      "dot_operations": 1024,
+      "median_cycles": 2519,
+      "min_cycles": 2518,
+      "max_cycles": 2552,
+      "median_fragment_cycles_per_dot": 2.4599609375
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 32,
+      "dot_operations": 128,
+      "median_cycles": 283,
+      "min_cycles": 283,
+      "max_cycles": 309,
+      "median_fragment_cycles_per_dot": 2.2109375
+    },
+    {
+      "variant": 0,
+      "chains": 2,
+      "rounds": 32,
+      "dot_operations": 64,
+      "median_cycles": 290,
+      "min_cycles": 290,
+      "max_cycles": 324,
+      "median_fragment_cycles_per_dot": 4.53125
+    },
+    {
+      "variant": 0,
+      "chains": 8,
+      "rounds": 512,
+      "dot_operations": 4096,
+      "median_cycles": 9814,
+      "min_cycles": 9814,
+      "max_cycles": 9815,
+      "median_fragment_cycles_per_dot": 2.39599609375
+    },
+    {
+      "variant": 1,
+      "chains": 4,
+      "rounds": 128,
+      "dot_operations": 512,
+      "median_cycles": 955,
+      "min_cycles": 955,
+      "max_cycles": 982,
+      "median_fragment_cycles_per_dot": 1.865234375
+    }
+  ],
+  "chain_comparisons": [
+    {
+      "chains": 1,
+      "rounds": 32,
+      "dot_plus_add_median": 257,
+      "acc_median": 279,
+      "dot_plus_add_over_acc": 0.921146953405018
+    },
+    {
+      "chains": 1,
+      "rounds": 128,
+      "dot_plus_add_median": 833,
+      "acc_median": 951,
+      "dot_plus_add_over_acc": 0.8759200841219769
+    },
+    {
+      "chains": 1,
+      "rounds": 512,
+      "dot_plus_add_median": 3137,
+      "acc_median": 3639,
+      "dot_plus_add_over_acc": 0.8620500137400384
+    },
+    {
+      "chains": 2,
+      "rounds": 32,
+      "dot_plus_add_median": 290,
+      "acc_median": 280,
+      "dot_plus_add_over_acc": 1.0357142857142858
+    },
+    {
+      "chains": 2,
+      "rounds": 128,
+      "dot_plus_add_median": 930,
+      "acc_median": 952,
+      "dot_plus_add_over_acc": 0.976890756302521
+    },
+    {
+      "chains": 2,
+      "rounds": 512,
+      "dot_plus_add_median": 3490,
+      "acc_median": 3640,
+      "dot_plus_add_over_acc": 0.9587912087912088
+    },
+    {
+      "chains": 4,
+      "rounds": 32,
+      "dot_plus_add_median": 401,
+      "acc_median": 283,
+      "dot_plus_add_over_acc": 1.4169611307420495
+    },
+    {
+      "chains": 4,
+      "rounds": 128,
+      "dot_plus_add_median": 1361,
+      "acc_median": 955,
+      "dot_plus_add_over_acc": 1.425130890052356
+    },
+    {
+      "chains": 4,
+      "rounds": 512,
+      "dot_plus_add_median": 5201,
+      "acc_median": 3643,
+      "dot_plus_add_over_acc": 1.427669503156739
+    },
+    {
+      "chains": 8,
+      "rounds": 32,
+      "dot_plus_add_median": 695,
+      "acc_median": 353,
+      "dot_plus_add_over_acc": 1.9688385269121813
+    },
+    {
+      "chains": 8,
+      "rounds": 128,
+      "dot_plus_add_median": 2519,
+      "acc_median": 1153,
+      "dot_plus_add_over_acc": 2.1847354726799653
+    },
+    {
+      "chains": 8,
+      "rounds": 512,
+      "dot_plus_add_median": 9814,
+      "acc_median": 4353,
+      "dot_plus_add_over_acc": 2.2545371008499884
+    }
+  ],
+  "input_sha256": {
+    "/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/third_party/XiangShan/build/verilator-compile/emu": "07dd955d3d41d927e89be93035feef0145fa2dd894db327cd8c0bb3ae0cc6150",
+    "/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/build/workloads/flash.bin": "12b791f69e01db906377cac6d6b15c4cce7cd09c226515f181f7687186f786bd",
+    "/home/yh/cie/vdot-acc-prototype/build/acc-nemu-precedence/reference/riscv64-nemu-interpreter-so": "e2795789c22c3f35c1df06f23b3f9bd6a434e61dcdfb875b4099b899d1325f2e",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/inputs/console.h": "d104a747b9592229154b5696854b7df63f45e647acfad39888573d8c31f7ed58",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/inputs/run_acc_benchmark_shards.py": "c223ac06425596f236e6e82f3bc80100c3125140693c735adb96b25b50a07b9f",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/inputs/acc_benchmark.c": "64053e03f47a3715a9b6d0b93bb6d4d74dab1c0ab6770705178aadd99af954bd",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/inputs/link.ld": "1c6dd14937e88ae5e5ea0fa95cd3b4abfe9b0c3121caa9c8b1605380cdfd5d8a",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/inputs/acc_benchmark_common.py": "06623996053b59c63984c7f79609821319ca096494d262d0b3c29278f449863d",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/inputs/start.S": "3c8cc301c699d2e2eb2a605353b5f91b3f2d9e03f723f7e2ef5d9ff1da2a7883",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/run.log": "af9a9da8449286d703a9d6c305f5e6894346bc62b1240013f2f61ce698866403",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/test.dis": "aee9d4254289d9bdc7830dad428993577e41c9a281b1bc43f8bd203244601263",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/time.txt": "f6bbdf6ba5c1fae71d97a4c1c8fa2cee0fd4280620b1d15aaa6a8a17bdc076a5",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/results.json": "8fbb04209e987ca26713223cb668a33a1d98b9b51d2a8bb0de7e403cfd3fcc35",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/run.log": "b430825085e0228ffd33d938c42857ad7c3cf7a03905c56c6badbd7eefe3d0e9",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/test.bin": "f268616203341b8021d1e7b59e3dad3e365a3692464e5816dbfe31ef16337f11",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/build.log": "2ead9dc7efa00ca56d86633590ce3de3bebde9aff2a6e5d9914ca2a027187ee0",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/exit-status.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/test.elf": "1da60a4acf65f6cd221d288ee1f7f198a5b5d9e044a6126034eb9e799e07e819",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/assembly-audit.json": "8821c80f222275adc848e81d809879307591641286cc89acd318171ca735a939",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-06/commands.json": "461cd5014850a2d44019bd0e4681e63b54cae2d1ca1a097d2a312cd8ba621ecb",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/test.dis": "e18cecebc879d44992e9751589ad308d3332e30eda2606450decde4f983be447",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/time.txt": "c9300da27491431a5762c9edefa05e06f9e56465edf02c4db403fd4eca214a4f",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/results.json": "40d4891de8f9413a765bde791eb2f3aa5e9ab6780395ca413e70ef2dc0a13b16",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/run.log": "dfa161dc606bc35783c33dd731af741978226be2c6406e68e253666e03ded466",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/test.bin": "6d01534f81e267a3e20ca23f1732fb81f1b5d094ea3e04a716539e71170bdcfa",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/build.log": "23f7b974f31da74030727925e1adb7f9557c632cc2b09bf68993fa928b6eb126",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/exit-status.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/test.elf": "693bbe709fc7b5bbcc77e3a944f40c77100264a5d7acdaa853d564222cd9dfbb",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/assembly-audit.json": "8821c80f222275adc848e81d809879307591641286cc89acd318171ca735a939",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-00/commands.json": "740d65e1d6cbb99656c408e27437f7bcf2d6cd85af6f636d4f88601dbb6df45e",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-07/test.dis": "50cf6d2d933ef77cd80ab7dae4d6badd629acb4199c30db85329155eaae85a0b",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-07/time.txt": "b296996510593b7f5076b653fd6bf07a10fbe5b64ecf4d4befe7244f9d2d3ae8",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-07/results.json": "59c042e7cb2634711ee7edeac240803190a55133974fac4aaabed9f943475424",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-07/run.log": "a8126c3f8415e6db8f07f2c07152eb3b56fcb51619e9ccc25ad0a1abd85b45d2",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-07/test.bin": "9a54531e78590994e0cc665646a1ae666d0e5144e31440020798c5a96478edc6",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-07/build.log": "f070d45e0de8c4431ad3436478b3b91b33af454fe21bdab7852ebd23857b7c95",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-07/exit-status.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-07/test.elf": "4a38bbee5fe02fce16c8e39d7bbeb3882e7645ebd8518311ae1a35c91eb070b6",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-07/assembly-audit.json": "8821c80f222275adc848e81d809879307591641286cc89acd318171ca735a939",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-07/commands.json": "7913f2393d464665f35d1cfd388a88921ae18d93f6bf9a61f664ba822ce6d94d",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-04/test.dis": "efe35b83b015cd738f49b882eb48bce864cbbc02884f6fd6599424ea8e83c371",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-04/time.txt": "a955b1cc9f0f52fdb6efc42d5eecc6a42dfddf3f997c786fe78f5199ee261dab",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-04/results.json": "c53516b1455e2415642ceb05b6d6932fbc0c713b0ded542f0c296b78a3054741",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-04/run.log": "d58237f6f855134b05b49df302b7f3b9edfba868e8022b5896b4371262d507d4",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-04/test.bin": "fd88af9337dc967a1edc03185711ca2fb08363a12f7c127e5606dc2d5f0dd1d0",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-04/build.log": "5202e0e96a673cf0671d7cfdb01f16e8e1dc243349250daddcd13e215bc312a7",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-04/exit-status.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-04/test.elf": "8efe2fe041487328b41169f4addb002e4db843049cca0b98ce115043c02a199e",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-04/assembly-audit.json": "8821c80f222275adc848e81d809879307591641286cc89acd318171ca735a939",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-04/commands.json": "9b63c643e07355e1d1dec032d27d90d9226fefd2ca5091fbafb8dbd8838a1ae1",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-05/test.dis": "711a13b2b16f07c3714b3a5b25760e83744378240e63927587d5363691d76493",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-05/time.txt": "06eff0f78a1d82c551d0510a533824edcec032edbdf27a1ad12be4cb0b44fe3c",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-05/results.json": "42a83c7547b5af43ed2c0969634c80de60b67fec06b476285708f7e413714b9a",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-05/run.log": "cda41ec4ef5d19d58f7a3130312c1c97eb333f36e3e9e64ec21f00b36cb1e76f",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-05/test.bin": "b7bdcd4bb73f320893241cfc239389d3fb347483aa07d9d460d6bc2b6d8a44bb",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-05/build.log": "a22ec175810cb4a12016b8e15e066e6ae9035e09e1bc3fc403eb6cbeb41d7749",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-05/exit-status.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-05/test.elf": "67acac87028216a097842bdad9bfea32402087e0f358f8b76dce25821dac7924",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-05/assembly-audit.json": "8821c80f222275adc848e81d809879307591641286cc89acd318171ca735a939",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-05/commands.json": "beada91695c79f5e6b2a68821eb601a09b4226c79a28d3cb998c010481036bfc",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-01/test.dis": "f95dee17ebdc127c8e5a3ed38f9f64ff4bc6003a7b444610b7205385588eb8dd",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-01/time.txt": "85d6c792dc2797b07900a288fb7861e63f55899fcb3af590103991e062ec71ea",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-01/results.json": "0dcd7a323971c5e7ee5619c5349195555a070885190e6c96423daa2738ea204d",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-01/run.log": "e15e1dac624d5d11822d2c4c32732f27b9e7df009486eed7f1f6e403ac6a890c",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-01/test.bin": "e0009c09fe172d1cab45a1e21c5ce090b8819556caef8d2337355ea88de2b5ca",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-01/build.log": "290e5c2ff7f10dd32b0bc995bea42645ecea6daaf0a9c72d4a790ad438dfefd3",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-01/exit-status.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-01/test.elf": "2ad8fea110d9e82e13d39acb1c9e2c9eeb2d0702ee0d0af027330b0b66685722",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-01/assembly-audit.json": "8821c80f222275adc848e81d809879307591641286cc89acd318171ca735a939",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-01/commands.json": "3a9f6e5bca412827dcb5645f1cce6d2450054b790d6dee068cfd5d57eb47e298",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-02/test.dis": "7b6aa943debe5191e618df0776550d92f677c18db82cc469288db526e9715df3",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-02/time.txt": "230d6cf6c1de96100f47bbd30cd092ec85b8f709fa521ec600e9bd0ff465e4bf",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-02/results.json": "9907e509037ca9bc2e1d96e8ca47778b451f8592b5ef47f16b1ca013c2f120df",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-02/run.log": "8da5d441f2586dc2df60c3b76379f8a3eb96a16175a1668479870635594996ae",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-02/test.bin": "aa43b7e32ea80d60bc9b80200d0f0e89ecacf96730741f1206257190194ceabe",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-02/build.log": "848e0993c94560dd933215e4b25c1737931a42cd674d27b14a3a190f7edd291e",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-02/exit-status.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-02/test.elf": "2c3643142dc891cb9f8ad863ea68f75c180b586e8b52e7cff8a9e1262892e24b",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-02/assembly-audit.json": "8821c80f222275adc848e81d809879307591641286cc89acd318171ca735a939",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-02/commands.json": "1f8b4145d182200095a4a711776075ee956ff8cacdf7f45ef31aee27cddaaff4",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-03/test.dis": "5c20900c40fa079ede9358fb4df6a5d98e79697deb9f3f2ef4ac74224c24aa16",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-03/time.txt": "23173a9f5258d958286588af99b460cf4f51179d8eb06bc9d5f497375667410d",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-03/results.json": "c0f9d94d4c73ccb90f55af00d847c4dba8f657a2f338db877f48c3714345ebe8",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-03/run.log": "800fccbdac0dce24339cca8c082aec83b8794c2f160669e2f026f236dc4b5999",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-03/test.bin": "3243958b3c356fe40d530f888486e48b72496d828ca29cba78a7de410a5f1db6",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-03/build.log": "0428b4350607d0b7f00d2d7aa44e9175ab5548b979693dd8d50a2ee9a8ac1bb1",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-03/exit-status.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-03/test.elf": "51659529ac34eb025b0a92f1c8d45239770c79e979870aa8c7df043a08c1191b",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-03/assembly-audit.json": "8821c80f222275adc848e81d809879307591641286cc89acd318171ca735a939",
+    "/home/yh/cie/vdot-acc-prototype/reports/acc-benchmark-shards-20261106T150847Z-700622/part-03/commands.json": "7cc51f4e2814fa13642932222009f5ecb7bae8be1ac661dc35c1a7f5913fc351"
+  },
+  "run_log_sha256": "af9a9da8449286d703a9d6c305f5e6894346bc62b1240013f2f61ce698866403",
+  "long_boundary": "cycle/fence before vector initialization; configurations, loads, loop, accumulation, final combine/reduction, one full 16-byte store and ending fence; output sentinel and scalar golden checks outside",
+  "chain_boundary": "sources and all eight seeds preloaded before cycle/fence; time loop, necessary per-round configurations, branch and complete final 16-byte stores for active chains; seeds, sentinel and scalar golden checks outside; this is not bare FU latency",
+  "long_variants": {
+    "0": "vdot plus explicit four-accumulator vadd",
+    "1": "RVV8 widening reduction",
+    "2": "RVV16 lane accumulation and final reduction",
+    "3": "vdot.acc four accumulators"
+  },
+  "chain_variants": {
+    "0": "vdot plus explicit e32 vadd",
+    "1": "vdot.acc"
+  },
+  "shard_count": 8,
+  "jobs": 8,
+  "groups": [
+    {
+      "part": 0,
+      "groups": [
+        0,
+        8,
+        16,
+        24,
+        32
+      ],
+      "raw_exit_status": 0,
+      "long_samples": 10,
+      "chain_samples": 15,
+      "run_log_sha256": "dfa161dc606bc35783c33dd731af741978226be2c6406e68e253666e03ded466",
+      "binary_sha256": "6d01534f81e267a3e20ca23f1732fb81f1b5d094ea3e04a716539e71170bdcfa"
+    },
+    {
+      "part": 1,
+      "groups": [
+        1,
+        9,
+        17,
+        25,
+        33
+      ],
+      "raw_exit_status": 0,
+      "long_samples": 10,
+      "chain_samples": 15,
+      "run_log_sha256": "e15e1dac624d5d11822d2c4c32732f27b9e7df009486eed7f1f6e403ac6a890c",
+      "binary_sha256": "e0009c09fe172d1cab45a1e21c5ce090b8819556caef8d2337355ea88de2b5ca"
+    },
+    {
+      "part": 2,
+      "groups": [
+        2,
+        10,
+        18,
+        26,
+        34
+      ],
+      "raw_exit_status": 0,
+      "long_samples": 10,
+      "chain_samples": 15,
+      "run_log_sha256": "8da5d441f2586dc2df60c3b76379f8a3eb96a16175a1668479870635594996ae",
+      "binary_sha256": "aa43b7e32ea80d60bc9b80200d0f0e89ecacf96730741f1206257190194ceabe"
+    },
+    {
+      "part": 3,
+      "groups": [
+        3,
+        11,
+        19,
+        27,
+        35
+      ],
+      "raw_exit_status": 0,
+      "long_samples": 10,
+      "chain_samples": 15,
+      "run_log_sha256": "800fccbdac0dce24339cca8c082aec83b8794c2f160669e2f026f236dc4b5999",
+      "binary_sha256": "3243958b3c356fe40d530f888486e48b72496d828ca29cba78a7de410a5f1db6"
+    },
+    {
+      "part": 4,
+      "groups": [
+        4,
+        12,
+        20,
+        28
+      ],
+      "raw_exit_status": 0,
+      "long_samples": 5,
+      "chain_samples": 15,
+      "run_log_sha256": "d58237f6f855134b05b49df302b7f3b9edfba868e8022b5896b4371262d507d4",
+      "binary_sha256": "fd88af9337dc967a1edc03185711ca2fb08363a12f7c127e5606dc2d5f0dd1d0"
+    },
+    {
+      "part": 5,
+      "groups": [
+        5,
+        13,
+        21,
+        29
+      ],
+      "raw_exit_status": 0,
+      "long_samples": 5,
+      "chain_samples": 15,
+      "run_log_sha256": "cda41ec4ef5d19d58f7a3130312c1c97eb333f36e3e9e64ec21f00b36cb1e76f",
+      "binary_sha256": "b7bdcd4bb73f320893241cfc239389d3fb347483aa07d9d460d6bc2b6d8a44bb"
+    },
+    {
+      "part": 6,
+      "groups": [
+        6,
+        14,
+        22,
+        30
+      ],
+      "raw_exit_status": 0,
+      "long_samples": 5,
+      "chain_samples": 15,
+      "run_log_sha256": "b430825085e0228ffd33d938c42857ad7c3cf7a03905c56c6badbd7eefe3d0e9",
+      "binary_sha256": "f268616203341b8021d1e7b59e3dad3e365a3692464e5816dbfe31ef16337f11"
+    },
+    {
+      "part": 7,
+      "groups": [
+        7,
+        15,
+        23,
+        31
+      ],
+      "raw_exit_status": 0,
+      "long_samples": 5,
+      "chain_samples": 15,
+      "run_log_sha256": "a8126c3f8415e6db8f07f2c07152eb3b56fcb51619e9ccc25ad0a1abd85b45d2",
+      "binary_sha256": "9a54531e78590994e0cc665646a1ae666d0e5144e31440020798c5a96478edc6"
+    }
+  ],
+  "measurement_collection": "each of 36 groups executed in exactly one actual simulation, warmup and five repeats per group",
+  "scope": "rtl_nemu_difftest",
+  "performance_numbers_are_hardware": true
+}
