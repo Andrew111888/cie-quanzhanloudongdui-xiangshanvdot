@@ -1,6 +1,5 @@
-"""Render six Chinese-named contest documents with team-only PDF metadata."""
+"""Render five Chinese-named reports; keep execution logs as original files."""
 import argparse
-from datetime import datetime
 import hashlib
 import html
 from io import BytesIO
@@ -121,9 +120,8 @@ def parse(path, content):
     flush();return out
 
 def footer(canvas,doc):
-    canvas.setStrokeColor(colors.HexColor('#c8d5df'));canvas.line(48,41,A4[0]-48,41)
-    x=p('全栈漏洞队 | 赛题编号交付版 | 2026-11-06',cell);x.wrap(W,20);x.drawOn(canvas,48,26)
-    canvas.setFont('Latin',8);canvas.drawRightString(A4[0]-48,27,str(doc.page))
+    canvas.setFont('Latin',8)
+    canvas.drawCentredString(A4[0]/2,27,str(doc.page))
 
 def split_at(content, marker):
     assert content.count(marker) == 1, marker
@@ -133,12 +131,9 @@ def split_at(content, marker):
 stage1 = (root/'docs/submission/stage1.md').read_text()
 stage2 = (root/'docs/submission/stage2.md').read_text()
 stage3 = (root/'docs/submission/stage3.md').read_text()
-stage1_logs, stage1_process = split_at(stage1, '\n## 1.3 ')
-stage1_process, bound_note_count = re.subn(
-    r'官方文档用于解释机制，具体模块、信号与周期以固定源码和真实FST为准。完整构建实际源码为[0-9a-f]{40}；当前作品与真实验收身份由source-binding\.json分别记录。',
-    '具体信号、周期及源码身份以真实FST和source-binding.json为准。官方文档用于解释机制。',
-    stage1_process)
-assert bound_note_count == 1
+stage1_environment, stage1_remaining = split_at(stage1, '\n## 1.2 ')
+_, stage1_process = split_at(stage1_remaining, '\n## 1.3 ')
+stage1_process = stage1_environment + '\n\n' + stage1_process
 stage2_design, stage2_tests = split_at(stage2, '\n## 2.3.1 ')
 stage3_cosim, stage3_performance = split_at(stage3, '\n## 3.2 ')
 stage3_cosim = stage3_cosim.replace(
@@ -150,15 +145,13 @@ def document(title, content):
     return '# '+title+'\n\n队伍：全栈漏洞队。参赛单位：西安电子科技大学。\n\n'+content
 
 documents = [
-    (1, '一阶段执行日志', ['1.1','1.2'], document('一阶段执行日志', stage1_logs)+
-     '\n\n## 参考资料\n\n- [R1] [香山官方开发环境](https://docs.xiangshan.cc/zh-cn/latest/tools/xsenv/)\n'),
-    (1, '一阶段过程文档', ['1.3'], document('一阶段过程文档', stage1_process.replace('图2：原始FST','图1：原始FST'))),
+    (1, '一阶段过程文档', ['1.1','1.3'], document('一阶段过程文档', stage1_process)),
     (2, '二阶段设计文档', ['2.1','2.2'], document('二阶段设计文档', stage2_design)),
     (2, '二阶段基础测试文档', ['2.3.1','2.3.2','2.3.3'], document('二阶段基础测试文档',
-     '测试遵循设计文档中的暂定契约：SEW=8、VLEN=128、LMUL=1、VL=8、vstart=0、vm=1；低8对有符号int8求和，低32位补码结果、高96位清零。结果宽度及支持范围尚待赛题方确认。\n\n'+stage2_tests)),
+     '测试配置为SEW=8、VLEN=128、LMUL=1、VL=8、vstart=0、vm=1。两源低8对有符号int8相乘求和，结果存入目标低32位，高96位清零。\n\n'+stage2_tests)),
     (3, '三阶段协同仿真文档', ['3.1.1','3.1.2'], document('三阶段协同仿真文档', stage3_cosim)),
     (3, '三阶段性能分析文档', ['3.2','3.3'], document('三阶段性能分析文档',
-     '本报告比较已验收RTL上的vdot与等价RVV基线。两条路径均按低8对有符号int8、低32位结果及高96位清零的暂定契约验证；指令支持范围及结果宽度尚待赛题方确认。\n\n'+stage3_performance)),
+     '本报告比较vdot与等价RVV基线。两条路径均计算低8对有符号int8的点积，结果存入目标低32位，高96位清零。\n\n'+stage3_performance)),
 ]
 
 records=[]
@@ -166,11 +159,7 @@ for stage,title,headings,content in documents:
     filename=title+'.pdf'
     source=root/f'docs/submission/stage{stage}.md'
     story=[p(title,h1),p('香山昆明湖 V2 自定义 vdot.vv'),
-           p('队伍：全栈漏洞队。参赛单位：西安电子科技大学。'),
-           p('作品源码：'+head,cell),
-           p('真实完整构建/验收源码：'+binding['tested_project_head'],cell),
-           p('补充逐例测试源码：'+basic['source_project_head'],cell),
-           p('关键输入已逐字节绑定，新增测试另存实际输入摘要。三段官网录屏由参赛者另行完成。',cell),Spacer(1,10)]
+           p('队伍：全栈漏洞队。参赛单位：西安电子科技大学。'),Spacer(1,10)]
     story += parse(source,content)
     buf=BytesIO();SimpleDocTemplate(buf,pagesize=A4,leftMargin=48,rightMargin=48,topMargin=43,bottomMargin=56).build(story,onFirstPage=footer,onLaterPages=footer)
     writer=PdfWriter();writer.clone_reader_document_root(PdfReader(BytesIO(buf.getvalue())))

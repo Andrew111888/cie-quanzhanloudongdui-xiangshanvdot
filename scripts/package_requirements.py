@@ -58,6 +58,8 @@ for n,p in stages.items():
     (p/'赛题条目对应.md').write_text(f'# 本阶段交付入口\n\n[完整赛题编号索引](源码与报告原稿/docs/SUBMISSION.md)\n\n[本阶段报告源稿](源码与报告原稿/docs/submission/stage{n}.md)\n\nPDF与原始证据位于本目录；源码和报告原稿保留完整的相对目录结构。\n')
     copy(args.pdf_dir/'reports-manifest.json',p/'reports-manifest.json')
 tree(args.stage1_evidence/'1.1-environment-validation',stages[1]/'1.1-环境输出',exclude=('recording-origin','README.md'))
+copy(args.stage1_evidence/'1.1-environment-validation/acceptance-run/run.log',stages[1]/'一阶段执行日志.log')
+(stages[1]/'一阶段执行日志索引.md').write_text('# 一阶段执行日志索引\n\n[整核仿真原始输出](一阶段执行日志.log)包含问候、IP、VADD_PASS、Difftest enabled及GOOD TRAP。该文件是原始run.log的逐字节副本。\n\n[完整部署与操作记录索引](1.2-部署操作日志/部署操作索引.md)对应225份命令、日志、版本及恢复文件。各次操作的原始输出与退出码分别保存。\n\n[向量加法过程文档](一阶段过程文档.pdf)包含环境验证、波形及逐阶段分析。\n')
 (stages[1]/'1.1-环境输出/README.md').write_text('# 1.1 实际环境输出\n\n[正式验收原始日志](acceptance-run/run.log)及[退出码](acceptance-run/exit-status.txt)。\n\n[既有真实终端画面](environment-output.png)对应另一份[复跑日志](recording-run/run.log)。两次来源分开保存；本包不含视频，官网录屏由参赛者另行完成。\n')
 tree(args.stage1_evidence/'1.2-operation-logs',stages[1]/'1.2-部署操作日志',exclude=('reference-procedures','部署操作索引.md'))
 log_index=(args.stage1_evidence/'1.2-operation-logs/部署操作索引.md').read_text().replace('reference-procedures/','../源码与报告原稿/docs/')
@@ -168,8 +170,8 @@ readme=f'''# 参赛提交材料：按赛题要求
 
 | 官网位置 | 本地材料 | 配套证据 |
 |---|---|---|
-| 文档：第一阶段 | [一阶段执行日志](01-第一阶段/一阶段执行日志.pdf) | 1.1实际问候与IP；1.2完整225份记录及顺序索引 |
-| 文档：第一阶段 | [一阶段过程文档](01-第一阶段/一阶段过程文档.pdf) | 1.3原始FST、参考文档与向量加法执行过程 |
+| 文档：第一阶段 | [一阶段执行日志.log](01-第一阶段/一阶段执行日志.log)、[完整部署日志索引](01-第一阶段/一阶段执行日志索引.md) | 原始仿真输出；1.2完整225份部署操作记录 |
+| 文档：第一阶段 | [一阶段过程文档](01-第一阶段/一阶段过程文档.pdf) | 1.1实际问候与IP；1.3原始FST及向量加法执行过程 |
 | 文档：第二阶段 | [二阶段设计文档](02-第二阶段/二阶段设计文档.pdf) | 2.1设计；2.2展开Chisel、补丁、生成RTL |
 | 文档：第二阶段 | [二阶段基础测试文档](02-第二阶段/二阶段基础测试文档.pdf) | 2.3正数、负数和边界值逐例输出及完整回归 |
 | 文档：第三阶段 | [三阶段协同仿真文档](03-第三阶段/三阶段协同仿真文档.pdf) | 3.1 NEMU扩展、真实差分及故障反例 |
@@ -177,7 +179,7 @@ readme=f'''# 参赛提交材料：按赛题要求
 | 代码仓库 | 仓库地址.txt | 04-源码与复现.zip可作代码附件；GitHub作品仓库为正式源码入口 |
 | 视频：三阶段 | 待参赛者提供 | 录屏操作指南.md给出命令及讲解要点 |
 
-每阶段有两份中文命名PDF，元数据仅保留作者“全栈漏洞队”，单位、最后修改人及其他Info/XMP字段均清除。每阶段另有“文档及证据.zip”，含两份PDF和原始证据，供系统接受ZIP时使用；系统只接受PDF时使用目录中的PDF，证据按平台允许的附件位置提供。
+第一阶段提供原始日志和一份过程文档PDF，第二、三阶段各提供两份PDF，共五份中文命名文档。PDF页脚仅保留居中页码，元数据仅保留作者“全栈漏洞队”，单位、最后修改人及其他Info/XMP字段均清除。每阶段另有“文档及证据.zip”，包含本阶段PDF与原始证据，供系统接受ZIP时使用；附件类型以系统实际支持为准。
 
 最终作品源码：{head}。真实完整硬件构建与验收：{binding['tested_project_head']}。新增逐例运行源码：{basic['source_project_head']}。关键处理器、NEMU、原有测试和配置逐字节相同；新增逐例演示是单独编译并真实执行的补充测试，不是一次新硬件构建。
 

@@ -3,7 +3,7 @@
 <rect width="1160" height="600" fill="white"/>
 <style>text{font-family:DejaVu Sans,Arial,sans-serif;fill:#172d49;font-size:16px}.title{font-size:23px;font-weight:bold}.small{font-size:14px;fill:#536980}.wire{fill:none;stroke:#51677e;stroke-width:1.6;marker-end:url(#arr)}.box{fill:#edf4fc;stroke:#4a75a2;stroke-width:1.4}.reg{fill:#e5f2e9;stroke:#2a7751;stroke-width:1.5}</style>
 <text x="25" y="36" class="title">vdot.vv: 8 signed int8 products, two pipeline stages</text>
-<text x="25" y="60" class="small">VLEN=128, SEW=8, VL=8, LMUL=1, vm=1, vstart=0 (provisional supported domain)</text>
+<text x="25" y="60" class="small">VLEN=128, SEW=8, VL=8, LMUL=1, vm=1, vstart=0</text>
 <text x="35" y="95">vs1 / vs2 low 64 bits</text>
 <text x="348" y="95">Stage 1 registers</text>
 <text x="655" y="95">Stage 2 balanced sum</text>

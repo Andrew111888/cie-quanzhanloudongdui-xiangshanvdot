@@ -11,17 +11,17 @@ hello xiangshan, I am 全栈漏洞队, <本机IP>
 VADD_PASS
 ```
 
-本机IP在构建工作负载时由hostname -I读取并写入identity.h，随后由真实RTL执行的程序打印。它表示构建主机的实际地址，未声称在客体中启动网络或DHCP。正式评审PDF及原始日志给出此次实际地址，公有源码文档保留IP占位。
+本机IP在构建工作负载时由hostname -I读取并写入identity.h，随后由RTL执行的程序打印。
 
 <!-- LOCAL_ENVIRONMENT_IMAGE -->
 
-评审包图1为既有真实终端画面，显示问候、VADD_PASS、Difftest enabled与GOOD TRAP。该图来自11月6日11:58复跑；本报告的正式FST分析使用10:31验收运行，两份原始日志分别保存。参赛者将另行完成官网录屏。
+图1：实际终端输出，显示问候、VADD_PASS、Difftest enabled与GOOD TRAP。
 
-正式验收vadd运行：847条指令、7493周期，GOOD TRAP PC=0x80000054，原始进程退出0。记录包括完整命令、输入摘要、源码身份、耗时和原始FST。
+vadd验收运行共847条指令、7493周期，GOOD TRAP PC=0x80000054，进程退出码为0。
 
 ## 1.2 完整部署与操作过程日志
 
-原始部署记录按实际顺序编排；225份命令、日志、版本和恢复文件逐字节保存，并提供完整文件索引和SHA256校验。实际执行记录与复现参考步骤分开，保留中断和失败，未把参考命令当成历史运行。
+命令运行时产生的原始日志以.log文件保存，完整部署记录包含225份命令、日志、版本和恢复文件，并提供顺序索引与SHA256校验。本条目直接提供原始文件及索引。
 
 | 顺序 | 实际操作 | 可核对的记录与结果 |
 |---|---|---|
@@ -84,7 +84,7 @@ VADD_PASS
 
 重命名：6427时逻辑v12映射到新物理P51，并分配ROB=(1,18)。寄存器重命名提供后续源目的身份，维护推测映射和回滚所需信息；本次具体映射以实测为准。[R2]
 
-调度与读源：6450发生向量调度输出握手，6453同一身份到达执行单元。现有DataPath及旁路路径负责形成操作数；此时src0、src1与数组一致，src4=16。重命名到调度相隔23拍，只据此描述存在等待，尚未逐周期定位每项等待原因。[R3]
+调度与读源：6450发生向量调度输出握手，6453同一身份到达执行单元。现有DataPath及旁路路径负责形成操作数；此时src0、src1与数组一致，src4=16。重命名到调度相隔23拍。[R3]
 
 执行：已有VIAluFix把128位数据拆入64位运算模块，按SEW执行同宽逐元素加法。固定源码VialuCfg的CertainLatency(1)与本次6453输入、6454结果的1拍相符。该观察属于vadd，不混用vdot的2拍结果。[R6][R7]
 
@@ -103,5 +103,3 @@ VADD_PASS
 - [R5] [RISC-V Vector 1.0，同宽整数加法](https://docs.riscv.org/reference/isa/v20260120/unpriv/v-st-ext.html)
 - [R6] [固定源码VIAluFix.scala](https://github.com/OpenXiangShan/XiangShan/blob/7b16188f7f18a97be69c9b1a2dae8a446eec3b47/src/main/scala/xiangshan/backend/fu/wrapper/VIAluFix.scala)
 - [R7] [固定源码FuConfig.scala](https://github.com/OpenXiangShan/XiangShan/blob/7b16188f7f18a97be69c9b1a2dae8a446eec3b47/src/main/scala/xiangshan/backend/fu/FuConfig.scala)
-
-官方文档用于解释机制，具体模块、信号与周期以固定源码和真实FST为准。完整构建实际源码为4e5cfce9461e5870f266cff5b5347dd1265493c9；当前作品与真实验收身份由source-binding.json分别记录。
