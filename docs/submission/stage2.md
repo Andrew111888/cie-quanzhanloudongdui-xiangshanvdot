@@ -6,7 +6,7 @@
 
 ### 2.1.1 平台与语义
 
-平台为官方昆明湖V2提交7b16188f7f18a97be69c9b1a2dae8a446eec3b47，单核MinimalConfig，VLEN=128，保留向量扩展。指令计算两源低8对有符号int8相乘之和；结果存入vd低32位补码，高96位清零，不读取旧vd，源高64位不参与。
+平台基于官方昆明湖V2提交7b16188f7f18a97be69c9b1a2dae8a446eec3b47扩展，单核MinimalConfig，VLEN=128，保留向量扩展。指令计算两源低8对有符号int8相乘之和；结果存入vd低32位补码，高96位清零，不读取旧vd，源高64位不参与。
 
 ```text
 s = sum(int8(vs1[i]) * int8(vs2[i]), i=0..7)
@@ -95,7 +95,7 @@ BASIC_CASE name=boundary_zero a=0 b=-128 count=8 expected=0 actual=0 vd=00000000
 VDOT_BASIC_PASS directed_cases=6
 ```
 
-构建与运行命令、反汇编、退出码、源码快照、二进制摘要及cases.json保存在2.3证据目录。逐例测试使用同一RTL仿真器和正常NEMU参考库。
+本组使用从已提交扩展源码重新构建的仿真器及NEMU参考库，日志打印dirty: 0。构建与运行命令、反汇编、退出码、源码快照、二进制摘要及cases.json保存在2.3证据目录。
 
 ### 基础测试之外的覆盖
 

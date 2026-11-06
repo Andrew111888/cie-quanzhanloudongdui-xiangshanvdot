@@ -6,6 +6,8 @@
 
 本轮新增RVV序列对比、含访存内核及旧目标依赖消除，重新构建的全核功能回归和前后540条真实性能样本均已通过。512次TU独立点积的片段周期由3639降至625（改善5.822倍）；TA、真实依赖链和含访存内核未因这次调度修改降低中位周期。候选RVV序列在部分场景更慢，报告以两条实测RVV序列中较快者作为主要基线。详见[方法](docs/OPTIMIZATION.md)、[结果与限制](docs/OPTIMIZATION_RESULTS.md)及[原始数据](docs/data/optimization/README.md)。
 
+补充完成[干净提交构建与关键验收](docs/干净提交验收.md)，新增模型自然打印dirty: 0；[访存瓶颈分析](docs/访存瓶颈分析.md)以40条正式样本和真实加载波形定位保尾依赖，128块TU固定加载寄存器2120周期、四对轮换956周期。指令宽度与量化全连接/GEMV的对应关系见[设计说明](docs/DESIGN.md)。
+
 赛题：[官方说明](https://rv.cie.org.cn/direction?id=8)。指令结果位宽等赛题未明确事项采用的暂定解释见 [contract.json](contract.json) 和 [待确认问题](docs/QUESTIONS.md)，尚未获得赛题方确认。
 
 固定昆明湖V2单核MinimalConfig，复用现有向量译码、调度、读源、VIMac执行槽位、写回及ROB通路。新增8路有符号8×8乘法与17/18/19位加法树，两级流水；同时交付[生成RTL及来源](rtl/README.md)，不依赖编译器认识新助记符。

@@ -22,6 +22,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--binding', type=Path, required=True)
 parser.add_argument('--basic-run', type=Path, required=True)
 parser.add_argument('--stage1-evidence', type=Path, required=True)
+parser.add_argument('--followup', type=Path)
 parser.add_argument('--output', type=Path, required=True)
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
@@ -38,6 +39,20 @@ case_output = '\n'.join(s for s in basic_text.splitlines() if s.startswith(('BAS
 assert case_output.count('BASIC_CASE ') == 6
 greet_log = args.stage1_evidence/'1.1-environment-validation/acceptance-run/run.log'
 greeting = next(s for s in greet_log.read_text().splitlines() if s.startswith('hello xiangshan, I am '))
+greet_text = re.sub(r'\x1b\[[0-9;]*m','',greet_log.read_text())
+greeting_output = '\n'.join(s for s in greet_text.splitlines() if
+    s.startswith(('hello xiangshan, I am ', 'VADD_PASS', 'Core-0 instrCnt =')) or
+    any(word in s for word in ('Commit SHA is:', 'Difftest enabled.', 'HIT GOOD TRAP')))
+basic_status = '\n'.join(s for s in basic_text.splitlines() if
+    s.startswith('Core-0 instrCnt =') or
+    any(word in s for word in ('Commit SHA is:', 'Difftest enabled.', 'HIT GOOD TRAP')))
+followup = None
+if args.followup:
+    followup = json.loads(args.followup.read_text())
+    assert followup['status'] == 'passed'
+    for name,value in followup['evidence_sha256'].items():
+        assert hashlib.sha256(Path(name).read_bytes()).hexdigest() == value, name
+    assert 'dirty: 0' in greeting_output and 'dirty: 0' in basic_status
 args.output.mkdir(parents=True, exist_ok=True)
 temporary = root/'tmp/pdfs/requirements'
 temporary.mkdir(parents=True,exist_ok=True)
@@ -66,8 +81,13 @@ def p(s,style=body):
     return Paragraph(inline(s),style)
 
 def parse(path, content):
+    content = content.replace('hello xiangshan, I am 全栈漏洞队, <本机IP>\nVADD_PASS',greeting_output)
     content = content.replace('hello xiangshan, I am 全栈漏洞队, <本机IP>',greeting)
     content = content.replace('{{BASIC_CASE_OUTPUT}}',case_output)
+    if 'BASIC_CASE name=' in content:
+        content,count = re.subn(r'BASIC_CASE name=.*?VDOT_BASIC_PASS directed_cases=6',
+                               lambda _:case_output+'\n'+basic_status,content,flags=re.S)
+        assert count == 1
     content = content.replace('<!-- LOCAL_ENVIRONMENT_IMAGE -->','![实际仿真输出画面](evidence:environment-output.png)')
     content = content.split('\n',1)[1]
     content = content.replace('\n队伍：全栈漏洞队。参赛单位：西安电子科技大学。\n','\n',1)
@@ -108,7 +128,9 @@ def parse(path, content):
                 png=temporary/(source.stem+'.png')
                 subprocess.run(['/usr/bin/convert','-density','170','-background','white',str(source),str(png)],check=True)
                 source=png
-            pic=Image(str(source));scale=min(W/pic.imageWidth,290/pic.imageHeight)
+            pic=Image(str(source))
+            height_limit=255 if source.stem=='clean-latency-timeline' else 290
+            scale=min(W/pic.imageWidth,height_limit/pic.imageHeight)
             pic.drawWidth=pic.imageWidth*scale;pic.drawHeight=pic.imageHeight*scale
             out += [pic,p(im[1],cell),Spacer(1,10)];i+=1;continue
         if s.startswith('#'):
@@ -188,5 +210,9 @@ for stage,title,headings,content in documents:
     if title=='二阶段基础测试文档':assert all(x['vd_hex'] in extracted for x in basic['cases'])
     records.append({'stage':stage,'title':title,'file':str(target.resolve()),'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'pages':len(reader.pages),'required_sections':headings,'metadata_author':'全栈漏洞队','metadata_fields':dict(reader.metadata),'company_metadata_present':False,'last_modified_by_metadata_present':False,'xmp_present':False,'metadata_and_content_scan':'passed','source_markdown_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'section_content_sha256':hashlib.sha256(content.encode()).hexdigest(),'visual_review':'pending'})
 manifest={'status':'documents_rendered_pending_visual_review','final_project_head':head,'tested_project_head':binding['tested_project_head'],'binding_sha256':hashlib.sha256(args.binding.read_bytes()).hexdigest(),'basic_validation':str(args.basic_run.resolve()),'basic_validation_source_head':basic['source_project_head'],'reports':records,'video_responsibility':'participant','videos_included':False}
+if args.followup:
+    manifest.update(followup_evidence=str(args.followup.resolve()),
+                    followup_evidence_sha256=hashlib.sha256(args.followup.read_bytes()).hexdigest(),
+                    clean_committed_run_logs_verified=True)
 (args.output/'reports-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps({'reports':records},ensure_ascii=False,indent=2))

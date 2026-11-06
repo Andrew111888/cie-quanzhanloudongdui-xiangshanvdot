@@ -14,6 +14,7 @@ parser.add_argument('--binding',type=Path,required=True)
 parser.add_argument('--pdf-dir',type=Path,required=True)
 parser.add_argument('--basic-run',type=Path,required=True)
 parser.add_argument('--stage1-evidence',type=Path,required=True)
+parser.add_argument('--followup',type=Path)
 parser.add_argument('--recorded-evidence-zip',type=Path,required=True)
 parser.add_argument('--output',type=Path,required=True)
 args=parser.parse_args()
@@ -28,6 +29,12 @@ pdfs=json.loads((args.pdf_dir/'reports-manifest.json').read_text())
 assert pdfs['status']=='verified' and pdfs['final_project_head']==head
 assert pdfs['binding_sha256']==digest(args.binding)
 assert all(x['visual_review']=='passed' for x in pdfs['reports'])
+followup=None
+if args.followup:
+    followup=json.loads(args.followup.read_text())
+    assert followup['status']=='passed'
+    assert pdfs['followup_evidence_sha256']==digest(args.followup)
+    for name,value in followup['evidence_sha256'].items():assert digest(Path(name))==value,name
 basic=json.loads((args.basic_run/'cases.json').read_text())
 assert basic['status']=='passed' and basic['source_unchanged']
 assert digest(args.basic_run/'run.log')==basic['run_log_sha256']
@@ -59,8 +66,11 @@ for n,p in stages.items():
     copy(args.pdf_dir/'reports-manifest.json',p/'reports-manifest.json')
 tree(args.stage1_evidence/'1.1-environment-validation',stages[1]/'1.1-环境输出',exclude=('recording-origin','README.md'))
 copy(args.stage1_evidence/'1.1-environment-validation/acceptance-run/run.log',stages[1]/'一阶段执行日志.log')
-(stages[1]/'一阶段执行日志索引.md').write_text('# 一阶段执行日志索引\n\n[整核仿真原始输出](一阶段执行日志.log)包含问候、IP、VADD_PASS、Difftest enabled及GOOD TRAP。该文件是原始run.log的逐字节副本。\n\n[完整部署与操作记录索引](1.2-部署操作日志/部署操作索引.md)对应225份命令、日志、版本及恢复文件。各次操作的原始输出与退出码分别保存。\n\n[向量加法过程文档](一阶段过程文档.pdf)包含环境验证、波形及逐阶段分析。\n')
-(stages[1]/'1.1-环境输出/README.md').write_text('# 1.1 实际环境输出\n\n[正式验收原始日志](acceptance-run/run.log)及[退出码](acceptance-run/exit-status.txt)。\n\n[既有真实终端画面](environment-output.png)对应另一份[复跑日志](recording-run/run.log)。两次来源分开保存；本包不含视频，官网录屏由参赛者另行完成。\n')
+(stages[1]/'一阶段执行日志索引.md').write_text('# 一阶段执行日志索引\n\n[整核仿真原始输出](一阶段执行日志.log)包含问候、IP、VADD_PASS、Difftest enabled及GOOD TRAP。该文件是原始run.log的逐字节副本。\n\n[完整部署与操作记录索引](1.2-部署操作日志/部署操作索引.md)包含原有225份记录及补充的干净提交构建与验收记录。各次操作的原始输出与退出码分别保存。\n\n[向量加法过程文档](一阶段过程文档.pdf)包含环境验证、波形及逐阶段分析。\n')
+environment_readme='# 1.1 实际环境输出\n\n[正式验收原始日志](acceptance-run/run.log)及[退出码](acceptance-run/exit-status.txt)。\n'
+if (stages[1]/'1.1-环境输出/environment-output.png').is_file():
+    environment_readme+='\n[既有真实终端画面](environment-output.png)。\n'
+(stages[1]/'1.1-环境输出/README.md').write_text(environment_readme)
 tree(args.stage1_evidence/'1.2-operation-logs',stages[1]/'1.2-部署操作日志',exclude=('reference-procedures','部署操作索引.md'))
 log_index=(args.stage1_evidence/'1.2-operation-logs/部署操作索引.md').read_text().replace('reference-procedures/','../源码与报告原稿/docs/')
 (stages[1]/'1.2-部署操作日志/部署操作索引.md').write_text(log_index)
@@ -83,6 +93,9 @@ for rel in ['examples/vdot_basic.c','scripts/run_basic_validation.sh','workloads
 tree(args.basic_run,stages[2]/'2.3-基础测试/逐例整核运行')
 for label in ('smoke','register','random','pipeline'):
     tree(Path(binding['rtl_runs'][label]['directory']),stages[2]/'2.3-基础测试/完整回归'/label)
+if followup:
+    for stage in stages.values():copy(args.followup,stage/'补充验收来源.json')
+    tree(Path(followup['runs']['smoke']['directory']),stages[2]/'2.3-基础测试/干净提交验收/smoke')
 
 nemu_source=json.loads((Path(binding['acceptance'])/'source-after.json').read_text())['repositories']['NEMU']['changed_source_sha256']
 for rel,value in nemu_source.items():
@@ -91,10 +104,14 @@ for rel,value in nemu_source.items():
 for rel in ['patches/nemu.patch','configs/nemu-reference.config','configs/nemu-standalone.config']:
     copy(root/rel,stages[3]/'3.1-NEMU扩展'/rel)
 (stages[3]/'3.1-NEMU扩展/README.md').write_text('# NEMU扩展与差分说明\n\n补丁、配置和展开源码位于本目录。\n\n[完整差分说明](../源码与报告原稿/docs/DIFFTEST_CHECKS.md)\n')
-for rel in ['workloads/vdot_test.c','workloads/benchmark.c','workloads/benchmark_rvv.c','workloads/dot_memory.c','workloads/latency_probe.c','scripts/performance_report.py','scripts/optimization_report.py']:
+for rel in ['workloads/vdot_test.c','workloads/benchmark.c','workloads/benchmark_rvv.c','workloads/dot_memory.c','workloads/latency_probe.c','scripts/performance_report.py','scripts/optimization_report.py','examples/dot_memory_diagnostic.c','scripts/run_memory_diagnostic.py','scripts/extract_memory_wave.py']:
     copy(root/rel,stages[3]/'3.2-基线与测量源码'/rel)
 tree(root/'docs/data/optimization',stages[3]/'3.3-性能分析/公开数据')
 (stages[3]/'3.3-性能分析/README.md').write_text('# 性能分析入口\n\n[方法](../源码与报告原稿/docs/OPTIMIZATION.md)\n\n[优化结果](../源码与报告原稿/docs/OPTIMIZATION_RESULTS.md)\n\n[完整性能边界](../源码与报告原稿/docs/PERFORMANCE.md)\n\n本目录公开数据和同阶段原始协同与性能证据保留实测来源。\n')
+if followup:
+    tree(Path(followup['runs']['memory']['directory']),stages[3]/'3.3-访存瓶颈对照/正式运行')
+    tree(Path(followup['memory_wave']['run_directory']),stages[3]/'3.3-访存瓶颈对照/波形运行')
+    tree(Path(followup['memory_wave']['analysis_directory']),stages[3]/'3.3-访存瓶颈对照/加载依赖分析')
 
 archived=[]
 with zipfile.ZipFile(args.recorded_evidence_zip) as z:
@@ -161,7 +178,14 @@ for n,ids in {1:['1.1','1.2','1.3'],2:['2.1','2.2','2.3.1','2.3.2','2.3.3'],3:['
     for identifier in ids:requirements.append({'id':identifier,'stage':n,'status':'technical_materials_verified','directory':str(stages[n])})
 manifest={'status':'non_video_materials_ready_videos_pending_portal_held','prepared_utc':datetime.now(timezone.utc).isoformat(),'final_project_head':head,'tested_project_head':binding['tested_project_head'],'basic_validation_source_head':basic['source_project_head'],'basic_validation_log_sha256':basic['run_log_sha256'],'source_binding_sha256':digest(args.binding),'requirements':requirements,'reports':pdfs['reports'],'packages':packages,'copied_source_records':records,'preserved_archive_source':{'path':str(args.recorded_evidence_zip),'sha256':old_recorded_digest},'extracted_records':archived,'videos':[{'stage':i,'status':'awaiting_participant_recording'} for i in (1,2,3)],'ppt':'deferred_by_participant','official_portal_updated':False,'official_pr_updated':False,'encryption':'pending_local_preparation'}
 manifest['offline_markdown_links_checked']=offline_links
+if followup:
+    manifest.update(followup_evidence_sha256=digest(args.followup),
+                    clean_core_commit=followup['clean_build']['core_commit'],
+                    clean_nemu_commit=followup['clean_build']['nemu_commit'],
+                    clean_committed_key_runs=True,memory_diagnostic_formal_samples=40)
 (out/'提交清单.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+supplement_note=('本轮另从已提交的香山/NEMU扩展源码重新构建，vadd、smoke和六项逐例测试均以dirty: 0通过；40条访存正式样本与加载波形另行绑定。'
+                 if followup else '补充逐例测试单独记录输入与源码身份。')
 readme=f'''# 参赛提交材料：按赛题要求
 
 队伍：全栈漏洞队；参赛单位：西安电子科技大学。
@@ -170,7 +194,7 @@ readme=f'''# 参赛提交材料：按赛题要求
 
 | 官网位置 | 本地材料 | 配套证据 |
 |---|---|---|
-| 文档：第一阶段 | [一阶段执行日志.log](01-第一阶段/一阶段执行日志.log)、[完整部署日志索引](01-第一阶段/一阶段执行日志索引.md) | 原始仿真输出；1.2完整225份部署操作记录 |
+| 文档：第一阶段 | [一阶段执行日志.log](01-第一阶段/一阶段执行日志.log)、[完整部署日志索引](01-第一阶段/一阶段执行日志索引.md) | 原始仿真输出；原有225份记录及补充干净提交构建记录 |
 | 文档：第一阶段 | [一阶段过程文档](01-第一阶段/一阶段过程文档.pdf) | 1.1实际问候与IP；1.3原始FST及向量加法执行过程 |
 | 文档：第二阶段 | [二阶段设计文档](02-第二阶段/二阶段设计文档.pdf) | 2.1设计；2.2展开Chisel、补丁、生成RTL |
 | 文档：第二阶段 | [二阶段基础测试文档](02-第二阶段/二阶段基础测试文档.pdf) | 2.3正数、负数和边界值逐例输出及完整回归 |
@@ -181,7 +205,7 @@ readme=f'''# 参赛提交材料：按赛题要求
 
 第一阶段提供原始日志和一份过程文档PDF，第二、三阶段各提供两份PDF，共五份中文命名文档。PDF页脚仅保留居中页码，元数据仅保留作者“全栈漏洞队”，单位、最后修改人及其他Info/XMP字段均清除。每阶段另有“文档及证据.zip”，包含本阶段PDF与原始证据，供系统接受ZIP时使用；附件类型以系统实际支持为准。
 
-最终作品源码：{head}。真实完整硬件构建与验收：{binding['tested_project_head']}。新增逐例运行源码：{basic['source_project_head']}。关键处理器、NEMU、原有测试和配置逐字节相同；新增逐例演示是单独编译并真实执行的补充测试，不是一次新硬件构建。
+最终作品源码：{head}。原完整硬件构建与验收：{binding['tested_project_head']}。本轮逐例运行源码：{basic['source_project_head']}。关键处理器、NEMU、原有测试和配置逐字节核对。{supplement_note}
 
 六个基础用例逐项输出输入、期望、实际值和128位vd，实际运行{basic_instructions}条指令、{basic_cycles}周期，正常差分、GOOD TRAP、原始退出0。
 

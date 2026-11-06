@@ -1,0 +1,64 @@
+{
+  "status": "verified",
+  "build_project_head": "b09303e7b7e4eefb3b9ec0c07ba81f7ee3c37709",
+  "patched_repositories": [
+    {
+      "repository": "XiangShan",
+      "official_base": "7b16188f7f18a97be69c9b1a2dae8a446eec3b47",
+      "patched_commit": "f1efc9c5ec57b89fdafd9432c72c5a0b456313b1",
+      "status": "",
+      "patch_sha256": "76ef1a49dbfd17a51654e40bded2d2431f483ace9112bbbc50dae8680a757555",
+      "changed_files": {
+        "src/main/scala/xiangshan/backend/decode/VecDecoder.scala": "abd554f3172b6e47c5e10968c5a96a84052b4cc9f3dbfad9eebfd6b4f505b9df",
+        "src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala": "4e0800b70699eb24557352b144741e8ed480ce51de64aa2dbccee3c4c72d2f50",
+        "src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala": "1845e685513507b724ba7e37ab46eb42c7b32c7fa2477644c4d728230a508fce",
+        "src/main/scala/xiangshan/backend/fu/vector/Vdot.scala": "d758aff49a6d10c0369a6d06968a5782cc8d1e13cad2c6a967d919b782adf6b4"
+      },
+      "bundle_sha256": "b3612cf24f45fd6a676fcc9d6ea91a7af2b5ee5ba928cffb912f04925dae2eae"
+    },
+    {
+      "repository": "NEMU",
+      "official_base": "d772a9d9e06f663d529bd1c6518480c1ee59ded2",
+      "patched_commit": "75da3a5bc6a4399ea48601636c024a5235e147bc",
+      "status": "",
+      "patch_sha256": "fbfe8ed34beaf5bde714806d2e3a5b90b9aa3d744b6a2927f81ce31a678c7e29",
+      "changed_files": {
+        "src/isa/riscv64/include/isa-all-instr.h": "e63c8bfed52d3d743640e38781662cdccf0a6bf78bdb3209fc61bd1e2661f967",
+        "src/isa/riscv64/instr/decode.c": "c943967ae3a95cb71515730d9d27639828f7db8dbb92bc979b2865b032dfcf5c",
+        "src/isa/riscv64/instr/rvv/vcompute.h": "d4595d0be4b5de3f65253efa5ca8180579466af6b2a091e04338fe31a503b39f",
+        "src/isa/riscv64/local-include/trapinfo.h": "33a116212fb154a012714d865c0adf159bfc98981f3f3033aa560edfaa3560f8",
+        "src/isa/riscv64/system/intr.c": "0be24282d16cad03330b5caec4b17f7d03d58970b372e5ee86380788c5511df7"
+      },
+      "bundle_sha256": "97f2cb5f8c186c66b11c72d0feb3a82ab71febb2a8012599a24d3504d229b3c7"
+    }
+  ],
+  "rtl_comparison": {
+    "checked_utc": "2026-11-06T10:31:48.805713+00:00",
+    "previous": "/home/yh/cie/vdot-kmhv2-repro-20261106/third_party/XiangShan/build/rtl",
+    "clean_committed": "/home/yh/cie/vdot-kmhv2/build/clean-commit-validation-20261106/third_party/XiangShan/build/rtl",
+    "module_count": 1868,
+    "identical_module_count": 1866,
+    "changed_modules": [
+      "CommitIDModule.sv",
+      "NewCSR.sv"
+    ],
+    "important_modules": {
+      "DecodeUnit.sv": {
+        "previous": "15d074bd874b5f335cfbd495c5eed91bff1a35871dcaed52388be0cbebe255bb",
+        "clean_committed": "15d074bd874b5f335cfbd495c5eed91bff1a35871dcaed52388be0cbebe255bb",
+        "identical": true
+      },
+      "VdotDatapath.sv": {
+        "previous": "868ca4b2f21e499a37c14161c72e0776817086eb73a27354102722008de20b89",
+        "clean_committed": "868ca4b2f21e499a37c14161c72e0776817086eb73a27354102722008de20b89",
+        "identical": true
+      },
+      "VIMacU.sv": {
+        "previous": "7a3a577e40340ec16162afa9d453756879729d749e4966e6d9f524784482ba74",
+        "clean_committed": "7a3a577e40340ec16162afa9d453756879729d749e4966e6d9f524784482ba74",
+        "identical": true
+      }
+    }
+  },
+  "vadd_smoke_and_six_basic_cases": "passed_with_dirty_zero"
+}

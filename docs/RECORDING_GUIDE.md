@@ -7,11 +7,13 @@
 ```bash
 cd /home/yh/cie/vdot-kmhv2
 source scripts/env.sh
-export VDOT_REPRO_ROOT=/home/yh/cie/vdot-kmhv2-repro-20261106
-export VDOT_ACCEPTANCE_DIR="$VDOT_REPRO_ROOT/reports/acceptance-20261106T023150Z-228441"
+export VDOT_REPRO_ROOT=/home/yh/cie/vdot-kmhv2/build/clean-commit-validation-20261106
+export VDOT_ACCEPTANCE_DIR=/home/yh/cie/vdot-kmhv2-repro-20261106/reports/acceptance-20261106T023150Z-228441
+export VDOT_EMU_PATH="$VDOT_REPRO_ROOT/third_party/XiangShan/build/emu"
+export VDOT_REF_SO="$VDOT_REPRO_ROOT/build/nemu/reference/riscv64-nemu-interpreter-so"
 ```
 
-正式验收与硬件构建源码为4e5cfce；当前作品另含补充逐例程序和文档。录像时区分现场重新执行、查看已完成的构建日志和查看原始波形三类动作，保持原始日志所记提交号。
+本机新增的干净提交模型已完成vadd、smoke和六项基础测试，运行打印dirty: 0。早先完整回归及540条性能记录仍保留其实际来源。下方前两阶段使用干净提交模型；第三阶段的故障反例与历史波形使用已完成的原验收记录。
 
 ## 第一阶段：操作过程
 
@@ -24,7 +26,7 @@ VDOT_WAVE_BEGIN=0 VDOT_WAVE_END=15000 \
 
 命令结束会打印实际RTL evidence目录；打开该目录run.log展示hello xiangshan、队名、IP、VADD_PASS和GOOD TRAP。IP来自工作负载构建时的本机地址。再展示正式验收FST和报告中的PC=0x80000118、ROB=(1,18)、P51关联，解释译码到提交31拍与ALU运算1拍的区别。
 
-可用已有讲解脚本辅助：`bash scripts/demo_stage1.sh`。它会真实复跑vadd，并明确区分正式验收的派生时序图。
+现场重跑使用上方命令，配合本轮一阶段过程文档及原始FST讲解。
 
 ## 第二阶段：解题思路与基础测试
 
@@ -44,7 +46,9 @@ bash scripts/run_basic_validation.sh \
 
 ```bash
 VDOT_BAD_REF=$(sed -n 's/^FAULT_REFERENCE_BUILT //p' "$VDOT_ACCEPTANCE_DIR/fault-build.log")
-bash "$VDOT_REPRO_ROOT/scripts/run_fault_check.sh" "$VDOT_BAD_REF"
+VDOT_EMU_PATH=/home/yh/cie/vdot-kmhv2-repro-20261106/third_party/XiangShan/build/emu \
+VDOT_REF_SO=/home/yh/cie/vdot-kmhv2-repro-20261106/build/nemu/reference/riscv64-nemu-interpreter-so \
+  bash /home/yh/cie/vdot-kmhv2-repro-20261106/scripts/run_fault_check.sh "$VDOT_BAD_REF"
 ```
 
 打开三阶段性能分析文档和FST：vdot输入到输出2拍；此次基线首个乘法输入至最终归约16拍，包含配置/清零/调度。解释组合路径、程序片段、吞吐三个边界，不能混称。

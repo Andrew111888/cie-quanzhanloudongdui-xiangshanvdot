@@ -1,0 +1,453 @@
+{
+  "status": "passed",
+  "source_project_head": "d13949a94c1f4ee4e602a9e1d522879dcf72b0f0",
+  "source_unchanged": true,
+  "emu": "/home/yh/cie/vdot-kmhv2/build/clean-commit-validation-20261106/third_party/XiangShan/build/verilator-compile/emu",
+  "emu_sha256": "64527368614a82580da81b7d4cfde9c1bfeddebe0d2a30692138fef9f8998c30",
+  "reported_core_commit_prefix": "f1efc9c5ec",
+  "reported_core_dirty": 0,
+  "difftest_enabled": true,
+  "raw_exit_status": 0,
+  "wave_dump_enabled": false,
+  "sample_count": 40,
+  "rows": [
+    [
+      0,
+      0,
+      16,
+      128,
+      0,
+      1029,
+      3259583159
+    ],
+    [
+      0,
+      0,
+      16,
+      128,
+      1,
+      967,
+      3259583159
+    ],
+    [
+      0,
+      0,
+      16,
+      128,
+      2,
+      954,
+      3259583159
+    ],
+    [
+      0,
+      0,
+      16,
+      128,
+      3,
+      956,
+      3259583159
+    ],
+    [
+      0,
+      0,
+      16,
+      128,
+      4,
+      967,
+      3259583159
+    ],
+    [
+      1,
+      0,
+      16,
+      128,
+      0,
+      2120,
+      3259583159
+    ],
+    [
+      1,
+      0,
+      16,
+      128,
+      1,
+      2120,
+      3259583159
+    ],
+    [
+      1,
+      0,
+      16,
+      128,
+      2,
+      2121,
+      3259583159
+    ],
+    [
+      1,
+      0,
+      16,
+      128,
+      3,
+      2120,
+      3259583159
+    ],
+    [
+      1,
+      0,
+      16,
+      128,
+      4,
+      2120,
+      3259583159
+    ],
+    [
+      0,
+      1,
+      16,
+      128,
+      0,
+      994,
+      3259583159
+    ],
+    [
+      0,
+      1,
+      16,
+      128,
+      1,
+      954,
+      3259583159
+    ],
+    [
+      0,
+      1,
+      16,
+      128,
+      2,
+      959,
+      3259583159
+    ],
+    [
+      0,
+      1,
+      16,
+      128,
+      3,
+      955,
+      3259583159
+    ],
+    [
+      0,
+      1,
+      16,
+      128,
+      4,
+      951,
+      3259583159
+    ],
+    [
+      1,
+      1,
+      16,
+      128,
+      0,
+      995,
+      3259583159
+    ],
+    [
+      1,
+      1,
+      16,
+      128,
+      1,
+      956,
+      3259583159
+    ],
+    [
+      1,
+      1,
+      16,
+      128,
+      2,
+      954,
+      3259583159
+    ],
+    [
+      1,
+      1,
+      16,
+      128,
+      3,
+      959,
+      3259583159
+    ],
+    [
+      1,
+      1,
+      16,
+      128,
+      4,
+      956,
+      3259583159
+    ],
+    [
+      0,
+      0,
+      8,
+      128,
+      0,
+      994,
+      3259583159
+    ],
+    [
+      0,
+      0,
+      8,
+      128,
+      1,
+      951,
+      3259583159
+    ],
+    [
+      0,
+      0,
+      8,
+      128,
+      2,
+      955,
+      3259583159
+    ],
+    [
+      0,
+      0,
+      8,
+      128,
+      3,
+      959,
+      3259583159
+    ],
+    [
+      0,
+      0,
+      8,
+      128,
+      4,
+      954,
+      3259583159
+    ],
+    [
+      1,
+      0,
+      8,
+      128,
+      0,
+      2120,
+      3259583159
+    ],
+    [
+      1,
+      0,
+      8,
+      128,
+      1,
+      2120,
+      3259583159
+    ],
+    [
+      1,
+      0,
+      8,
+      128,
+      2,
+      2120,
+      3259583159
+    ],
+    [
+      1,
+      0,
+      8,
+      128,
+      3,
+      2120,
+      3259583159
+    ],
+    [
+      1,
+      0,
+      8,
+      128,
+      4,
+      2120,
+      3259583159
+    ],
+    [
+      0,
+      1,
+      8,
+      128,
+      0,
+      1000,
+      3259583159
+    ],
+    [
+      0,
+      1,
+      8,
+      128,
+      1,
+      954,
+      3259583159
+    ],
+    [
+      0,
+      1,
+      8,
+      128,
+      2,
+      951,
+      3259583159
+    ],
+    [
+      0,
+      1,
+      8,
+      128,
+      3,
+      956,
+      3259583159
+    ],
+    [
+      0,
+      1,
+      8,
+      128,
+      4,
+      955,
+      3259583159
+    ],
+    [
+      1,
+      1,
+      8,
+      128,
+      0,
+      995,
+      3259583159
+    ],
+    [
+      1,
+      1,
+      8,
+      128,
+      1,
+      967,
+      3259583159
+    ],
+    [
+      1,
+      1,
+      8,
+      128,
+      2,
+      954,
+      3259583159
+    ],
+    [
+      1,
+      1,
+      8,
+      128,
+      3,
+      954,
+      3259583159
+    ],
+    [
+      1,
+      1,
+      8,
+      128,
+      4,
+      954,
+      3259583159
+    ]
+  ],
+  "summary": [
+    {
+      "tail_undisturbed": 0,
+      "rotating": 0,
+      "store_bytes": 16,
+      "blocks": 128,
+      "cycles_median": 967,
+      "cycles_min": 954,
+      "cycles_max": 1029
+    },
+    {
+      "tail_undisturbed": 0,
+      "rotating": 0,
+      "store_bytes": 8,
+      "blocks": 128,
+      "cycles_median": 955,
+      "cycles_min": 951,
+      "cycles_max": 994
+    },
+    {
+      "tail_undisturbed": 0,
+      "rotating": 1,
+      "store_bytes": 16,
+      "blocks": 128,
+      "cycles_median": 955,
+      "cycles_min": 951,
+      "cycles_max": 994
+    },
+    {
+      "tail_undisturbed": 0,
+      "rotating": 1,
+      "store_bytes": 8,
+      "blocks": 128,
+      "cycles_median": 955,
+      "cycles_min": 951,
+      "cycles_max": 1000
+    },
+    {
+      "tail_undisturbed": 1,
+      "rotating": 0,
+      "store_bytes": 16,
+      "blocks": 128,
+      "cycles_median": 2120,
+      "cycles_min": 2120,
+      "cycles_max": 2121
+    },
+    {
+      "tail_undisturbed": 1,
+      "rotating": 0,
+      "store_bytes": 8,
+      "blocks": 128,
+      "cycles_median": 2120,
+      "cycles_min": 2120,
+      "cycles_max": 2120
+    },
+    {
+      "tail_undisturbed": 1,
+      "rotating": 1,
+      "store_bytes": 16,
+      "blocks": 128,
+      "cycles_median": 956,
+      "cycles_min": 954,
+      "cycles_max": 995
+    },
+    {
+      "tail_undisturbed": 1,
+      "rotating": 1,
+      "store_bytes": 8,
+      "blocks": 128,
+      "cycles_median": 954,
+      "cycles_min": 954,
+      "cycles_max": 995
+    }
+  ],
+  "checksum": 3259583159,
+  "run_log_sha256": "deb80f1343d8b51fee64c56c7c91b2e130c1b694d82f136bf3e25db1c9a1f469",
+  "boundary": "four-way unrolled loop, two 8-byte vector loads and one result store per block; common full-output zeroing outside timing; all 128-bit memory results checked",
+  "purpose": "controlled diagnostic; complements the unchanged full-layout RVV/vdot benchmark"
+}
