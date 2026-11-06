@@ -2,6 +2,8 @@
 
 2026 CIE 赛题独立工程，队伍：全栈漏洞队。已完成自定义vdot.vv的Chisel/RTL和NEMU扩展；优化版于2026-11-06在新的独立检出中完成整核构建、三阶段内部验收与性能复测。
 
+按赛题1.1至3.3的交付入口见[提交成果索引](docs/SUBMISSION.md)，三份阶段报告源稿分别为[第一阶段](docs/submission/stage1.md)、[第二阶段](docs/submission/stage2.md)、[第三阶段](docs/submission/stage3.md)。另提供[逐例正负数/边界程序](examples/vdot_basic.c)及[真实整核运行入口](scripts/run_basic_validation.sh)。三段官网录屏由参赛者自行完成，操作入口见[录屏指南](docs/RECORDING_GUIDE.md)；本轮不制作PPT，官网材料继续暂停替换。
+
 本轮新增RVV序列对比、含访存内核及旧目标依赖消除，重新构建的全核功能回归和前后540条真实性能样本均已通过。512次TU独立点积的片段周期由3639降至625（改善5.822倍）；TA、真实依赖链和含访存内核未因这次调度修改降低中位周期。候选RVV序列在部分场景更慢，报告以两条实测RVV序列中较快者作为主要基线。详见[方法](docs/OPTIMIZATION.md)、[结果与限制](docs/OPTIMIZATION_RESULTS.md)及[原始数据](docs/data/optimization/README.md)。
 
 赛题：[官方说明](https://rv.cie.org.cn/direction?id=8)。指令结果位宽等赛题未明确事项采用的暂定解释见 [contract.json](contract.json) 和 [待确认问题](docs/QUESTIONS.md)，尚未获得赛题方确认。
