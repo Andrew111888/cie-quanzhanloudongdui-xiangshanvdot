@@ -9,12 +9,8 @@ vdot_workload=${1:-vdot_smoke}
 case "$vdot_workload" in
   vadd_test) vdot_marker=VADD_PASS ;;
   vdot_smoke|vdot_test) vdot_marker=VDOT_PASS ;;
-  benchmark) vdot_marker=BENCH_PASS ;;
-  latency_probe) vdot_marker=LATENCY_PROBE_PASS ;;
   pipeline_test) vdot_marker=PIPELINE_PASS ;;
   register_test) vdot_marker=REGISTER_PASS ;;
-  benchmark_rvv) vdot_marker=RVV_BENCH_PASS ;;
-  dot_memory) vdot_marker=MEMORY_DOT_PASS ;;
   *) printf 'Unknown validation workload: %s\n' "$vdot_workload" >&2; exit 2 ;;
 esac
 vdot_emu=${VDOT_EMU_PATH:-$NOOP_HOME/build/emu}

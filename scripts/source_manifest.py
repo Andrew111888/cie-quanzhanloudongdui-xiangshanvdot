@@ -49,7 +49,7 @@ for relative in ('contract.json', 'build.sc', 'build.mill'):
     path = root / relative
     if path.is_file():
         result['project_files_sha256'][relative] = sha256(path.read_bytes())
-for directory in ('scripts', 'tests', 'workloads', 'datapath', 'patches', 'configs'):
+for directory in ('scripts', 'tests', 'workloads', 'datapath', 'patches', 'configs', 'src'):
     for path in sorted((root / directory).rglob('*')):
         if path.is_file() and '__pycache__' not in path.parts:
             result['project_files_sha256'][str(path.relative_to(root))] = sha256(path.read_bytes())

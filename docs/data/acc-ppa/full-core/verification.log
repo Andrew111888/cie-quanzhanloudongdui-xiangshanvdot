@@ -1,1 +1,0 @@
-ACC_ARITHMETIC_PASS directed=12 random=4096 continuous_checked_each=4108 total_checked_each=8217 first_stage_captures=6805 result_captures=7369 enable1_hold_cycles=1413 enable2_hold_cycles=848 result_bits=128 latency=2 initiation_interval=1 seed=20261106

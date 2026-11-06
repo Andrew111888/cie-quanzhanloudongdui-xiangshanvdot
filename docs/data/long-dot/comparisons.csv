@@ -1,4 +1,0 @@
-k,vdot_median,rvv_reduce_median,rvv_lane_median,selected_baseline_variant,selected_baseline_median,speedup
-32,118,126,127,1,126,1.0677966101694916
-128,182,207,172,2,172,0.945054945054945
-512,453,548,364,2,364,0.8035320088300221

@@ -1,3 +1,0 @@
-pipeline_stages,sequential_cells,combinational_cells,total_cells,combinational_area_library_units,sequential_area_library_units,total_area_library_units,maximum_combinational_cell_levels,worst_setup_slack_ns,total_negative_setup_slack_ns,accepted_input_interval_cycles
-2,147,3748,3895,4279.674,664.734,4944.408,23,-0.148259,-3.259213,1
-4,251,4024,4275,4692.24,1135.022,5827.262,19,-0.021344,-0.484064,1

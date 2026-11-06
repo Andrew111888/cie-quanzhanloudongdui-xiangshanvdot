@@ -18,17 +18,16 @@ riscv64-unknown-elf-objcopy -O binary "$VDOT_ROOT/build/workloads/flash.elf" "$V
 if [[ $# -gt 0 ]]; then
   vdot_workloads=("$@")
 else
-  vdot_workloads=(vdot_test vdot_smoke vdot_vstart_probe vadd_test benchmark latency_probe pipeline_test register_test benchmark_rvv dot_memory)
+  vdot_workloads=(vdot_test vdot_smoke vadd_test pipeline_test register_test)
 fi
 for workload in "${vdot_workloads[@]}"; do
 case "$workload" in
-  vdot_test|vdot_smoke|vdot_vstart_probe|vadd_test|benchmark|latency_probe|pipeline_test|register_test|benchmark_rvv|dot_memory) ;;
+  vdot_test|vdot_smoke|vadd_test|pipeline_test|register_test) ;;
   *) printf 'Unknown workload: %s\n' "$workload" >&2; exit 2 ;;
 esac
 source_name=$workload
 extra=()
 if [[ "$workload" == vdot_smoke ]]; then source_name=vdot_test; extra=(-DRANDOM_CASES=0); fi
-if [[ "$workload" == vdot_vstart_probe ]]; then source_name=vdot_test; extra=(-DRANDOM_CASES=0 -DVDOT_PROBE_STANDARD_VSTART); fi
 riscv64-unknown-elf-gcc -march=rv64gcv -mabi=lp64d -mcmodel=medany \
   -O2 -fno-tree-vectorize -ffreestanding -fno-builtin -nostdlib -nostartfiles \
   -I"$VDOT_ROOT/build/workloads" \

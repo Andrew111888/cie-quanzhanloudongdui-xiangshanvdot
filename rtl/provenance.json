@@ -11,14 +11,12 @@
     {
       "file": "VdotAccRetimedDatapath.sv",
       "generated_path": "third_party/XiangShan/build/rtl/VdotAccRetimedDatapath.sv",
-      "sha256": "4723293e599df8d4221797422ec742e7f1db149308a6fa929bc1cfa52e6f654e",
-      "verified_copy": "experiments/acc/generated/rtl/VdotAccRetimedDatapath.sv"
+      "sha256": "4723293e599df8d4221797422ec742e7f1db149308a6fa929bc1cfa52e6f654e"
     },
     {
       "file": "VIMacU.sv",
       "generated_path": "third_party/XiangShan/build/rtl/VIMacU.sv",
-      "sha256": "a728e8f109bd0c3261af12c644ee0f5a003b6ad4ae08dbe2573bf24f2207d1c8",
-      "verified_copy": "experiments/acc/generated/rtl/VIMacU.sv"
+      "sha256": "a728e8f109bd0c3261af12c644ee0f5a003b6ad4ae08dbe2573bf24f2207d1c8"
     }
   ],
   "xiangshan_head": "14c8b3489a610d9b210ab57b5bf30901f8cf4263",
@@ -26,5 +24,5 @@
   "corrected_nemu_head": "3097fa05435c3e85c1541f09027457ee7ee13f43",
   "nemu_patch_sha256": "e6ebf001f287014a1fb8ba5a2f56cdfc76ac53b51bb42b1f69a334a6953e36ac",
   "baseline_directory": "baseline",
-  "source_manifest": "../experiments/acc/generated/provenance.json"
+  "source_manifest": "../configs/source-manifest.json"
 }

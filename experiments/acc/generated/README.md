@@ -1,5 +1,0 @@
-# 实际整核源码与RTL
-
-rtl/VdotAccRetimedDatapath.sv为独立整核构建生成的实际算术模块，rtl/VIMacU.sv为同次构建的执行单元包装器。包装器依赖该固定版本其余向量模块，不能单独代替整核。上游许可证与文件声明继续适用。
-
-XiangShan保存本轮修改的五个完整Chisel源码文件，NEMU保存含异常优先级修正的五个完整源码文件；完整上游工程由固定版本及patches补丁获取。provenance.json分别记录硬件构建、初始参考、修正参考身份与逐文件摘要。

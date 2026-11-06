@@ -1,0 +1,47 @@
+{
+  "upstream": {
+    "XiangShan": "7b16188f7f18a97be69c9b1a2dae8a446eec3b47",
+    "NEMU": "d772a9d9e06f663d529bd1c6518480c1ee59ded2",
+    "xs-env": "822e3581a2757d4a9848b065fd2a3057957b401e"
+  },
+  "tested": {
+    "XiangShan": "14c8b3489a610d9b210ab57b5bf30901f8cf4263",
+    "NEMU_initial": "3cdf27f53cc7a6ecef9b2c5f63ee836307042a08",
+    "NEMU_corrected": "3097fa05435c3e85c1541f09027457ee7ee13f43"
+  },
+  "patched_sources": {
+    "XiangShan": {
+      "src/main/scala/xiangshan/backend/decode/DecodeUnit.scala": "39118536a845bd21bafd03727f4a6e9121e78d34725cef80be6fbaecae8c0049",
+      "src/main/scala/xiangshan/backend/decode/VecDecoder.scala": "be911e8d81a7e9d12a64d80adbac8c992cb1e36c05f8a2855290abac4c9f9308",
+      "src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala": "b4f1a63ae0d26194f1e4dcf773d816a278e80bdc635f10f0426be571124f3708",
+      "src/main/scala/xiangshan/backend/fu/vector/Vdot.scala": "61d6ce2c5a969b9b7e3ce50a5550fd40632d74728e9c8165b5de8c8f0b77edfb",
+      "src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala": "a32954424e201fcdab1b1fdf5c798276f84429270bf882fc4fa05fa4da17f2fe"
+    },
+    "NEMU": {
+      "src/isa/riscv64/include/isa-all-instr.h": "fdbcb068a445c9e0d770bc248c91a2f49f63028fcd64c8aa81c95d26f6d0a1d2",
+      "src/isa/riscv64/instr/decode.c": "18e0b2a877aaf3c5f5a84e75c9f63b9fd940fd521607df978948d464690c1c1e",
+      "src/isa/riscv64/instr/rvv/vcompute.h": "64b99a31835fdb3bb01c9db4692a8ef277660ad4f8b82b6564bd329e7b6c756f",
+      "src/isa/riscv64/local-include/trapinfo.h": "33a116212fb154a012714d865c0adf159bfc98981f3f3033aa560edfaa3560f8",
+      "src/isa/riscv64/system/intr.c": "0be24282d16cad03330b5caec4b17f7d03d58970b372e5ee86380788c5511df7"
+    }
+  },
+  "patches": {
+    "patches/xiangshan.patch": "643253b1ba96469ca943849206eb14d0d05d4a9f48ec9948f7928fddc6536ff8",
+    "patches/nemu.patch": "e6ebf001f287014a1fb8ba5a2f56cdfc76ac53b51bb42b1f69a334a6953e36ac"
+  },
+  "sources": {
+    "src/Vdot.scala": "61d6ce2c5a969b9b7e3ce50a5550fd40632d74728e9c8165b5de8c8f0b77edfb"
+  },
+  "rtl": {
+    "rtl/VIMacU.sv": "a728e8f109bd0c3261af12c644ee0f5a003b6ad4ae08dbe2573bf24f2207d1c8",
+    "rtl/VdotAccRetimedDatapath.sv": "4723293e599df8d4221797422ec742e7f1db149308a6fa929bc1cfa52e6f654e"
+  },
+  "baseline": {
+    "rtl/baseline/VdotDatapath.sv": "868ca4b2f21e499a37c14161c72e0776817086eb73a27354102722008de20b89"
+  },
+  "comparison_rtl": {
+    "experiments/acc/reference/VdotAccPlainDatapath.sv": "2583105ad138cfcff9aee0bfc84d39254cdea5e46597ccc63ffaf13952148c64",
+    "experiments/acc/reference/VdotAccCsaPrefixDatapath.sv": "cc642d3900dc17458a91e15dcb1b3224723ba28a30029a07585d1746aa008c92",
+    "experiments/acc/reference/VdotAccCsaDatapath.sv": "f47fde04eea397dbdcf43dc86dc0430456ed4c440ec5ae3daaba69b0236e4c7a"
+  }
+}

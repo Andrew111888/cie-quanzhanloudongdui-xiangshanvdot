@@ -23,9 +23,9 @@
 
 面积为Liberty area属性单位，不换算为物理µm²。所有数据仅描述隔离算术模块，不包含指令选择、发射、读写端口或全核物理实现，不能据此宣称芯片频率或功耗。
 
-同轮单元生成形式的比较中，平衡树串累加、CSA、前缀和提前压缩版的面积分别为5431.188、5733.896、5830.188、5608.344；1.5 ns建立裕量分别为-0.561671、-0.220036、-0.055645、+0.100698 ns。[同轮数据](../../docs/data/acc-ppa/results.json)
+同轮单元生成形式的比较中，平衡树串累加、CSA、前缀和提前压缩版的面积分别为5431.188、5733.896、5830.188、5608.344；1.5 ns建立裕量分别为-0.561671、-0.220036、-0.055645、+0.100698 ns。[同轮数据](../../docs/data/资源时序.csv)
 
-整核实际生成的提前压缩模块另行验证：面积5519.500、159个触发器，1/1.5/2.5 ns建立裕量为-0.363571/+0.136429/+1.136429 ns。其输入SV及黄金验证见[整核实际模块数据](../../docs/data/acc-ppa/full-core/results.json)。
+整核实际生成的提前压缩模块另行验证：面积5519.500、159个触发器，1/1.5/2.5 ns建立裕量为-0.363571/+0.136429/+1.136429 ns。其输入SV及黄金验证见[整核实际模块数据](../../docs/data/资源时序.csv)。
 
 ## 运行方式
 
@@ -40,6 +40,6 @@ python3 scripts/evaluate_acc_ppa.py \
   --liberty /path/to/NangateOpenCellLibrary_typical.lib
 ```
 
-若已运行Chisel数据通路测试，可追加--chisel-plain、--chisel-csa、--chisel-prefix及--chisel-retimed，分别传入对应VdotAcc*Datapath.sv；脚本将其纳入同一黄金检查和同约束映射。--designs可选择需映射的对象，支持original、plain、csa、prefix、prefix_or、retimed及相应chisel_*名称。选择映射对象不会跳过黄金检查。
+reference/保存对应单元生成的plain、CSA、前缀SV，当前重定时模块位于rtl/。参数示例见[复现说明](../../docs/复现说明.md)。--designs可选择需映射的对象，支持original、plain、csa、prefix、prefix_or、retimed及相应chisel_*名称。选择映射对象不会跳过黄金检查。
 
 输出reports/acc-ppa-*/evidence包含输入副本、命令、工具摘要、库推导、原始编译/运行退出码、网表、综合/STA日志、结果JSON、汇总CSV与SHA256SUMS。早期旧OpenSTA无法解析拼接左值的失败记录单独保留；脚本已使用write_verilog -simple-lhs，只有无解析错误的完整轮次才写入passed回执。

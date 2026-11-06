@@ -1,6 +1,0 @@
-/home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/third_party/XiangShan/build/verilator-compile/emu: OK
-/home/yh/cie/vdot-acc-prototype/build/acc-nemu-precedence/reference/riscv64-nemu-interpreter-so: OK
-/home/yh/cie/vdot-kmhv2/reports/basic-validation-20261106T164252Z-759592/workload/vdot_basic.bin: OK
-/home/yh/cie/vdot-kmhv2/reports/basic-validation-20261106T164252Z-759592/workload/flash.bin: OK
-/home/yh/cie/vdot-kmhv2/examples/vdot_basic.c: OK
-/home/yh/cie/vdot-kmhv2/scripts/run_basic_validation.sh: OK

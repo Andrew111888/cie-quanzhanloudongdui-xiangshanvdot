@@ -12,11 +12,6 @@
       "file": "VdotDatapath.sv",
       "generated_path": "third_party/XiangShan/build/rtl/VdotDatapath.sv",
       "sha256": "868ca4b2f21e499a37c14161c72e0776817086eb73a27354102722008de20b89"
-    },
-    {
-      "file": "VIMacU.sv",
-      "generated_path": "third_party/XiangShan/build/rtl/VIMacU.sv",
-      "sha256": "7a3a577e40340ec16162afa9d453756879729d749e4966e6d9f524784482ba74"
     }
   ]
 }

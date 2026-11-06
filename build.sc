@@ -6,8 +6,7 @@ object datapath extends ScalaModule {
   def ivyDeps = Agg(ivy"org.chipsalliance::chisel:6.7.0")
   def scalacPluginIvyDeps = Agg(ivy"org.chipsalliance:::chisel-plugin:6.7.0")
   def sources = T.sources {
-    Seq(PathRef(millSourcePath / ".." / "third_party" / "XiangShan" / "src" / "main" / "scala" /
-      "xiangshan" / "backend" / "fu" / "vector" / "Vdot.scala"))
+    Seq(PathRef(millSourcePath / ".." / "src" / "Vdot.scala"))
   }
   object test extends ScalaTests with TestModule.ScalaTest {
     override def sources = T.sources {

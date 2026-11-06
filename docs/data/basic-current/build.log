@@ -1,1 +1,0 @@
-/home/yh/chipyard/.conda-env/riscv-tools/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/bin/ld: warning: /home/yh/cie/vdot-kmhv2/reports/basic-validation-20261106T164252Z-759592/workload/vdot_basic.elf has a LOAD segment with RWX permissions

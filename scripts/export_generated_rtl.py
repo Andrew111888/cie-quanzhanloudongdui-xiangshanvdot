@@ -42,11 +42,11 @@ output = root / 'rtl' if has_accumulator else root / 'rtl/baseline'
 arithmetic = 'VdotAccRetimedDatapath.sv' if has_accumulator else 'VdotDatapath.sv'
 verified = None
 if has_accumulator:
-    verified = json.loads((root / 'experiments/acc/generated/provenance.json').read_text())
-    if verified['core_commit'] != source['repositories']['XiangShan']['head']:
+    verified = json.loads((root / 'configs/source-manifest.json').read_text())
+    if verified['tested']['XiangShan'] != source['repositories']['XiangShan']['head']:
         raise SystemExit('Update the verified source snapshot for this core before exporting')
     for name in (arithmetic, 'VIMacU.sv'):
-        if digest(fir.parent / name) != verified['files']['rtl/' + name]['sha256']:
+        if digest(fir.parent / name) != verified['rtl']['rtl/' + name]:
             raise SystemExit('Generated RTL differs from the verified arithmetic output: ' + name)
 output.mkdir(parents=True, exist_ok=True)
 modules = []
@@ -65,14 +65,11 @@ manifest = {'schema': 'generated-rtl/v1', 'build_status': 'completed',
             'fir_sha256': digest(fir), 'xiangshan_patch_sha256': digest(original_patch),
             'modules': modules}
 if has_accumulator:
-    for item in modules:
-        name = item['file']
-        item['verified_copy'] = 'experiments/acc/generated/rtl/' + name
-    manifest.update(schema='generated-rtl/v2', xiangshan_head=verified['core_commit'],
-                    initial_nemu_head=verified['initial_reference_commit'],
-                    corrected_nemu_head=verified['corrected_reference_commit'],
+    manifest.update(schema='generated-rtl/v2', xiangshan_head=verified['tested']['XiangShan'],
+                    initial_nemu_head=verified['tested']['NEMU_initial'],
+                    corrected_nemu_head=verified['tested']['NEMU_corrected'],
                     nemu_patch_sha256=digest(root / 'patches/nemu.patch'),
                     baseline_directory='baseline',
-                    source_manifest='../experiments/acc/generated/provenance.json')
+                    source_manifest='../configs/source-manifest.json')
 (output / 'provenance.json').write_text(json.dumps(manifest, indent=2) + '\n')
 print('GENERATED_RTL_EXPORTED', output)

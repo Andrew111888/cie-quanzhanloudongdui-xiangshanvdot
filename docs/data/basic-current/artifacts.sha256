@@ -1,6 +1,0 @@
-07dd955d3d41d927e89be93035feef0145fa2dd894db327cd8c0bb3ae0cc6150  /home/yh/cie/vdot-acc-prototype/build/acc-core-20261106/third_party/XiangShan/build/verilator-compile/emu
-e2795789c22c3f35c1df06f23b3f9bd6a434e61dcdfb875b4099b899d1325f2e  /home/yh/cie/vdot-acc-prototype/build/acc-nemu-precedence/reference/riscv64-nemu-interpreter-so
-f44c6273becb61a7f608e1ebe27b0074ca7e69cf1c6d96747a0218c606aaeef4  /home/yh/cie/vdot-kmhv2/reports/basic-validation-20261106T164252Z-759592/workload/vdot_basic.bin
-12b791f69e01db906377cac6d6b15c4cce7cd09c226515f181f7687186f786bd  /home/yh/cie/vdot-kmhv2/reports/basic-validation-20261106T164252Z-759592/workload/flash.bin
-6273242273021d86b9c3203d82b12d60b62f35886c8f086187ccfcb1f0233a00  /home/yh/cie/vdot-kmhv2/examples/vdot_basic.c
-38397b3f5b9438be00b04e4707432c5002e46e8dd2f51dfc4365eacb1d2dc066  /home/yh/cie/vdot-kmhv2/scripts/run_basic_validation.sh

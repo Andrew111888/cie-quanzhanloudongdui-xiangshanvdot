@@ -54,11 +54,11 @@ for name in source_names:
 if args.chisel_plain:
     for path in ([args.chisel_plain,args.chisel_csa]+([args.chisel_prefix] if args.chisel_prefix else [])+([args.chisel_retimed] if args.chisel_retimed else [])):
         path=path.resolve(strict=True);source_hashes[str(path)]=digest(path);shutil.copy2(path,evidence/'inputs'/path.name)
-    chisel_source=root/'third_party/XiangShan/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala'
+    chisel_source=root/'src/Vdot.scala'
     source_hashes[str(chisel_source)]=digest(chisel_source);shutil.copy2(chisel_source,evidence/'inputs/Vdot.scala')
 provenance=json.loads((root/'rtl/baseline/provenance.json').read_text())
 assert any(m['file']=='VdotDatapath.sv' and m['sha256']==source_hashes['rtl/baseline/VdotDatapath.sv'] for m in provenance['modules'])
-shutil.copy2(root/'docs/data/ppa/OpenCellLibraryLicenseSi2.txt',evidence/'inputs/OpenCellLibraryLicenseSi2.txt')
+shutil.copy2(root/'experiments/acc/OpenCellLibraryLicenseSi2.txt',evidence/'inputs/OpenCellLibraryLicenseSi2.txt')
 start_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
 library_text=args.liberty.read_text()
 assert digest(args.liberty)=='8d540a4d4cf6d09d27c87ad067857a9c0c2eeb023ab7a56e058cd3113db4e9b1'

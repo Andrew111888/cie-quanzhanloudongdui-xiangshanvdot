@@ -9,3 +9,11 @@ __pycache__/
 /reports/
 /output/
 /tmp/
+*.elf
+*.bin
+*.fst
+*.vcd
+*.o
+*.a
+*.so
+*.log

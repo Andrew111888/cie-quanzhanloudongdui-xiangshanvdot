@@ -1,3 +1,0 @@
-design,total_area_library_units,sequential_cells,combinational_cells,max_logic_levels,wns_1ns,wns_1p5ns,wns_2p5ns,II,latency
-original,4944.408,147,3748,23,-0.148259,0.351741,1.351742,1,2
-chisel_retimed,5519.5,159,4210,25,-0.363571,0.136429,1.136429,1,2

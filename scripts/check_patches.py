@@ -8,6 +8,7 @@ import tempfile
 root = Path(__file__).resolve().parents[1]
 (root / 'build').mkdir(exist_ok=True)
 records = {}
+manifest = json.loads((root / 'configs/source-manifest.json').read_text())
 for name, directory in [('xiangshan', 'XiangShan'), ('nemu', 'NEMU')]:
     upstream = root / 'third_party' / directory
     patch = root / 'patches' / f'{name}.patch'
@@ -35,6 +36,9 @@ for name, directory in [('xiangshan', 'XiangShan'), ('nemu', 'NEMU')]:
         subprocess.run(['git', 'apply', str(patch)], cwd=clean, check=True)
         for relative in paths:
             actual = (clean / relative).read_bytes()
+            expected = manifest['patched_sources'][directory][relative]
+            if hashlib.sha256(actual).hexdigest() != expected:
+                raise SystemExit(f'patch replay differs from verified source: {name}/{relative}')
             if actual != (upstream / relative).read_bytes():
                 raise SystemExit(f'patch replay differs from current source: {name}/{relative}')
             records[name]['files'][relative] = hashlib.sha256(actual).hexdigest()

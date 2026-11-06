@@ -1,10 +1,12 @@
-"""Check shipped RTL, source snapshots, evidence hashes and documentation links."""
+"""Check the source distribution, published result tables and local links."""
 import argparse
 import ast
+import csv
 import hashlib
 import json
 from pathlib import Path
 import re
+import statistics
 import subprocess
 
 
@@ -12,77 +14,71 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def read(path):
-    return json.loads(path.read_text())
-
-
 def check(root):
-    binding = read(root / 'experiments/acc/generated/provenance.json')
-    rtl = read(root / 'rtl/provenance.json')
-    assert rtl['build_status'] == 'completed'
-    assert rtl['xiangshan_head'] == binding['core_commit']
-    assert rtl['corrected_nemu_head'] == binding['corrected_reference_commit']
-    modules = {item['file']: item for item in rtl['modules']}
-    assert set(modules) == {'VdotAccRetimedDatapath.sv', 'VIMacU.sv'}
-    for name, item in modules.items():
-        assert digest(root / 'rtl' / name) == item['sha256'], name
-        assert item['sha256'] == binding['files']['rtl/' + name]['sha256'], name
-        assert (root / 'rtl' / name).read_bytes() == (root / item['verified_copy']).read_bytes(), name
-    for name, item in binding['files'].items():
-        assert digest(root / 'experiments/acc/generated' / name) == item['sha256'], name
-    for name in ('xiangshan', 'nemu'):
-        assert digest(root / 'patches' / (name + '.patch')) == rtl[name + '_patch_sha256'], name
-    old = read(root / 'rtl/baseline/provenance.json')
-    for item in old['modules']:
-        assert digest(root / 'rtl/baseline' / item['file']) == item['sha256'], item['file']
+    manifest = json.loads((root / 'configs/source-manifest.json').read_text())
+    for group in ('patches', 'sources', 'rtl', 'baseline', 'comparison_rtl'):
+        for name, expected in manifest[group].items():
+            assert digest(root / name) == expected, name
+    source_key = 'src/main/scala/xiangshan/backend/fu/vector/Vdot.scala'
+    assert digest(root / 'src/Vdot.scala') == manifest['patched_sources']['XiangShan'][source_key]
+    rtl = json.loads((root / 'rtl/provenance.json').read_text())
+    assert rtl['build_status'] == 'completed' and rtl['xiangshan_head'] == manifest['tested']['XiangShan']
+    for item in rtl['modules']:
+        assert digest(root / 'rtl' / item['file']) == item['sha256'], item['file']
 
-    evidence_files = 0
-    for directory in ('acc-results', 'acc-ppa', 'basic-current'):
-        base = root / 'docs/data' / directory
-        manifest = read(base / ('manifest.json' if directory == 'basic-current' else 'package-manifest.json'))
-        for name, expected in manifest['files_sha256'].items():
-            assert digest(base / name) == expected, str(base / name)
-            evidence_files += 1
-    validation = read(root / 'docs/data/acc-results/validation/results.json')
-    benchmark = read(root / 'docs/data/acc-results/benchmark/results.json')
-    precedence = read(root / 'docs/data/acc-results/precedence/results.json')
-    assert validation['status'] == benchmark['status'] == precedence['status'] == 'passed'
-    assert validation['scope'] == benchmark['scope'] == 'rtl_nemu_difftest'
-    assert validation['random_input_groups'] == 1000 and validation['reported_core_dirty'] == 0
-    assert benchmark['long_sample_count'] == 60 and benchmark['chain_sample_count'] == 120
-    assert precedence['case_count'] == 48 and precedence['corrected_reference_rtl_all_cases_passed']
-    basic = read(root / 'docs/data/basic-current/cases.json')
-    basic_log = (root / 'docs/data/basic-current/run.log').read_text()
-    assert basic['status'] == 'passed' and basic['source_unchanged'] and len(basic['cases']) == 6
-    assert basic['difftest_enabled'] and basic['raw_exit_status'] == 0
-    assert 'Difftest enabled.' in basic_log and 'HIT GOOD TRAP' in basic_log
-    assert 'Commit SHA is: ' + binding['core_commit'][:10] + ', dirty: 0' in basic_log
-    assert digest(root / 'rtl/VdotAccRetimedDatapath.sv') == digest(
-        root / 'docs/data/acc-ppa/full-core/inputs/VdotAccRetimedDatapath.sv')
+    summary = json.loads((root / 'docs/data/验证摘要.json').read_text())
+    assert summary['status'] == 'passed' and summary['basic_cases'] == 6
+    assert summary['core_commit'] == manifest['tested']['XiangShan']
+    assert summary['random_input_groups'] == 1000 and summary['exception_cases'] == 48
+    assert summary['fault_original_exit_codes'] == [0, 1, 0]
+    for filename, count, keys, summaries in [
+        ('长点积周期.csv', 60, ('variant', 'k'), summary['long_comparisons']),
+        ('累加链周期.csv', 120, ('variant', 'chains', 'rounds'), summary['chain_comparisons']),
+    ]:
+        with (root / 'docs/data' / filename).open() as stream:
+            rows = list(csv.DictReader(stream))
+        assert len(rows) == count, filename
+        groups = {}
+        for row in rows:
+            key = tuple(int(row[k]) for k in keys)
+            groups.setdefault(key, []).append((int(row['repeat']), int(row['cycles'])))
+        assert len(groups) == count // 5
+        for values in groups.values():
+            assert sorted(x[0] for x in values) == list(range(5)) and min(x[1] for x in values) > 0
+        for item in summaries:
+            if len(keys) == 2:
+                measured = {v: statistics.median(x[1] for x in groups[(v, item['k'])]) for v in range(4)}
+                assert measured[3] == item['acc_median']
+                assert min(measured[1], measured[2]) == item['selected_rvv_median']
+            else:
+                measured = {v: statistics.median(x[1] for x in groups[(v, item['chains'], item['rounds'])]) for v in (0, 1)}
+                assert measured[0] == item['dot_plus_add_median'] and measured[1] == item['acc_median']
+    with (root / 'docs/data/基础测试.csv').open() as stream:
+        basic = list(csv.DictReader(stream))
+    assert len(basic) == 6
+    for row in basic:
+        expected = 8 * int(row['a']) * int(row['b'])
+        assert int(row['expected']) == int(row['actual']) == expected
+        assert int(row['vd_hex'], 16) == (expected & 0xffffffff)
 
-    documents = ['README.md', 'rtl/README.md', 'docs/SUBMISSION.md', 'docs/评审入口.md',
-                 'docs/DESIGN.md', 'docs/BUILDING.md', 'docs/累加融合复现.md',
-                 'docs/submission/stage1.md', 'docs/submission/stage2.md', 'docs/submission/stage3.md']
-    for name in documents:
-        path = root / name
+    paths = [root / 'README.md', *(root / 'docs').rglob('*.md'), *(root / 'experiments').rglob('README.md'), *(root / 'rtl').rglob('README.md')]
+    for path in paths:
         for target in re.findall(r'\]\(([^)]+)\)', path.read_text()):
             if '://' not in target and not target.startswith('#'):
-                assert (path.parent / target.split('#')[0]).is_file(), (name, target)
+                assert (path.parent / target.split('#')[0]).is_file(), (str(path.relative_to(root)), target)
     for path in (root / 'scripts').glob('*.py'):
         ast.parse(path.read_text(), filename=str(path))
-    return {'status': 'passed', 'current_rtl_modules': len(modules),
-            'source_snapshot_files': len(binding['files']), 'verified_evidence_files': evidence_files,
-            'random_input_groups': 1000, 'performance_samples': 180, 'cross_exception_cases': 48,
-            'fresh_basic_cases': 6}
+    return {'status': 'passed', 'rtl_modules': len(rtl['modules']), 'basic_cases': 6,
+            'random_input_groups': 1000, 'performance_samples': 180, 'exception_cases': 48}
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--replay-patches', action='store_true', help='Also compare pristine upstream patch replay with local sources')
+    parser.add_argument('--replay-patches', action='store_true')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     result = check(root)
     if args.replay_patches:
         subprocess.run(['python3', str(root / 'scripts/check_patches.py')], cwd=root, check=True)
-        result['pristine_patch_replay'] = 'passed'
+        result['patch_replay'] = 'passed'
     print(json.dumps(result, ensure_ascii=False, indent=2))

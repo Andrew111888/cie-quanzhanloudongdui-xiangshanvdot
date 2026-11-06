@@ -1,0 +1,178 @@
+{
+  "status": "passed",
+  "scope": "RTL/NEMU differential simulation",
+  "core_commit": "14c8b3489a610d9b210ab57b5bf30901f8cf4263",
+  "reference_commits": {
+    "XiangShan": "14c8b3489a610d9b210ab57b5bf30901f8cf4263",
+    "NEMU_initial": "3cdf27f53cc7a6ecef9b2c5f63ee836307042a08",
+    "NEMU_corrected": "3097fa05435c3e85c1541f09027457ee7ee13f43"
+  },
+  "basic_cases": 6,
+  "random_input_groups": 1000,
+  "directed_input_groups": 6,
+  "legal_instruction_executions": 22318,
+  "alias_modes": 6,
+  "tail_policies": 2,
+  "pipeline_acc_instructions": 1664,
+  "exception_cases": 48,
+  "fault_original_exit_codes": [
+    0,
+    1,
+    0
+  ],
+  "long_samples": 60,
+  "chain_samples": 120,
+  "long_comparisons": [
+    {
+      "k": 32,
+      "old_vdot_median": 119,
+      "rvv8_median": 127,
+      "rvv16_median": 128,
+      "acc_median": 113,
+      "selected_rvv_variant": 1,
+      "selected_rvv_median": 127,
+      "rvv_over_acc": 1.1238938053097345,
+      "old_vdot_over_acc": 1.0530973451327434
+    },
+    {
+      "k": 128,
+      "old_vdot_median": 183,
+      "rvv8_median": 208,
+      "rvv16_median": 173,
+      "acc_median": 176,
+      "selected_rvv_variant": 2,
+      "selected_rvv_median": 173,
+      "rvv_over_acc": 0.9829545454545454,
+      "old_vdot_over_acc": 1.0397727272727273
+    },
+    {
+      "k": 512,
+      "old_vdot_median": 453,
+      "rvv8_median": 549,
+      "rvv16_median": 365,
+      "acc_median": 409,
+      "selected_rvv_variant": 2,
+      "selected_rvv_median": 365,
+      "rvv_over_acc": 0.8924205378973105,
+      "old_vdot_over_acc": 1.1075794621026895
+    }
+  ],
+  "chain_comparisons": [
+    {
+      "chains": 1,
+      "rounds": 32,
+      "dot_plus_add_median": 257,
+      "acc_median": 279,
+      "dot_plus_add_over_acc": 0.921146953405018
+    },
+    {
+      "chains": 1,
+      "rounds": 128,
+      "dot_plus_add_median": 833,
+      "acc_median": 951,
+      "dot_plus_add_over_acc": 0.8759200841219769
+    },
+    {
+      "chains": 1,
+      "rounds": 512,
+      "dot_plus_add_median": 3137,
+      "acc_median": 3639,
+      "dot_plus_add_over_acc": 0.8620500137400384
+    },
+    {
+      "chains": 2,
+      "rounds": 32,
+      "dot_plus_add_median": 290,
+      "acc_median": 280,
+      "dot_plus_add_over_acc": 1.0357142857142858
+    },
+    {
+      "chains": 2,
+      "rounds": 128,
+      "dot_plus_add_median": 930,
+      "acc_median": 952,
+      "dot_plus_add_over_acc": 0.976890756302521
+    },
+    {
+      "chains": 2,
+      "rounds": 512,
+      "dot_plus_add_median": 3490,
+      "acc_median": 3640,
+      "dot_plus_add_over_acc": 0.9587912087912088
+    },
+    {
+      "chains": 4,
+      "rounds": 32,
+      "dot_plus_add_median": 401,
+      "acc_median": 283,
+      "dot_plus_add_over_acc": 1.4169611307420495
+    },
+    {
+      "chains": 4,
+      "rounds": 128,
+      "dot_plus_add_median": 1361,
+      "acc_median": 955,
+      "dot_plus_add_over_acc": 1.425130890052356
+    },
+    {
+      "chains": 4,
+      "rounds": 512,
+      "dot_plus_add_median": 5201,
+      "acc_median": 3643,
+      "dot_plus_add_over_acc": 1.427669503156739
+    },
+    {
+      "chains": 8,
+      "rounds": 32,
+      "dot_plus_add_median": 695,
+      "acc_median": 353,
+      "dot_plus_add_over_acc": 1.9688385269121813
+    },
+    {
+      "chains": 8,
+      "rounds": 128,
+      "dot_plus_add_median": 2519,
+      "acc_median": 1153,
+      "dot_plus_add_over_acc": 2.1847354726799653
+    },
+    {
+      "chains": 8,
+      "rounds": 512,
+      "dot_plus_add_median": 9814,
+      "acc_median": 4353,
+      "dot_plus_add_over_acc": 2.2545371008499884
+    }
+  ],
+  "raw_run_log_sha256": {
+    "validation": {
+      "0": "08754ff36cb055d3022b641ebd1d953a1094f7c66690592ad5ead9acd3ea84fa",
+      "1": "7ea707dbbebe5299b31fa53f8160edc6b519077280ef6f2e1adaf6c594c96bb2",
+      "2": "764daf873abda5819d558ef38596036092b71c810905ba4c90ed719906799ff2",
+      "3": "2a69a919aaa3ff204f07c0da63a91aefac6e45838c457df486fab1c7889034e2",
+      "4": "8a18ca4a6fc81775535cfb2ec4de3117ef3f8a271fb86521b93bdd9323f9829b",
+      "5": "41ff526df700f796007716ff5094011ca2443c77917ad111ce457ab0458e8ee6",
+      "6": "d0b2fcfd8b539cdffdb160f7606381a443e40521190b472450f2c30b87edf4cd",
+      "7": "0a476958e7bb59102766c7ea5af6a348da8927cf835cf9eb7074d740a8e53ce7",
+      "8": "670c664c4cbf1a125684496e1ea86b055fa1f510d23b1ad700b8dff9f1f131d5",
+      "9": "882392d173c826227fa00291e54062e4250bfe3e2e543e7f46dfe7800d088143",
+      "10": "3681f5dba66edc7e55b4c7a12ec763f48c6e4873da700b176876dfef1d866bb5",
+      "11": "d055096c818daca24775ccf86e5fcd46e72fb695975b435e3526c958179300b2",
+      "12": "b8df482327d660832a86e3b90cf999da54cbdeb95ffd92eaaa0d7e469eba334e",
+      "13": "2e215fddc1f591a58b36782d3a090a971dbd933e2f7a55abe960173bbb2878f1",
+      "14": "a905d2ba7816a8b8d3e5590b9d6cad464b8a0853f6cf2d9bb1ab2e95862ff325",
+      "15": "11fff15cce46efe93e49827fbbeb1455521b60c61faa9b84f96372359fc0f757"
+    },
+    "benchmark": "af9a9da8449286d703a9d6c305f5e6894346bc62b1240013f2f61ce698866403",
+    "basic": "51ae8fe9439b713af9a73846ea5f0edc02367f975112b9948e53951fef3b9698"
+  },
+  "original_result_record_sha256": {
+    "docs/data/acc-results/validation/results.json": "02ea41eb3a74b9fa0a008491dc8b168ed95d5b8ccb6836138fa5879d6c165984",
+    "docs/data/acc-results/benchmark/results.json": "966e30751389c1b4576ac23c081104aa96118851724814132fbd2415c98fb4f8",
+    "docs/data/acc-results/pipeline/results.json": "2e970e04facd0471d3d48c2dfa6c6ec645ca1d452dbee68a53c650da2ab6a7e3",
+    "docs/data/acc-results/registers/results.json": "0c6b545c54ae340f8f39bef1fe45f8de2f57f0d9d491aec43b88955ed9314250",
+    "docs/data/acc-results/fault/results.json": "34a975df4940f8a702ee64e99d61ab4a0d408cdd46a660c541fe276a7f5dc848",
+    "docs/data/acc-results/precedence/results.json": "183cfe79affa572facb5f8c8ca7f720f06cfd85d3fa9b333201d09b8e7aa62be",
+    "docs/data/basic-current/cases.json": "c4f0ebfbf11401c0d7ed2e2ee555c6440f1a9ce04e9e94415d2e590c0c756695",
+    "docs/data/acc-ppa/full-core/results.json": "8bf1d0071594e9a90cdbc08982a58bc91c4b38e33c88ba6608b4d96676580da4"
+  }
+}

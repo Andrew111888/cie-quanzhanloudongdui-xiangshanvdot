@@ -1,3 +1,3 @@
 # 原点积基线
 
-本目录为三阶段初始验收的两级平衡树实现，保留原文件及摘要。资源对照、边界变异和旧FST分析使用这些输入。当前执行单元使用上层目录的VdotAccRetimedDatapath及VIMacU。
+本目录保留两级平衡树算术模块及摘要，用于资源对照。当前执行单元使用上层目录的VdotAccRetimedDatapath及VIMacU。
