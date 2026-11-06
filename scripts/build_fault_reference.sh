@@ -25,6 +25,10 @@ relative = Path('src/isa/riscv64/instr/rvv/vcompute.h')
 before = (destination / relative).read_text()
 needle = '  vreg_l(id_dest->reg, 0) = (uint32_t)result;'
 replacement = '  vreg_l(id_dest->reg, 0) = ((uint32_t)result) ^ UINT32_C(1);'
+if before.count(needle) == 0:
+    # The experimental family shares one macro body for vdot and vdot.acc.
+    needle = '  vreg_l(id_dest->reg, 0) = old_accumulator + (uint32_t)result; \\'
+    replacement = '  vreg_l(id_dest->reg, 0) = (old_accumulator + (uint32_t)result) ^ UINT32_C(1); \\'
 if before.count(needle) != 1:
     raise SystemExit('Expected exactly one vdot result assignment; no fault applied')
 after = before.replace(needle, replacement)

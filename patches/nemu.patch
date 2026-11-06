@@ -1,61 +1,62 @@
 diff --git a/src/isa/riscv64/include/isa-all-instr.h b/src/isa/riscv64/include/isa-all-instr.h
-index 2f18ca1..b3becde 100644
+index 2f18ca1..55da20f 100644
 --- a/src/isa/riscv64/include/isa-all-instr.h
 +++ b/src/isa/riscv64/include/isa-all-instr.h
 @@ -155,6 +155,7 @@
  
  #ifdef CONFIG_RVV
  #define VECTOR_INSTR_TERNARY(f) \
-+  f(vdot) \
++  f(vdot) f(vdot_acc) \
    f(vadd) f(vsub) f(vrsub) f(vminu) f(vmin) \
    f(vmaxu) f(vmax) f(vand) f(vor) f(vxor) \
    f(vrgather) f(vrgatherei16) \
 diff --git a/src/isa/riscv64/instr/decode.c b/src/isa/riscv64/instr/decode.c
-index 11290c8..f0da1a8 100644
+index 11290c8..c7c5ef9 100644
 --- a/src/isa/riscv64/instr/decode.c
 +++ b/src/isa/riscv64/instr/decode.c
-@@ -97,6 +97,7 @@ def_THelper(main) {
+@@ -97,6 +97,8 @@ def_THelper(main) {
    def_INSTR_TAB  ("??????? ????? ????? ??? ????? 10100 ??",         op_fp);
  #endif // CONFIG_FPU_NONE
  #ifdef CONFIG_RVV
 +  def_INSTR_IDTAB("000000 ? ????? ????? 000 ????? 00010 11", OP_V, vdot);
++  def_INSTR_IDTAB("000001 ? ????? ????? 000 ????? 00010 11", OP_V, vdot_acc);
    def_INSTR_IDTAB("??????? ????? ????? ??? ????? 10101 ??", OP_V  , OP_V);
  #endif // CONFIG_RVV
  #ifdef CONFIG_RV_AME
 diff --git a/src/isa/riscv64/instr/rvv/vcompute.h b/src/isa/riscv64/instr/rvv/vcompute.h
-index 2bcb6aa..ddc865e 100644
+index 2bcb6aa..36ff75e 100644
 --- a/src/isa/riscv64/instr/rvv/vcompute.h
 +++ b/src/isa/riscv64/instr/rvv/vcompute.h
 @@ -19,6 +19,33 @@
  #include "vcompute_impl.h"
  #include "vcommon.h"
  
-+// Provisional CIE-2026 vdot.vv: low eight signed bytes -> signed32, rest zero.
-+def_EHelper(vdot) {
-+  require_vector(true);
-+  // Nonzero arithmetic vstart is rejected by the core's decoder, which has
-+  // the original instruction payload. Preserve ordinary illegal xtval here.
-+  if (vstart->val != 0) {
-+    longjmp_exception(EX_II);
-+  }
-+  if (VLEN != 128 || vtype->vsew != 0 || vtype->vlmul != 0 ||
-+      vl->val != 8 || !s->vm) {
-+    // The custom execution-unit configuration fault reports xtval=0.
-+    // Keep ordinary decode/privilege illegal-instruction reporting unchanged.
-+    cpu.trapInfo.vdot_config_fault = true;
-+    longjmp_exception(EX_II);
-+  }
-+  int32_t result = 0;
-+  // Read every source before writing vd: vd may alias either source (or v0).
-+  for (int i = 0; i < 8; ++i) {
-+    result += (int32_t)(int8_t)vreg_b(id_src1->reg, i) *
-+              (int32_t)(int8_t)vreg_b(id_src2->reg, i);
-+  }
-+  vreg_l(id_dest->reg, 0) = (uint32_t)result;
-+  vreg_l(id_dest->reg, 1) = 0;
-+  vstart->val = 0;
-+  vp_set_dirty();
-+}
++// Both ordinary and threaded NEMU execute headers include this body. A macro
++// keeps the arithmetic identical without defining a function inside execute().
++// All sources and the optional old accumulator are read before the first write.
++#define CUSTOM_VDOT(accumulate) do { \
++  require_vector(true); \
++  if (vstart->val != 0) longjmp_exception(EX_II); \
++  if (VLEN != 128 || vtype->vsew != 0 || vtype->vlmul != 0 || \
++      vl->val != 8 || !s->vm) { \
++    cpu.trapInfo.vdot_config_fault = true; \
++    longjmp_exception(EX_II); \
++  } \
++  const uint32_t old_accumulator = (accumulate) ? (uint32_t)vreg_l(id_dest->reg, 0) : 0; \
++  int32_t result = 0; \
++  for (int i = 0; i < 8; ++i) { \
++    result += (int32_t)(int8_t)vreg_b(id_src1->reg, i) * \
++              (int32_t)(int8_t)vreg_b(id_src2->reg, i); \
++  } \
++  vreg_l(id_dest->reg, 0) = old_accumulator + (uint32_t)result; \
++  vreg_l(id_dest->reg, 1) = 0; \
++  vstart->val = 0; \
++  vp_set_dirty(); \
++} while (0)
++
++def_EHelper(vdot) { CUSTOM_VDOT(false); }
++def_EHelper(vdot_acc) { CUSTOM_VDOT(true); }
++#undef CUSTOM_VDOT
 +
  def_EHelper(vadd) {
    ARITH(ADD, SIGNED)

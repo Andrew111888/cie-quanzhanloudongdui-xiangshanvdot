@@ -2,3 +2,4 @@
 docs/data/boundary-mutations/** -whitespace
 docs/data/long-dot/*.log -whitespace
 docs/data/ppa/OpenCellLibraryLicenseSi2.txt -whitespace
+patches/*.patch -whitespace

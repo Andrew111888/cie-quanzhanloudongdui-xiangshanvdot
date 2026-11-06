@@ -1,5 +1,19 @@
+diff --git a/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala b/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala
+index 2285d69..e535ec8 100644
+--- a/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala
++++ b/src/main/scala/xiangshan/backend/decode/DecodeUnit.scala
+@@ -1066,7 +1066,8 @@ class DecodeUnit(implicit p: Parameters) extends XSModule with DecodeUnitConstan
+   decodedInst.vpu.isNarrow := isNarrow
+   decodedInst.vpu.isDstMask := isDstMask
+   decodedInst.vpu.isOpMask := isOpMask
+-  decodedInst.vpu.isDependOldVd := isVppu || isVecOPF || isVStore || (isDstMask && !isOpMask) || isNarrow || isVlx || isVma || isFof || vstartIsNotZero
++  decodedInst.vpu.isDependOldVd := isVppu || isVecOPF || isVStore || (isDstMask && !isOpMask) || isNarrow || isVlx || isVma || isFof || vstartIsNotZero ||
++    (xiangshan.backend.fu.vector.VdotEncoding.accumulateInstruction === inst.ALL)
+   decodedInst.vpu.isWritePartVd := isWritePartVd || isVlm || isVle && emulIsFrac
+   decodedInst.vpu.vstart := io.enq.vstart
+   decodedInst.vpu.isVleff := isFof && inst.NF === 0.U
 diff --git a/src/main/scala/xiangshan/backend/decode/VecDecoder.scala b/src/main/scala/xiangshan/backend/decode/VecDecoder.scala
-index 3764191..0a48114 100644
+index 3764191..552c713 100644
 --- a/src/main/scala/xiangshan/backend/decode/VecDecoder.scala
 +++ b/src/main/scala/xiangshan/backend/decode/VecDecoder.scala
 @@ -12,6 +12,7 @@ import xiangshan.backend.fu.FuType
@@ -10,75 +24,36 @@ index 3764191..0a48114 100644
  
  abstract class VecDecode extends XSDecodeBase {
    def generate() : List[BitPat]
-@@ -186,6 +187,7 @@ case class VST(src2: BitPat, fuOp: BitPat, strided: Boolean = false, indexed: Bo
+@@ -186,6 +187,8 @@ case class VST(src2: BitPat, fuOp: BitPat, strided: Boolean = false, indexed: Bo
  
  object VecDecoder extends DecodeConstants {
    val opivv: Array[(BitPat, XSDecodeBase)] = Array(
 +    VdotEncoding.instruction -> OPIVV(FuType.vimac, VdotEncoding.op, T, F, F, src3 = SrcType.no),
++    VdotEncoding.accumulateInstruction -> OPIVV(FuType.vimac, VdotEncoding.accOp, T, F, F, src3 = SrcType.vp),
      VADD_VV         -> OPIVV(FuType.vialuF, VialuFixType.vadd_vv, T, F, F),
      VSUB_VV         -> OPIVV(FuType.vialuF, VialuFixType.vsub_vv, T, F, F),
  
 diff --git a/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala b/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala
-index c553020..31f2134 100644
+index c553020..7c56af2 100644
 --- a/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala
 +++ b/src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala
-@@ -91,7 +91,8 @@ trait BitFieldsVec { this: Riscv32BitInst =>
+@@ -91,7 +91,9 @@ trait BitFieldsVec { this: Riscv32BitInst =>
    }
  
    def isVecArith = {
 -    this.OPCODE5Bit === xiangshan.backend.decode.isa.bitfield.OPCODE5Bit.OP_V
 +    this.OPCODE5Bit === xiangshan.backend.decode.isa.bitfield.OPCODE5Bit.OP_V ||
-+      xiangshan.backend.fu.vector.VdotEncoding.instruction === this.ALL
++      xiangshan.backend.fu.vector.VdotEncoding.instruction === this.ALL ||
++      xiangshan.backend.fu.vector.VdotEncoding.accumulateInstruction === this.ALL
    }
  
    def isOPIVV = {
-diff --git a/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala b/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala
-index 27eb801..6edafc7 100644
---- a/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala
-+++ b/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala
-@@ -7,7 +7,7 @@ import utility.XSError
- import xiangshan.backend.fu.FuConfig
- import xiangshan.backend.fu.vector.Bundles.VSew
- import xiangshan.backend.fu.vector.utils.VecDataSplitModule
--import xiangshan.backend.fu.vector.{Mgu, Utils, VecPipedFuncUnit, VecSrcTypeModule}
-+import xiangshan.backend.fu.vector.{Mgu, Utils, VecPipedFuncUnit, VecSrcTypeModule, VdotDatapath, VdotEncoding}
- import xiangshan.ExceptionNO
- import yunsuan.VialuFixType
- import yunsuan.encoding.Opcode.VimacOpcode
-@@ -63,6 +63,12 @@ class VIMacU(cfg: FuConfig)(implicit p: Parameters) extends VecPipedFuncUnit(cfg
-   private val oldVdSplit  = Module(new VecDataSplitModule(dataWidth, dataWidthOfDataModule))
-   private val vimacs = Seq.fill(numVecModule)(Module(new VIMac64b))
-   private val mgu = Module(new Mgu(dataWidth))
-+  require(dataWidth == 128 && latency == 2, "vdot requires the 128-bit two-cycle vector MAC slot")
-+  private val dot = Module(new VdotDatapath)
-+  dot.io.vs1 := vs1
-+  dot.io.vs2 := vs2
-+  dot.io.enable1 := regEnable(1)
-+  dot.io.enable2 := regEnable(2)
- 
-   /**
-     * [[typeMod]]'s in connection
-@@ -145,7 +151,11 @@ class VIMacU(cfg: FuConfig)(implicit p: Parameters) extends VecPipedFuncUnit(cfg
-   mgu.io.in.info.dstMask := 0.B
-   mgu.io.in.isIndexedVls := false.B
- 
--  io.out.bits.res.data := mgu.io.out.vd
--  io.out.bits.res.vxsat.get := (outVxsat & mgu.io.out.active).orR
--  io.out.bits.ctrl.exceptionVec.get(ExceptionNO.illegalInstr) := mgu.io.out.illegal
-+  private val outIsDot = outCtrl.fuOpType === VdotEncoding.op
-+  private val dotIllegal = outVecCtrl.vill || outVecCtrl.vsew =/= 0.U ||
-+    outVecCtrl.vlmul =/= 0.U || outVl =/= 8.U || outVstart =/= 0.U || !outVm
-+  io.out.bits.res.data := Mux(outIsDot, dot.io.result, mgu.io.out.vd)
-+  io.out.bits.res.vxsat.get := !outIsDot && (outVxsat & mgu.io.out.active).orR
-+  io.out.bits.ctrl.exceptionVec.get(ExceptionNO.illegalInstr) :=
-+    Mux(outIsDot, dotIllegal, mgu.io.out.illegal)
- }
 diff --git a/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala b/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala
 new file mode 100644
-index 0000000..44136c9
+index 0000000..96c8c43
 --- /dev/null
 +++ b/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala
-@@ -0,0 +1,39 @@
+@@ -0,0 +1,116 @@
 +// SPDX-License-Identifier: MulanPSL-2.0
 +package xiangshan.backend.fu.vector
 +
@@ -90,6 +65,8 @@ index 0000000..44136c9
 +  // custom-0, funct6=0, funct3=0; bit25 retains RVV's vm meaning.
 +  val instruction = BitPat("b000000???????????000?????0001011")
 +  def op = "b100000000".U(9.W)
++  val accumulateInstruction = BitPat("b000001???????????000?????0001011")
++  def accOp = "b100000001".U(9.W)
 +}
 +
 +/** Two stages, enabled by the existing vector FU pipeline's stage enables.
@@ -118,3 +95,120 @@ index 0000000..44136c9
 +  }
 +  io.result := result
 +}
++
++/** Experimental fused accumulator. Both operations share the eight multipliers.
++  * The caller supplies zero for vdot, or old vd[31:0] for vdot.acc.
++  * Addition wraps modulo 2^32; the upper 96 result bits are always zero.
++  */
++class VdotAccDatapath(useCarrySave: Boolean = true, usePrefix: Boolean = false,
++                      retimeFirstCompression: Boolean = false) extends Module {
++  require(!retimeFirstCompression || (useCarrySave && usePrefix))
++  override def desiredName: String = if (retimeFirstCompression) "VdotAccRetimedDatapath" else if (usePrefix) "VdotAccCsaPrefixDatapath" else if (useCarrySave) "VdotAccCsaDatapath" else "VdotAccPlainDatapath"
++  val io = IO(new Bundle {
++    val vs1 = Input(UInt(128.W))
++    val vs2 = Input(UInt(128.W))
++    val acc = Input(UInt(32.W))
++    val enable1 = Input(Bool())
++    val enable2 = Input(Bool())
++    val result = Output(UInt(128.W))
++  })
++  val inputProducts = Wire(Vec(8, SInt(16.W)))
++  for (i <- 0 until 8) {
++    inputProducts(i) := io.vs1(8*i+7, 8*i).asSInt * io.vs2(8*i+7, 8*i).asSInt
++  }
++  private def compressLayer(terms: Seq[UInt]): Seq[UInt] = {
++      terms.grouped(3).flatMap { group =>
++        if (group.size < 3) group
++        else {
++          val a = group(0); val b = group(1); val c = group(2)
++          val majority = (a & b) | (a & c) | (b & c)
++          Seq(a ^ b ^ c, (majority << 1)(31, 0))
++        }
++      }.toSeq
++  }
++  private def compress(terms: Seq[UInt]): Seq[UInt] = {
++    if (terms.size <= 2) terms else compress(compressLayer(terms))
++  }
++  private def prefixAdd(a: UInt, b: UInt): UInt = {
++    val originalPropagate = (a ^ b).asBools.toSeq
++    var generate = (a & b).asBools.toSeq
++    var propagate = originalPropagate
++    for (distance <- Seq(1, 2, 4, 8, 16)) {
++      val oldGenerate = generate
++      val oldPropagate = propagate
++      generate = (0 until 32).map(i => if (i < distance) oldGenerate(i)
++        else oldGenerate(i) || (oldPropagate(i) && oldGenerate(i-distance)))
++      propagate = (0 until 32).map(i => if (i < distance) oldPropagate(i)
++        else oldPropagate(i) && oldPropagate(i-distance))
++    }
++    VecInit((0 until 32).map(i => originalPropagate(i) ^
++      (if (i == 0) false.B else generate(i-1)))).asUInt
++  }
++  val nextResult = if (retimeFirstCompression) {
++    // Move one compressor layer before the first register boundary. Multipliers
++    // remain shared by dot and dot.acc; two enabled edges and II=1 are retained.
++    val earlyTerms = compressLayer(inputProducts.toSeq.map(_.pad(32).asUInt) :+ io.acc)
++    val level1 = Reg(Vec(earlyTerms.size, UInt(32.W)))
++    when(io.enable1) { level1 := VecInit(earlyTerms) }
++    val terms = compress(level1.toSeq)
++    prefixAdd(terms(0), terms(1))
++  } else {
++    val products = Reg(Vec(8, SInt(16.W)))
++    val accumulator = Reg(UInt(32.W))
++    when(io.enable1) { products := inputProducts; accumulator := io.acc }
++    if (useCarrySave) {
++      val terms = compress(products.toSeq.map(_.pad(32).asUInt) :+ accumulator)
++      if (usePrefix) prefixAdd(terms(0), terms(1)) else terms(0) + terms(1)
++    } else {
++      val pairs = (0 until 4).map(i => products(2*i) +& products(2*i+1))
++      val quads = (0 until 2).map(i => pairs(2*i) +& pairs(2*i+1))
++      val sum = quads(0) +& quads(1)
++      sum.pad(32).asUInt + accumulator
++    }
++  }
++  val result = Reg(UInt(32.W))
++  when(io.enable2) { result := nextResult }
++  io.result := Cat(0.U(96.W), result)
++}
+diff --git a/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala b/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala
+index 27eb801..0be4712 100644
+--- a/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala
++++ b/src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala
+@@ -7,7 +7,7 @@ import utility.XSError
+ import xiangshan.backend.fu.FuConfig
+ import xiangshan.backend.fu.vector.Bundles.VSew
+ import xiangshan.backend.fu.vector.utils.VecDataSplitModule
+-import xiangshan.backend.fu.vector.{Mgu, Utils, VecPipedFuncUnit, VecSrcTypeModule}
++import xiangshan.backend.fu.vector.{Mgu, Utils, VecPipedFuncUnit, VecSrcTypeModule, VdotAccDatapath, VdotEncoding}
+ import xiangshan.ExceptionNO
+ import yunsuan.VialuFixType
+ import yunsuan.encoding.Opcode.VimacOpcode
+@@ -63,6 +63,13 @@ class VIMacU(cfg: FuConfig)(implicit p: Parameters) extends VecPipedFuncUnit(cfg
+   private val oldVdSplit  = Module(new VecDataSplitModule(dataWidth, dataWidthOfDataModule))
+   private val vimacs = Seq.fill(numVecModule)(Module(new VIMac64b))
+   private val mgu = Module(new Mgu(dataWidth))
++  require(dataWidth == 128 && latency == 2, "vdot requires the 128-bit two-cycle vector MAC slot")
++  private val dot = Module(new VdotAccDatapath(useCarrySave = true, usePrefix = true, retimeFirstCompression = true))
++  dot.io.vs1 := vs1
++  dot.io.vs2 := vs2
++  dot.io.acc := Mux(fuOpType === VdotEncoding.accOp, oldVd(31, 0), 0.U(32.W))
++  dot.io.enable1 := regEnable(1)
++  dot.io.enable2 := regEnable(2)
+ 
+   /**
+     * [[typeMod]]'s in connection
+@@ -145,7 +152,11 @@ class VIMacU(cfg: FuConfig)(implicit p: Parameters) extends VecPipedFuncUnit(cfg
+   mgu.io.in.info.dstMask := 0.B
+   mgu.io.in.isIndexedVls := false.B
+ 
+-  io.out.bits.res.data := mgu.io.out.vd
+-  io.out.bits.res.vxsat.get := (outVxsat & mgu.io.out.active).orR
+-  io.out.bits.ctrl.exceptionVec.get(ExceptionNO.illegalInstr) := mgu.io.out.illegal
++  private val outIsDot = outCtrl.fuOpType === VdotEncoding.op || outCtrl.fuOpType === VdotEncoding.accOp
++  private val dotIllegal = outVecCtrl.vill || outVecCtrl.vsew =/= 0.U ||
++    outVecCtrl.vlmul =/= 0.U || outVl =/= 8.U || outVstart =/= 0.U || !outVm
++  io.out.bits.res.data := Mux(outIsDot, dot.io.result, mgu.io.out.vd)
++  io.out.bits.res.vxsat.get := !outIsDot && (outVxsat & mgu.io.out.active).orR
++  io.out.bits.ctrl.exceptionVec.get(ExceptionNO.illegalInstr) :=
++    Mux(outIsDot, dotIllegal, mgu.io.out.illegal)
+ }

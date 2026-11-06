@@ -1,5 +1,7 @@
 # 香山昆明湖 V2 vdot 指令项目
 
+当前分支为累加融合实验：在已验收vdot基础上新增vdot.acc，使用共用乘法器、提前一级压缩与并行前缀加法的两级路径。实验设计见[累加融合架构](docs/累加融合架构.md)，语义和验证入口见[累加指令契约](docs/累加指令契约.md)、[累加融合性能方法](docs/累加融合性能方法.md)。原三阶段提交以已发布813be85版本为基线；新实验的硬件、功能和性能结果分别以实际输入绑定的回执记录。
+
 2026 CIE 赛题独立工程，队伍：全栈漏洞队。已完成自定义vdot.vv的Chisel/RTL和NEMU扩展；优化版于2026-11-06在新的独立检出中完成整核构建、三阶段内部验收与性能复测。
 
 按赛题1.1至3.3的交付入口见[提交成果索引](docs/SUBMISSION.md)，三份阶段报告源稿分别为[第一阶段](docs/submission/stage1.md)、[第二阶段](docs/submission/stage2.md)、[第三阶段](docs/submission/stage3.md)。另提供[逐例正负数/边界程序](examples/vdot_basic.c)及[真实整核运行入口](scripts/run_basic_validation.sh)。三段官网录屏由参赛者自行完成，操作入口见[录屏指南](docs/RECORDING_GUIDE.md)；本轮不制作PPT，官网材料继续暂停替换。
