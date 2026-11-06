@@ -26,7 +26,7 @@ r=json.load(open(sys.argv[1]));root=Path(sys.argv[2]);b=root/r['build_report']
 assert (b/'compile-exit-status.txt').read_text().strip()=='0'
 print('实际构建源码：',r['tested_project_head'])
 print('FIR摘要：',r['fir_sha256'])
-subprocess.run(['sha256sum','--check',str(b/'emu.sha256')],check=True)
+subprocess.run(['sha256sum','--check',str(b/'emu.sha256')],cwd=root/'third_party/XiangShan',check=True)
 print('完整部署脚本、原始失败与恢复日志随操作日志包保留。')
 PY
 sleep 5
