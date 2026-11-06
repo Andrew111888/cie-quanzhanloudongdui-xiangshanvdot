@@ -7,34 +7,48 @@
 python3 scripts/export_generated_rtl.py /absolute/path/to/completed-vdot-build-report
 
 # 完整干净验收生成acceptance.json后，整理最终文档与原始CSV。
-python3 scripts/summarize_acceptance.py /absolute/path/to/completed-acceptance
-
-# 三个录屏入口必须使用已完成的干净验收。
-export VDOT_REPRO_ROOT=/absolute/path/to/independent-checkout
-export VDOT_ACCEPTANCE_DIR=/absolute/path/to/completed-acceptance
-python3 scripts/record_terminal.py scripts/demo_stage1.sh --output output/video-stage1
-python3 scripts/record_terminal.py scripts/demo_stage2.sh --output output/video-stage2
-python3 scripts/record_terminal.py scripts/demo_stage3.sh --output output/video-stage3
+python3 scripts/summarize_acceptance.py /absolute/path/to/completed-acceptance \
+  --pristine-run /absolute/path/to/historical-unmodified-core-vadd
 ```
 
-先审阅所有文档、原始数据及录屏，再提交最终源码，保持Git工作区干净。绑定器比较处理器、NEMU、资源、工作负载、配置和关键构建/分析入口的字节；允许并记录后续报告/演示工具增加。子模块比较路径、SHA和初始化状态，不把不同克隆中的git-describe标签当作代码差异。rtl/中的两份生成模块另与本次完整构建的实际文件、FIR及补丁摘要比较，不把来源未明的生成文件混入交付。
+原核证据来自较早检出时，用显式参数保留其真实来源；不能把旧原核模拟器复制进新目录后声称本轮重新构建。优化报告必须先从完成的四组RTL原始日志生成，并核对before/after的工作负载、参考库、flash字节一致。
 
-仓库中已有的rtl/provenance.json记录首次交付构建，不能冒充另一次构建。若要重新生成整套报告和提交包，先用上述导出入口更新本轮构建来源，再提交这些非处理器源文件变化；绑定器会保留新验收提交和最终归档提交的区别。普通功能复现只需构建与verify_reproduction.sh，无须重发提交材料。
+先审阅文档、原始数据和演示脚本，再提交最终源码，保持Git工作区干净。绑定器比较处理器、NEMU、资源、工作负载、配置和关键构建/分析入口的字节；允许并记录后续报告/演示工具增加。子模块比较路径、SHA和初始化状态，不把不同克隆中的git-describe标签当作代码差异。rtl/中的两份生成模块另与本次完整构建的实际文件、FIR及补丁摘要比较，不把来源未明的生成文件混入交付。
+
+rtl/provenance.json记录当前导出模块的实际构建。重新生成整套材料时先更新本轮来源，再提交这些非处理器源文件变化；绑定器保留新验收提交和最终归档提交的区别。原始失败日志不改写；同源码、同FIR的分阶段恢复使用明确列出各阶段来源的composite-build.json。普通功能复现只需构建与verify_reproduction.sh，无须重发提交材料。
 
 ```bash
 python3 scripts/bind_evidence.py /absolute/path/to/completed-acceptance \
   --output reports/final-source-binding.json
-bash scripts/render_reports.sh --binding reports/final-source-binding.json
+bash scripts/render_reports.sh --binding reports/final-source-binding.json \
+  --output output/pdf/20261106-optimized --report-date 2026-11-06
 ```
 
 PDF入口需要ReportLab与pypdf，本机已验证4.4.9和6.10.0；版面复核使用Poppler。启动脚本使用VDOT_PDF_PYTHON指定的Python，未指定时使用系统Python。其他机器可在独立Python虚拟环境安装ReportLab和pypdf后设置VDOT_PDF_PYTHON。还需要DejaVu和Droid Sans Fallback字体、ImageMagick的SVG渲染。没有binding参数时仅生成标注待完成项的开发审阅稿；正式版写入output/pdf-release，须重新渲染并目视检查所有页。
 
-录屏依赖和隔离显示方式见VIDEO_PLAN.md。视频、脚本、终端日志、实际退出码、源码前后清单与MP4参数一起保存；必须检查完整播放/抽帧、可读性和源摘要。工具预检短片不作为赛题视频。
+完成PDF逐页检查后录制真实会话。三个入口必须使用已通过的干净验收和已验证的优化报告；录制期间不修改源文件。
+
+```bash
+export VDOT_REPRO_ROOT=/absolute/path/to/independent-checkout
+export VDOT_ACCEPTANCE_DIR=/absolute/path/to/completed-acceptance
+export VDOT_OPTIMIZATION_DIR=/absolute/path/to/completed-optimization-report
+python3 scripts/record_terminal.py scripts/demo_stage1.sh --output output/video/20261106-optimized/stage1
+python3 scripts/record_terminal.py scripts/demo_stage2.sh --output output/video/20261106-optimized/stage2
+python3 scripts/record_terminal.py scripts/demo_stage3.sh --output output/video/20261106-optimized/stage3
+```
+
+录屏依赖和隔离显示方式见VIDEO_PLAN.md。视频、脚本、终端日志、实际退出码、源码前后清单与MP4参数一起保存；必须检查完整解码、关键画面可读性和源摘要。工具预检短片不作为赛题视频。本轮不制作PPT，官网上传继续暂停。
 
 ```bash
 python3 scripts/package_submission.py --binding reports/final-source-binding.json \
-  --stage1-video output/video-stage1 --stage2-video output/video-stage2 \
-  --stage3-video output/video-stage3 --output output/submission-package
+  --pdf-dir output/pdf/20261106-optimized \
+  --stage1-video output/video/20261106-optimized/stage1 \
+  --stage2-video output/video/20261106-optimized/stage2 \
+  --stage3-video output/video/20261106-optimized/stage3 \
+  --pristine-run /absolute/path/to/historical-unmodified-core-vadd \
+  --optimization-dir /absolute/path/to/completed-optimization-report \
+  --reproduction-status /absolute/path/to/completed-clean-reproduction/status.json \
+  --output output/submission-package
 ```
 
 该入口生成四类ZIP和SHA256SUMS，核对报告、视频及验收身份，检查ZIP完整性和450MB内部上限。证明材料包含原始环境输出，仅用于官网评审上传；公有源码包只使用Git跟踪文件，不包含private/、原始运行日志或报名个人资料。

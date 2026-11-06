@@ -2,6 +2,24 @@
 
 本文为固定版本的构建与运行入口。开发与干净检出证据分别保留；本轮完整构建身份、资源和验收状态见CLEAN_REPRODUCTION.md，不能只依据某个中间文件判断三阶段交付完成。
 
+## 2026-11-06本轮宿主配置
+
+新独立目录为/home/yh/cie/vdot-kmhv2-repro-20261106，构建源码4e5cfce。Chisel和firtool在此目录从源码生成，Verilator采用原生jemalloc、O1、inline-mult=1和trace-depth=10，生成DecodeUnit的宿主C++按兼容规则使用O0，其余快速对象使用O2。两级点积RTL没有因宿主选项改变。
+
+scripts/firtool_file_heap.sh与本轮实际执行的reports/firtool-file-heap.sh字节一致，为固定firtool单独提供16GiB文件映射池。它要求先按BOOTSTRAP.md安装本地libvmmalloc；不修改系统库。以下显式配置可用于后续从头复现，各阶段的实际成功记录与本次恢复经过见CLEAN_REPRODUCTION.md：
+
+```bash
+VDOT_FIRTOOL="$PWD/scripts/firtool_file_heap.sh" \
+VDOT_NATIVE_FILE_HEAP=0 VDOT_USE_JEMALLOC=1 \
+VDOT_INLINE_MULT=1 VDOT_VERILATOR_OPT=1 VDOT_TRACE_DEPTH=10 \
+VDOT_CPP_DECODER_O0=1 VDOT_CPP_JOBS=4 \
+VDOT_COMPILE_MEMORY_MAX=8G bash scripts/build_emu.sh
+```
+
+本轮实际先在6400MiB模型阶段触及内存限制，保留退出137。文件堆尝试因磁盘写回过慢被人工停止；启用8GiB临时系统交换空间后，原生模型在MemoryMax=8G、MemorySwapMax=2G的独立用户服务中生成，再复用本目录自己的C++目标续编译。脚本默认构建scope的MemorySwapMax仍为0，上述从头入口没有伪记成此次实际连续运行的命令。临时交换空间帮助释放其他进程占用，不改变处理器周期；具体命令、资源与成功阶段分别记录在composite-build.json及其指向的原始目录。
+
+后文保留通用入口、默认值和历史资源实验；本轮显式参数优先于对默认值的推断。
+
 ## 固定源码
 
 | 工程 | 官方地址 | 基准提交 |

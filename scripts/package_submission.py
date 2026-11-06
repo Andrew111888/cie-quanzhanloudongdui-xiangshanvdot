@@ -18,6 +18,9 @@ parser.add_argument('--binding', type=Path, required=True)
 parser.add_argument('--pdf-dir', type=Path, help='Directory containing final PDFs and reports-manifest.json')
 parser.add_argument('--submission-checklist', type=Path, help='Reviewed requirement mapping to include in every archive')
 parser.add_argument('--workflow-receipt', type=Path, help='Current external submission metadata to include in every archive')
+parser.add_argument('--pristine-run', type=Path, help='Explicit historical unmodified-core vadd evidence')
+parser.add_argument('--optimization-dir', type=Path, help='Verified before/after RTL performance report')
+parser.add_argument('--reproduction-status', type=Path, help='Completed clean source reproduction status')
 parser.add_argument('--stage1-video', type=Path, required=True)
 parser.add_argument('--stage2-video', type=Path, required=True)
 parser.add_argument('--stage3-video', type=Path, required=True)
@@ -118,9 +121,13 @@ if (pdf_path / 'pdf-metadata-cleaning.json').exists():
     pdfs['pdf-metadata-cleaning.json'] = pdf_path / 'pdf-metadata-cleaning.json'
 video_files = {}
 for stage, path in enumerate(videos, 1):
-    for name in ('recording.mp4', 'recording.json', 'commands.sh', 'terminal.log', 'terminal.timing'):
+    for name in ('recording.mp4', 'recording.json', 'commands.sh', 'terminal.log', 'terminal.timing',
+                 'source-before.json', 'source-after.json', 'ffmpeg.log', 'xterm.log', 'xvfb.log'):
         video_files[f'stage{stage}/' + name] = path / name
 video_files['source-binding.json'] = binding_path
+video_quality = videos[0].parent / 'quality-check.json'
+if all(path.parent == videos[0].parent for path in videos) and video_quality.exists():
+    video_files['video-quality-check.json'] = video_quality
 evidence = {'source-binding.json': binding_path}
 for name, run in acceptance['rtl_runs'].items():
     folder = Path(run)
@@ -164,7 +171,13 @@ tested_root = acceptance_path.parents[1]
 for name in ('pristine-preserved.sha256', 'pristine-sources.json', 'pristine-vadd-evidence.txt', 'toolchain-identity.json', 'host-environment.json'):
     path = tested_root / 'reports' / name
     if path.exists(): evidence['pristine/' + name] = path
-pristine_run = Path((tested_root / 'reports/pristine-vadd-evidence.txt').read_text().strip())
+pristine_run = (args.pristine_run.resolve(strict=True) if args.pristine_run else
+                Path((tested_root / 'reports/pristine-vadd-evidence.txt').read_text().strip()))
+if (pristine_run / 'exit-status.txt').read_text().strip() != '0':
+    raise SystemExit('Historical unmodified-core vadd evidence did not pass')
+for name in ('pristine-preserved.sha256', 'pristine-sources.json', 'pristine-vadd-evidence.txt'):
+    path = pristine_run.parents[1] / 'reports' / name
+    if path.exists(): evidence['pristine/historical-identity/' + name] = path
 for path in pristine_run.rglob('*'):
     if path.is_file(): evidence['pristine/vadd/' + str(path.relative_to(pristine_run))] = path
 
@@ -174,12 +187,18 @@ stage1_text = re.sub(r'\x1b\[[0-9;]*m', '', (videos[0] / 'terminal.log').read_te
 stage1_candidates = {Path(line.strip()) for line in stage1_text.splitlines()
                      if re.fullmatch(re.escape(str(root / 'reports')) + r'/demo-stage1-\d{8}T\d{6}Z', line.strip())}
 if len(stage1_candidates) != 1:
-    raise SystemExit('Cannot identify the exact pristine session in the stage-one video')
+    raise SystemExit('Cannot identify the exact live session in the stage-one video')
 stage1_session = stage1_candidates.pop()
 if (stage1_session / 'exit-status.txt').read_text().strip() != '0':
     raise SystemExit('Stage-one live session did not complete successfully')
 for path in stage1_session.rglob('*'):
     if path.is_file(): evidence['video-rechecks/stage1/' + str(path.relative_to(stage1_session))] = path
+if (stage1_session / 'rtl-evidence.txt').exists():
+    live = Path((stage1_session / 'rtl-evidence.txt').read_text().strip())
+    if (live / 'exit-status.txt').read_text().strip() != '0':
+        raise SystemExit('Stage-one live RTL run failed')
+    for path in live.rglob('*'):
+        if path.is_file(): evidence['video-rechecks/stage1/rtl/' + str(path.relative_to(live))] = path
 for label in ('smoke', 'register'):
     log = acceptance_path / ('video-stage2-' + label + '.log')
     folders = [Path(s.removeprefix('RTL evidence: ')) for s in log.read_text().splitlines()
@@ -208,6 +227,37 @@ for report in (tested_root / 'reports').glob('vdot-build-*'):
     if not report.is_dir(): continue
     for path in report.rglob('*'):
         if path.is_file(): evidence['build-history/' + report.name + '/' + str(path.relative_to(report))] = path
+completed_build = tested_root / binding['generated_rtl']['build_report']
+for report in [completed_build, *(tested_root / 'reports').glob('model-resume-*'),
+               *(tested_root / 'reports').glob('model-native-swap-*')]:
+    if not report.is_dir(): continue
+    for path in report.rglob('*'):
+        if path.is_file(): evidence['build-history/' + report.name + '/' + str(path.relative_to(report))] = path
+if args.optimization_dir:
+    directory = args.optimization_dir.resolve(strict=True)
+    performance = json.loads((directory / 'evidence.json').read_text())
+    if performance['status'] != 'verified' or not performance['ab_inputs_identical']:
+        raise SystemExit('Optimization A/B inputs were not verified')
+    for path in directory.rglob('*'):
+        if path.is_file(): evidence['optimization/report/' + str(path.relative_to(directory))] = path
+    for phase, kinds in performance['runs'].items():
+        for kind, item in kinds.items():
+            run = Path(item['directory'])
+            for path in run.rglob('*'):
+                if path.is_file(): evidence[f'optimization/raw/{phase}/{kind}/' + str(path.relative_to(run))] = path
+if args.reproduction_status:
+    status_path = args.reproduction_status.resolve(strict=True)
+    reproduction = json.loads(status_path.read_text())
+    if reproduction['status'] != 'passed' or Path(reproduction['acceptance']).resolve() != (acceptance_path / 'acceptance.json').resolve():
+        raise SystemExit('Clean reproduction does not identify this completed acceptance')
+    for label, directory in [('completion', status_path.parent),
+                             ('initial-attempt', tested_root / 'reports/independent-reproduction-20261106')]:
+        for path in directory.rglob('*'):
+            if path.is_file(): evidence['clean-reproduction/' + label + '/' + str(path.relative_to(directory))] = path
+    for name in ('preparation.json', 'pristine-source.json', 'patched-source.json', 'firtool-file-heap.sh',
+                 'depth12-stopped-for-selective-trace.json'):
+        path = tested_root / 'reports' / name
+        if path.exists(): evidence['clean-reproduction/preparation/' + name] = path
 for path in (tested_root / 'reports/extension-preparation').rglob('*'):
     if path.is_file(): evidence['extension-preparation/' + str(path.relative_to(tested_root/'reports/extension-preparation'))] = path
 for name in ('prepare-clean-20261105.sh', 'clean-prepare-driver.log', 'pristine-build-driver.log',
@@ -219,7 +269,28 @@ for name in ('prepare-clean-20261105.sh', 'clean-prepare-driver.log', 'pristine-
              'final-artifact-preparation-driver.log'):
     path = root / 'reports' / name
     if path.exists(): evidence['operation-logs/' + name] = path
+for name in ('prepare-reproduction-20261106.py', 'reproduction-20261106-prepare.log',
+             'reproduce-final-20261106.py', 'recover-reproduction-swap-20261106.py',
+             'recover-reproduction-swap-j4-20261106.py',
+             'reproduction-swap-20261106-driver.log', 'reproduction-swap-j4-20261106-driver.log',
+             'temporary-swap-receipt.json', 'memory-user-terminal-20261106.log',
+             'required-trace-depth-audit.json', 'trace-depth-probe.json',
+             'independent-rtl-comparison-20261106.json', 'independent-before-after-rtl-20261106.json',
+             'required-trace-signals-verified-20261106.json',
+             'firtool-helper-provenance-20261106.json', 'official-question-state-20261106.json',
+             'official-question-issue-20261106.json', 'official-question-comments-20261106.json',
+             'official-question-final-check-20261106.json', 'official-question-comments-final-20261106.json',
+             'reproduction-report-replay-verified-20261106.json'):
+    path = root / 'reports' / name
+    if path.exists(): evidence['operation-logs/' + name] = path
 source = {name: root / name for name in binding['tracked_file_sha256']}
+# The document category itself carries the full deployment/build text logs.
+# Large raw FST and complete regression records remain in the evidence category.
+document_log_prefixes = ('operation-logs/', 'build-history/', 'clean-reproduction/preparation/',
+                         'clean-reproduction/initial-attempt/', 'pristine/', 'rtl/vadd/')
+for relative, path in evidence.items():
+    if relative.startswith(document_log_prefixes) and path.suffix in ('.log', '.txt', '.json', '.sha256', '.py', '.sh'):
+        pdfs['deployment-and-operation-logs/' + relative] = path
 packages = [archive('technical-documents.zip', pdfs),
             archive('demonstration-videos.zip', video_files),
             archive('supporting-evidence.zip', evidence),

@@ -1,8 +1,8 @@
 # 阶段二：整核功能与流水验证最终结果
 
-实际干净构建/验收的作品源码提交：`3424efe852a1b4e2b26fa3efc25b233d94aec9a4`。最终作品提交由发布包的source-binding.json给出；处理器、NEMU、工作负载、配置与分析输入逐字节一致，后续文档/演示工具差异单独记录。
+实际干净构建/验收的作品源码提交：`4e5cfce9461e5870f266cff5b5347dd1265493c9`。最终作品提交由发布包的source-binding.json给出；处理器、NEMU、工作负载、配置与分析输入逐字节一致，后续文档/演示工具差异单独记录。
 
-单核MinimalConfig，VLEN=128，真实NEMU差分开启。emu SHA256：`dd1f0323f96d567e26e9ba25336db5f9cbcc3a9ebb55821665110fc993e30e31`；正常REF SHA256：`baa2f11e3190d4dd3e7d6107c46ca6795c9b574978a070fdd7bdfafaf8372225`。
+单核MinimalConfig，VLEN=128，真实NEMU差分开启。emu SHA256：`2f23052bb8407d837e1251faaed6e1890b765e3f33f682939a341eacaf87eb6d`；正常REF SHA256：`95faff9c9a0182e21d4820f405eade091ea7c3ec531382899e3ec1adf634b4d7`。
 
 采用低8个有符号int8乘积求和，低32位补码、高96位清零的暂定契约；支持域SEW8/VLEN128/LMUL1/VL8/vstart0/vm1。已向官方Issue #126询问范围、布局、版本和编码，尚未视为官方确认。
 

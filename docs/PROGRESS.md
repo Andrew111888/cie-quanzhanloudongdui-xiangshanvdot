@@ -1,5 +1,17 @@
 # 开发进度
 
+## 2026-11-06优化版独立复现
+
+本轮新的独立检出位于/home/yh/cie/vdot-kmhv2-repro-20261106，实际构建和验收源码4e5cfce9461e5870f266cff5b5347dd1265493c9。完整功能、波形和性能复测均通过，最终总回执为reports/reproduction-recovery-swap-j4-20261106/status.json，status=passed、source_unchanged=true。
+
+新emu SHA256为2f23052bb8407d837e1251faaed6e1890b765e3f33f682939a341eacaf87eb6d，新正常NEMU库为95faff9c9a0182e21d4820f405eade091ea7c3ec531382899e3ec1adf634b4d7。实际版本、失败与恢复资源见CLEAN_REPRODUCTION.md。本轮三阶段结果入口仍为FINAL_RESULTS.md，已切换到这次新验收。
+
+新增对照使用保存的before 270条和本轮新采集after 270条。540条周期/校验值逐项一致地复现前次开发结果，36组RVV控制中位数相同。TU独立寄存器场景3639→625周期；内存TA为1.921倍、TU为1.003倍的基线/vdot比值，不能将寄存器收益推广到全部负载。只有DecodeUnit在独立生成的前后1868个模块比较中发生变化；新FST再次确认2周期算术路径。
+
+本轮PDF、三段实际录屏及四类包的生成状态见本机output/delivery-20261106.json，各文件必须通过实际manifest和质量检查。本轮不制作PPT；官网、官方PR和旧发布归档暂不更新。下面保留首轮开发与交付的历史记录，不用其身份替代本轮结果。
+
+## 2026-11-05历史记录
+
 验收日期：2026-11-05。三阶段内部技术验收与独立检出复现均已通过，三段真实录屏完成。本文件记录技术归档状态；GitHub与官网的外部提交回执在作品发布页另行记录，不能将内部验收等同于官方评审通过。本机工程与/home/yh/eda独立。
 
 正式结果入口为FINAL_RESULTS.md、results/stage1-clean.md、results/stage2-clean.md、results/stage3-clean.md及data/clean/provenance.json。实际构建源码为3424efe852a1b4e2b26fa3efc25b233d94aec9a4；最终文档/工具提交由发布包source-binding.json给出。

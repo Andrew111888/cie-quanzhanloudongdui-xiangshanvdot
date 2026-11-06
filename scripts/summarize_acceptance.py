@@ -6,9 +6,12 @@ import json
 from pathlib import Path
 import re
 import shutil
+import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument('acceptance', type=Path)
+parser.add_argument('--pristine-run', type=Path,
+                    help='Explicit historical unmodified-core vadd evidence, if it was verified in another checkout')
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
 acceptance_path = args.acceptance.resolve(strict=True)
@@ -96,10 +99,28 @@ for kind,label in [('decode','译码'),('rename','重命名'),('issue','发射')
     table.append(f'| {label} | {es[0]["edge"]} | '+(f'PC={vadd["pc"]:#x}' if kind=='decode' else
                  f'ROB=({vadd["rob_flag"]},{vadd["rob_value"]})，P={rename["pdest"]}')+' |')
 pristine_root=acceptance_path.parents[1]
-pristine_run=Path((pristine_root/'reports/pristine-vadd-evidence.txt').read_text().strip())
+pristine_run=(args.pristine_run.resolve(strict=True) if args.pristine_run else
+              Path((pristine_root/'reports/pristine-vadd-evidence.txt').read_text().strip()))
+stats(pristine_run)
 pristine_identity=identities(pristine_run)
+historical_root=pristine_run.parents[1]
+historical_sources=json.loads((historical_root/'reports/pristine-sources.json').read_text())
+for name in ('XiangShan','NEMU'):
+    if historical_sources['repositories'][name]['changed_source_sha256']:
+        raise SystemExit('Historical original-core evidence has source edits: '+name)
+preserved=historical_root/'reports/pristine-preserved.sha256'
+subprocess.run(['sha256sum','--check',str(preserved)],cwd=historical_root,check=True,
+               stdout=subprocess.DEVNULL)
+saved_hashes={line.split()[0] for line in preserved.read_text().splitlines()}
+if set(pristine_identity.values())!=saved_hashes or 'VADD_PASS' not in plain(pristine_run/'run.log'):
+    raise SystemExit('Historical vadd inputs do not match the preserved original-core artifacts')
+same_pristine_checkout=pristine_run.is_relative_to(pristine_root)
+deployment_description=(
+    '该独立检出先完成未修改香山/NEMU的全量构建与标准向量vadd，再应用补丁并从空硬件生成目录重建扩展核。'
+    if same_pristine_checkout else
+    '历史未修改原核的全量构建与标准vadd证据另行保留在上一轮独立目录；本轮在新的检出中按固定SHA取得源码、应用补丁，从空生成目录构建最终扩展核，并重新执行vadd与波形分析。没有把历史原核运行记作本轮重新构建。')
 stage1=('# 阶段一：环境与向量加法最终结果\n\n'+common+
-        '独立检出先完成未修改香山/NEMU的全量构建与标准向量vadd，再应用补丁并从空硬件生成目录重建扩展核。'
+        deployment_description+
         '复用固定外部工具与下载缓存，不复制开发目录的RTL、C++或模拟器；这不是全新操作系统验证。\n\n'
         f'原核emu SHA256：`{pristine_identity["emu"]}`。原核vadd目录：`{pristine_run}`；'
         f'扩展核vadd目录：`{runs["vadd"]}`。两者均有VADD_PASS、Difftest启用、GOOD TRAP和原始退出0。\n\n'
@@ -109,7 +130,7 @@ stage1=('# 阶段一：环境与向量加法最终结果\n\n'+common+
         f'同PC译码尝试的边沿为{wave["vadd_decode_attempt_edges"]}，按实际提交反向选择对应重命名并限定ROB动态区间，不能仅用重用的物理目的拼接。'
         '叶FU入口的ROB取自同拍父Exu接收入口，不借用延后ctrlPipe。边沿序号在采集内计数、上升沿前采样，不是cycle CSR或物理频率。\n\n'
         '完整部署命令、固定版本、失败修复与资源参数见构建文档和证明材料包operation-logs/build-history。'
-        '原始环境输出包含赛题所需团队和本机IP；公开录屏只省略IP展示，原始日志仍留在证明材料中。\n')
+        '原始环境输出及本轮阶段一录屏包含赛题要求的团队标识和本机IP，随评审材料提供；原始环境日志不纳入公有源码包。\n')
 smoke_stats=stats(runs['smoke']);random_stats=stats(runs['random']);pipeline_stats=stats(runs['pipeline'])
 random_text=plain(runs['random']/'run.log');register_text=plain(runs['register']/'run.log')
 assert 'VDOT_PASS random_cases=1000 directed_cases=6 modes=5 illegal_cases=7' in random_text
@@ -156,10 +177,11 @@ stage3=('# 阶段三：协同仿真与实测性能最终结果\n\n'+common+
         '异常契约v2：后期配置检查cause2/xtval0；非零vstart由译码拒绝、xtval为指令位。NEMU仅消费一次自定义非架构标志，普通非法0x7b保持原报告；没有关闭TVAL或豁免比较。\n\n'+perf+'\n'
         '基线用vwmul生成16位有符号乘积、vwredsum扩宽归约到32位，预先清零高96位。两路径输入、目标布局、内存条件和测量边界一致；'
         '每种长度32/128/512预热后重复5次，区分真结果依赖和无显式结果依赖。波形关闭。\n\n'
-        '基线逐次完成清零和配置恢复，未测量跨迭代复用已清零目标等循环优化，也未穷举最优RVV序列。'
-        '加速比仅相对此处公开的等价组合，不推广为所有软件实现的最佳加速比。\n\n'
-        'vdot循环使用ta/ma，原有派发/发射逻辑可消除通用旧vd源等待；本实现没有专门删除该源。'
-        '基线按算法切换SEW和tu/mu以保证完整结果布局，末尾恢复相同vtype；该片段结果不能推广到所有tu/mu配置。\n\n'
+        '上述60条样本保留基础基线的逐次清零和配置恢复。新增对照另测复用零目标的RVV序列、TA/TU、真实结果依赖和内存加载/存储，详见本报告后续优化结果。'
+        '加速比仅相对实测的等价组合，不声称穷举所有RVV实现。\n\n'
+        '最终实现将自定义vdot译码的src3改为SrcType.no，去除不读取旧vd的虚假源依赖；vs1/vs2真实依赖保留。'
+        '该修改在独立操作且TU的对照中体现收益，TA、真实结果依赖及本次内存内核不因这项修改普遍加速。'
+        '基础基线按算法切换SEW和tu/mu以保证完整结果布局，末尾恢复相同vtype；不同测量边界分别报告。\n\n'
         '## 实际算术路径与独立突发吞吐\n\n'+'\n'.join(fu_rows)+'\n\n'
         f'此次等价基线首个乘法接收到最终归约结果为{wave["baseline_input_to_final_result_cycles"]}周期，含配置、清零及依赖调度；'
         f'vdot输入至结果为{wave["vdot_input_to_result_cycles"]}周期。归约uop0写内部临时物理目的，uop1才写v12完整结果8，不能把部分和当作最终结果。\n\n'

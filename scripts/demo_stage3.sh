@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 source "$(dirname -- "$0")/env.sh"
-vdot_root=${VDOT_REPRO_ROOT:-/home/yh/cie/vdot-kmhv2-repro-20261105}
+vdot_root=${VDOT_REPRO_ROOT:?Set the completed clean checkout}
 vdot_acceptance=${VDOT_ACCEPTANCE_DIR:?Set the completed clean acceptance report}
 python3 - "$vdot_acceptance/acceptance.json" <<'PY'
 import json,sys
@@ -92,5 +92,24 @@ for op in pipeline['independent_bursts'][0]['operations']:
 print('\n性能表属于含必要配置与循环的片段，不能称为FU延迟。')
 print('没有综合、时序或功耗测量，不声称面积、频率或能效收益。')
 PY
+clear
+printf '展示本轮真实FST的派生时序图，输入/输出按ROB和物理目的关联。\n'
+python3 "$VDOT_ROOT/scripts/show_recording_image.py" "$vdot_acceptance/wave-analysis/latency-timeline.svg" --seconds 14
+clear
+printf '新增对照：真实加载/存储、两条RVV序列、TA/TU及真依赖。\n'
+printf '现在从已经完成的RTL原始数据重新计算；不把旧日志称作实时仿真。\n'
+vdot_optimization=${VDOT_OPTIMIZATION_DIR:?Set the completed optimization report}
+vdot_video_report="$VDOT_ROOT/reports/video-optimization-$(date -u +%Y%m%dT%H%M%SZ)"
+python3 - "$vdot_optimization/evidence.json" "$VDOT_ROOT/scripts/optimization_report.py" "$vdot_video_report" <<'PYDATA'
+import json,subprocess,sys
+r=json.load(open(sys.argv[1]));cmd=['python3',sys.argv[2]]
+for phase in ['before','after']:
+ for kind in ['RVV','MEMORY']:
+  cmd.extend(['--'+phase+('-rvv' if kind=='RVV' else '-memory'),r['runs'][phase][kind]['directory']])
+cmd.extend(['--output',sys.argv[3]]);subprocess.run(cmd,check=True)
+PYDATA
+clear
+python3 "$VDOT_ROOT/scripts/show_optimization_summary.py" "$vdot_video_report"
+sleep 14
 printf '\n阶段三演示结束。三段录屏、报告与最终源码将一起校验并打包。\n'
 sleep 8

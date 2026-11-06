@@ -6,4 +6,4 @@ VdotDatapath.sv是新增的两级8路有符号点积算术模块。VIMacU.sv是�
 
 源码和依赖许可见根目录LICENSE与NOTICE.md；保留生成器原始文件头。生成文件用于检查实际结构，不替代时序、综合、面积或功耗报告。
 
-本轮旧目标依赖修改只涉及译码。上述两个导出模块已与本轮新构建逐字节比较，一致；此处原独立检出的provenance.json仍保留原始来源，不改写成新生成记录。新译码、完整回归与540条性能样本的来源另见docs/OPTIMIZATION_RESULTS.md。
+本轮provenance.json已更新为2026-11-06新独立构建的真实来源，构建源码4e5cfce，完成报告为reports/completed-build-20261106。两个导出模块与该次完整构建逐字节一致，也与优化前算术模块一致。直接比较独立生成的前后1868个SV模块，只有DecodeUnit改变；完整回归和540条性能对照见docs/OPTIMIZATION_RESULTS.md。旧导出来源由原发布归档与Git历史保留。

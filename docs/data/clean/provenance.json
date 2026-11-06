@@ -1,13 +1,13 @@
 {
   "status": "completed_clean_acceptance",
-  "tested_project_head": "3424efe852a1b4e2b26fa3efc25b233d94aec9a4",
-  "acceptance_directory": "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/acceptance-20261105T063406Z-3723760",
-  "acceptance_sha256": "baa1f0787eb339491ac71e8e9edbae20afbcb76d0930a5fa0a2c16b974d7c78d",
+  "tested_project_head": "4e5cfce9461e5870f266cff5b5347dd1265493c9",
+  "acceptance_directory": "/home/yh/cie/vdot-kmhv2-repro-20261106/reports/acceptance-20261106T023150Z-228441",
+  "acceptance_sha256": "1341543db0c0006b971026af002c04a0a5e8d81fc81d991d62ea89e9b96dcbca",
   "repositories": {
     "XiangShan": {
       "head": "7b16188f7f18a97be69c9b1a2dae8a446eec3b47",
       "changed_source_sha256": {
-        "src/main/scala/xiangshan/backend/decode/VecDecoder.scala": "1fcc8840dbe5d8b78166d1e1663e434ee4561b820868939533891cb529688bcd",
+        "src/main/scala/xiangshan/backend/decode/VecDecoder.scala": "abd554f3172b6e47c5e10968c5a96a84052b4cc9f3dbfad9eebfd6b4f505b9df",
         "src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala": "4e0800b70699eb24557352b144741e8ed480ce51de64aa2dbccee3c4c72d2f50",
         "src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala": "1845e685513507b724ba7e37ab46eb42c7b32c7fa2477644c4d728230a508fce",
         "src/main/scala/xiangshan/backend/fu/vector/Vdot.scala": "d758aff49a6d10c0369a6d06968a5782cc8d1e13cad2c6a967d919b782adf6b4"
@@ -44,26 +44,26 @@
       "changed_source_sha256": {}
     }
   },
-  "emu_sha256": "dd1f0323f96d567e26e9ba25336db5f9cbcc3a9ebb55821665110fc993e30e31",
-  "reference_sha256": "baa2f11e3190d4dd3e7d6107c46ca6795c9b574978a070fdd7bdfafaf8372225",
+  "emu_sha256": "2f23052bb8407d837e1251faaed6e1890b765e3f33f682939a341eacaf87eb6d",
+  "reference_sha256": "95faff9c9a0182e21d4820f405eade091ea7c3ec531382899e3ec1adf634b4d7",
   "raw_log_sha256": {
-    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-vadd_test-20261105T063407Z-3781349/run.log": "bdff182ab18ca0183797778a0213aab9cf62636600044b52e49045cb83aec7ea",
-    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-vdot_smoke-20261105T063449Z-3782269/run.log": "a609309ab06690028d87894bc3ca5653a662def129cfd0bacbc909dc6fa5d270",
-    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-register_test-20261105T063527Z-3782987/run.log": "728d33899324ff75aae5a0f8b303fc086ed12c606553681ea4ee470bfe0db049",
-    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-vdot_test-20261105T063741Z-3787236/run.log": "69599baef25372044bdea5d8df38a568485865a51772836af36206e278afdd1f",
-    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-pipeline_test-20261105T063741Z-3787237/run.log": "d09e8839676d73699ab6915179f76d636814377e5d7143cd3740a28b85c9cb09",
-    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-benchmark-20261105T063741Z-3787238/run.log": "d791870211e90a78117cf677f972770d31ed5cefd82683427c7ca88ffe7b66a1",
-    "/home/yh/cie/vdot-kmhv2-repro-20261105/reports/rtl-latency_probe-20261105T063741Z-3787239/run.log": "e76265a1343cd30c8108cd54d690ebb975165167bd301561e518e94e3c51726a"
+    "/home/yh/cie/vdot-kmhv2-repro-20261106/reports/rtl-vadd_test-20261106T023151Z-229455/run.log": "672fad13cbcc7065099d5f5fb9c96d619eabd456d7922db843aa4164581ced4b",
+    "/home/yh/cie/vdot-kmhv2-repro-20261106/reports/rtl-vdot_smoke-20261106T023249Z-230384/run.log": "ca0de98f361f64378a9ba088088aa86eaf36b9a3085f506e010a336409bce99e",
+    "/home/yh/cie/vdot-kmhv2-repro-20261106/reports/rtl-register_test-20261106T023335Z-231033/run.log": "534d84b14d5b49893d8ccceaba52b3354bd69144ce307c301f2f0370ed8cc724",
+    "/home/yh/cie/vdot-kmhv2-repro-20261106/reports/rtl-vdot_test-20261106T023627Z-235418/run.log": "4142f105f24366ad8521e6d58e7e72f2d51ea54ca2e87749d6ba9e04fdf8f569",
+    "/home/yh/cie/vdot-kmhv2-repro-20261106/reports/rtl-pipeline_test-20261106T023627Z-235419/run.log": "f77d76ac429f4965fb06e3465c3a1f8908562117adc49a9cb0cd4518041644b2",
+    "/home/yh/cie/vdot-kmhv2-repro-20261106/reports/rtl-benchmark-20261106T023627Z-235420/run.log": "1da71acc5a46bb34eb18c0774db9360c9ef7207ff7818c40cb97a7bb501acaa2",
+    "/home/yh/cie/vdot-kmhv2-repro-20261106/reports/rtl-latency_probe-20261106T023627Z-235421/run.log": "0376a2232a39db7b3b9ef01370f85f3947a1296612d31544c579981b964ce5c0"
   },
   "csv_sha256": {
     "benchmark.csv": "7c03a1584b5c515d4af5e3ea01b3add6dd505c6045da45dcef203a94de8d1e1d",
-    "wave-events.csv": "8d4ee6dec42c82972f5f51e0d475cae9eb3cbdcac832c362982b9d59495d4de0",
+    "wave-events.csv": "c52bdadf4ba6bcd2fc5b41912e878a6b250075a8ebaa71735fffcd35e4232628",
     "flush-events.csv": "78a496afbd70c6c9ff404b3c199588b9b69bbd163d2ec51391056b64947b141e",
     "burst-throughput.csv": "7335e1b49a875abccb697fe65b39fe158457e78921cac6fd3f71859b0758be77"
   },
   "fst_sha256": {
-    "vadd": "7e8f110d196d3fbd45b402f172c6308af2e299ddb801dd099f4e12b3e420d275",
-    "latency": "abac6e30b091b2063e1b3f36cf76685015d05350906260280c9a353d246c0646",
-    "pipeline": "a4e160e4db802b50f7cb20e3fd1728631aa75ac799a52aab3ab9ef480481a895"
+    "vadd": "f50320281e4c4de63bf776a66fc07e8a9f3efa69888d50625eec08b0a699b443",
+    "latency": "bb769f6404f7f430ede18c597fa017b5869965765a5c355bab4f72b1982ab7aa",
+    "pipeline": "5cfcc4a0fb516349057ae990097292eb1e20c0679370c9e1505c642e467b4626"
   }
 }

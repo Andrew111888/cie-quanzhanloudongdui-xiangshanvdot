@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 source "$(dirname -- "$0")/env.sh"
-vdot_root=${VDOT_REPRO_ROOT:-/home/yh/cie/vdot-kmhv2-repro-20261105}
+vdot_root=${VDOT_REPRO_ROOT:?Set the completed clean checkout}
 vdot_acceptance=${VDOT_ACCEPTANCE_DIR:?Set the completed clean acceptance report}
 python3 - "$vdot_acceptance/acceptance.json" <<'PY'
 import json,sys
@@ -20,6 +20,11 @@ sed -n '18,39p' "$vdot_root/third_party/XiangShan/src/main/scala/xiangshan/backe
 printf '\n接入：VecDecoder -> 原VIMac调度/读源 -> VdotDatapath -> 原写回/ROB。\n'
 printf '共享乘法槽位；没有新增独立发射端口。\n'
 sleep 5
+printf '\n本轮译码改进：完整覆盖目标，因此vdot无需读取旧vd。\n'
+rg -n 'VdotEncoding.instruction' "$vdot_root/third_party/XiangShan/src/main/scala/xiangshan/backend/decode/VecDecoder.scala"
+printf '只删除无用第三源；vs1/vs2、向量配置及真实重叠依赖保留。\n'
+sleep 5
+python3 "$VDOT_ROOT/scripts/show_recording_image.py" "$VDOT_ROOT/docs/figures/vdot-datapath.svg" --seconds 12 --title 'vdot两级数据通路结构示意'
 clear
 printf 'smoke真实测试循环的6组输入，每组5种模式：\n'
 printf '  1*1*8=8；(-1)*1*8=-8\n'

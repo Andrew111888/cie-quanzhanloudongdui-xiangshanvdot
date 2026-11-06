@@ -1,5 +1,46 @@
 # 独立检出复现记录
 
+## 2026-11-06：优化版的本轮重建
+
+本轮完整功能、基础性能、波形及新增性能A/B复测全部通过。总回执reports/reproduction-recovery-swap-j4-20261106/status.json为passed、source_unchanged=true。保存的before共270条，本轮重新采集after共270条，合计540条；15份自动报告/数据从原始日志重算字节一致。
+
+新的独立目录为/home/yh/cie/vdot-kmhv2-repro-20261106，固定作品提交4e5cfce9461e5870f266cff5b5347dd1265493c9。22个源码仓库按固定SHA从已缓存Git对象作独立克隆；复用已校验工具包、Conda环境和Maven下载缓存，禁用ccache。没有复制上一目录的RTL、C++、对象文件、NEMU二进制或模拟器，不声称全新操作系统或无下载缓存验证。准备清单在reports/preparation.json；目录时间戳使用UTC，报告日期使用北京时间。
+
+从源码重新执行Python测试、Chisel数据通路测试、全部工作负载构建、NEMU独立程序及参考库构建，软件阶段均已通过。新构建的benchmark_rvv.bin、dot_memory.bin与flash.bin和此前对照输入逐字节一致，检查记录为reports/independent-reproduction-20261106/fresh-workload-hash-check.json。
+
+| 阶段 | 实际结果与资源 | 原始证据 |
+|---|---|---|
+| Chisel/CHIRRTL | 退出0；10分43.10秒；最大RSS 4104264KiB | reports/vdot-build-20261105T163254Z-4164408/chisel-time.txt |
+| firtool | 退出0；5分37.32秒；最大RSS 4438832KiB；独立16GiB文件映射池 | 同目录firtool-time.txt与命令 |
+| 首次原生FST模型 | 6400MiB进程组上限处退出137，原失败状态保留 | 同目录compile-exit-status.txt |
+| 文件堆模型尝试 | trace-depth=12及10两次因磁盘写回过慢被人工停止，均不计成功 | reports/model-resume-20261106T012148Z-181611与model-resume-20261106T013440Z-188153 |
+| 原生模型恢复 | 启用临时系统交换空间；MemoryMax=8G、MemorySwapMax=2G；原生jemalloc、O1、inline-mult=1、FST层级10；生成后进入C++ | reports/model-native-swap-20261106T020712Z；并行度调整的人工停止另有deliberate-stop.json |
+| C++续编译及链接 | 从2路改为4路；退出0；本段15分11.40秒，单子进程最大RSS 1225880KiB；复用本目录自己的已完成对象 | reports/model-native-swap-j4-20261106T021634Z |
+
+15分11.40秒只计最后一段续编译，不能作为从零完整构建耗时。编译选项中仅生成DecodeUnit的宿主C++使用O0，其余快速对象使用O2。交换空间只用于宿主资源管理；状态查询因swapon不支持--json而失败后，改读内核/proc/swaps确认8GiB交换文件已启用，没有重复创建，也没有修改fstab。
+
+reports/completed-build-20261106/composite-build.json逐项关联本轮成功的Chisel、firtool、原生生成与续编译，保留最初退出137和人工停止记录。源摘要、FIR摘要在恢复前后校验一致；没有伪造一次重新运行的Chisel或将失败日志改成通过。
+
+本轮FIR SHA256为fa5e68cce015dc81e561d9f0bff3f0c565368c2e10a17df4a443c92fcea757ad；完成链接的emu SHA256为2f23052bb8407d837e1251faaed6e1890b765e3f33f682939a341eacaf87eb6d。独立生成的1868个SV模块与开发目录优化版比较，1867个一致，唯一差异是诊断打印LogPerfEndpoint；DecodeUnit、VIMacU与VdotDatapath字节一致。
+
+本轮原始运行和验收状态保存在reports/reproduction-recovery-swap-j4-20261106/。正常功能验收使用本轮重新构建的NEMU参考库；性能A/B为了严格固定参考库，使用此前保存且校验过的同一reference.so。两类证据分别标记，不将A/B复用的旧库冒充本轮新构建库。
+
+完整验收回执为reports/acceptance-20261106T023150Z-228441/acceptance.json，status=passed、source_unchanged=true。本轮新正常参考库SHA256为95faff9c9a0182e21d4820f405eade091ea7c3ec531382899e3ec1adf634b4d7；A/B固定参考库为baa2f11e3190d4dd3e7d6107c46ca6795c9b574978a070fdd7bdfafaf8372225。
+
+| 本轮完整验收项 | 实际完成内容 |
+|---|---|
+| 标准向量与基础输入 | vadd、6组正负/边界输入、5种模式、7种非法形式及寄存器边界通过 |
+| 完整随机 | 1000组×5模式，4000次合法vdot与1000次等价基线；786591条指令/593917周期 |
+| 完整流水压力 | 64组、1664条vdot；28次taken、36次not-taken；290027条指令/181649周期 |
+| 真实比较器反例 | 正常→错误→恢复；v12_low的REF9/DUT8、ABORT及退出1均被核实 |
+| 基础性能 | 全部60条RTL样本通过；完整片段中位数加速比2.607至4.634 |
+| 本轮真实FST | vdot输入至结果2周期；3条已写回错路指令被冲刷且未提交；5组×8条独立突发间隔1周期 |
+| 波形接口与来源 | 3份FST各保留825个所需信号；关键输入摘要、PC/ROB动态区间和物理目的均核对 |
+
+诊断窗口按28000周期预算停止，功能验收器实际拒绝其作为功能PASS；该窗口仅用于波形分析。完整压力程序另有GOOD TRAP和退出0。最终生成的CSV、时序图与来源索引见FINAL_RESULTS.md和data/clean/provenance.json。
+
+## 2026-11-05：历史原核与首次扩展核复现
+
 核对日期：2026-11-05。根目录为/home/yh/cie/vdot-kmhv2-repro-20261105。该目录从本机作品Git创建独立检出，再从官方仓库按SHA获取上游及资源；没有复制开发目录的生成RTL、C++、目标文件或模拟器。
 
 同机复用已校验的Mill工件、开发依赖包、固定Conda工具环境、firtool及Maven下载缓存。原核Scala依赖在新目录冷编译；随后应用vdot补丁时复用该独立目录自己的Scala依赖缓存，但移动整个原核build目录，扩展核重新生成RTL和C++。这不是全新操作系统或无下载缓存的验证。

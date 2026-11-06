@@ -1,4 +1,6 @@
 """Render source-bound reports, retaining only the team author in PDF metadata."""
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from io import BytesIO
 from pathlib import Path
 import argparse
@@ -23,7 +25,11 @@ root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument('--binding', type=Path, help='Verified final source binding; omitting this creates draft PDFs')
 parser.add_argument('--output', type=Path, help='Use a new directory to preserve previously issued reports')
+parser.add_argument('--report-date', default=datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat(),
+                    help='Human-facing evidence review date, YYYY-MM-DD')
 args = parser.parse_args()
+if re.fullmatch(r'\d{4}-\d{2}-\d{2}', args.report_date) is None:
+    raise SystemExit('Invalid report date')
 binding = None
 if args.binding:
     binding = json.loads(args.binding.read_text())
@@ -157,7 +163,7 @@ def footer(canvas, doc):
     canvas.line(48, 42, A4[0]-48, 42)
     canvas.setFont('Latin', 7.5)
     canvas.setFillColor(colors.HexColor('#61738a'))
-    label = paragraph('全栈漏洞队 | ' + ('最终交付版' if binding else '开发审阅版') + ' | 2026-11-05',
+    label = paragraph('全栈漏洞队 | ' + ('最终交付版' if binding else '开发审阅版') + ' | ' + args.report_date,
                       ParagraphStyle('Footer', parent=body, fontSize=7.5, leading=10))
     label.wrap(width, 12)
     label.drawOn(canvas, 48, 27)
@@ -176,7 +182,7 @@ if binding:
     final_documents = [
         ['results/stage1-clean.md', 'CLEAN_REPRODUCTION.md', 'BUILDING.md', 'BOOTSTRAP.md'],
         ['DESIGN.md', 'results/stage2-clean.md'],
-        ['results/stage3-clean.md'],
+        ['results/stage3-clean.md', 'OPTIMIZATION_RESULTS.md', 'OPTIMIZATION.md'],
     ]
     reports = [(name, title, documents) for (name, title, _), documents in zip(reports, final_documents)]
 artifact_records = []
@@ -187,7 +193,7 @@ for filename, title, documents in reports:
     status_notice = ('最终交付版：完整干净检出验收已通过。各结果的实际构建提交、最终源码提交、输入摘要与证据目录由绑定清单明确区分。未明确的赛题语义仍按暂定契约披露，未得到官方确认。'
                      if binding else '开发审阅版：定向、1000组随机、真实差分反例与恢复、流水压力和性能数据均已有证据。未修改原核的干净构建与vadd已通过；扩展核干净构建、最终录屏与打包仍待完成，不作为正式提交包。')
     story = [paragraph('香山昆明湖 V2 自定义 vdot.vv', h1), paragraph(title, h2),
-             paragraph('队伍：全栈漏洞队。证据核对日期：2026-11-05。'),
+             paragraph('队伍：全栈漏洞队。证据核对日期：' + args.report_date + '。'),
              paragraph(status_notice, notice)]
     if binding:
         story += [paragraph('最终作品源码提交：' + binding['final_project_head']),
