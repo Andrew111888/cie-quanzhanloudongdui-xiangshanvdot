@@ -1,3 +1,5 @@
+本文保留原三阶段基线的生成RTL。当前main的共享数据通路和包装器见[当前实际生成RTL](../experiments/acc/generated/README.md)，版本对应见[评审入口](../docs/评审入口.md)。
+
 # 本次完整构建生成的RTL模块
 
 这两个SystemVerilog文件直接复制自独立检出的完整扩展核构建，未手工修改。provenance.json记录构建源码、上游版本、FIR与补丁摘要，以及每个模块的SHA256。实际验收结果由docs/FINAL_RESULTS.md（完整验收通过后生成）和发布包source-binding.json关联，模块文件存在本身不代表测试通过。
