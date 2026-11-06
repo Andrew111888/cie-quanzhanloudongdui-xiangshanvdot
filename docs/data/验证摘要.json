@@ -259,8 +259,103 @@
         }
       ]
     },
-    "figure_file": "docs/figures/vdot-handshake-timeline.svg",
-    "figure_sha256": "9a67bf617a37c11115608f191a193757dc697cc30fffeb9923dab25e57ac9e96",
-    "latest_accumulator_core_fst_available": false
+    "latest_accumulator_core_fst_available": false,
+    "screenshots": [
+      {
+        "view": "input",
+        "file": "docs/figures/vdot-input-gtkwave.png",
+        "sha256": "5f70f4073e157be7c4cb30eb409ca6235512a0647e8ab3ae515cc32f771195df",
+        "marker_tick": 2953,
+        "savefile_sha256": "05797d3c5f335b9cbae66354c5bcf3cf25ebc0b7439fd209ee646f156e39af9e",
+        "script_sha256": "738aa6ab2377ab7b8713dae8ad374aef3161c578c004ee4319e3374e8906f3d6"
+      },
+      {
+        "view": "output",
+        "file": "docs/figures/vdot-output-gtkwave.png",
+        "sha256": "fcd8fa029dd031173733df47505684d3c829f063609df3c51dc3aa4fdd953572",
+        "marker_tick": 2957,
+        "savefile_sha256": "2f724fb4bf7540de2dadc7999e1e72db59616cb69803a9bd65a4ef5d37c80921",
+        "script_sha256": "f7c26e164b7ea539ea1ad5f7c636c6f19327d3a99b9d52eba0ec8bdafb6f1e55"
+      },
+      {
+        "view": "commit",
+        "file": "docs/figures/vdot-commit-gtkwave.png",
+        "sha256": "097bf8ee679fddc290abb0007149800a3d3433164d476cc659e05d64d18d7c17",
+        "marker_tick": 3003,
+        "savefile_sha256": "5e81a604dd694ec436af4b0be52b38d671e16dfe4c659bb1fabe94ae657525b7",
+        "script_sha256": "f2ccc8e5835ae3368aa3228d5fcc1aa3c7390edc7a3efd88a8a09df466a08590"
+      }
+    ],
+    "screenshot_method": "Unedited GTKWave window capture from the original FST",
+    "signal_aliases": {
+      "clock": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.clock",
+      "IN_valid": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_in_valid",
+      "IN_ready": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_in_ready",
+      "IN_op": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_in_bits_ctrl_fuOpType[8:0]",
+      "IN_ROB_flag": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_in_bits_robIdx_flag",
+      "IN_ROB_index": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_in_bits_robIdx_value[5:0]",
+      "IN_pdest": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_in_bits_pdest[7:0]",
+      "IN_src0": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_in_bits_data_src_0[127:0]",
+      "IN_src1": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_in_bits_data_src_1[127:0]",
+      "OUT_valid": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_out_valid",
+      "OUT_ready": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_out_ready",
+      "OUT_data": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_out_bits_res_data[127:0]",
+      "OUT_ROB_flag": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_out_bits_robIdx_flag",
+      "OUT_ROB_index": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_out_bits_robIdx_value[5:0]",
+      "OUT_pdest": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_out_bits_pdest[7:0]",
+      "WB_valid": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_valid",
+      "WB_data": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_bits_data_0[127:0]",
+      "WB_ROB_flag": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_bits_robIdx_flag",
+      "WB_ROB_index": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_bits_robIdx_value[5:0]",
+      "WB_pdest": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_bits_pdest[7:0]",
+      "WB_vecWen": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_bits_vecWen",
+      "ROB_isCommit": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_isCommit",
+      "COMMIT2_valid": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_commitValid_2",
+      "COMMIT2_pc": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_info_2_debug_pc[49:0]",
+      "COMMIT2_instr": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_info_2_debug_instr[31:0]",
+      "COMMIT2_ROB_flag": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_robIdx_2_flag",
+      "COMMIT2_ROB_index": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_robIdx_2_value[5:0]",
+      "COMMIT2_ldest": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_info_2_basicDebug_ldest[5:0]",
+      "COMMIT2_pdest": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_info_2_basicDebug_pdest[7:0]",
+      "COMMIT2_vecWen": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_info_2_basicDebug_vecWen"
+    },
+    "cursor_values_checked_from_fst": true,
+    "cursor_samples": {
+      "2953": {
+        "IN_valid": 1,
+        "IN_pdest": 60,
+        "IN_ROB_index": 42,
+        "IN_ROB_flag": 0,
+        "IN_src1": 1334440654591915542993625911497130241,
+        "IN_src0": 1334440654591915542993625911497130241,
+        "IN_op": 256,
+        "IN_ready": 1
+      },
+      "2957": {
+        "OUT_data": 8,
+        "OUT_valid": 1,
+        "OUT_ROB_index": 42,
+        "OUT_ROB_flag": 0,
+        "OUT_pdest": 60,
+        "OUT_ready": 1,
+        "WB_vecWen": 1,
+        "WB_ROB_index": 42,
+        "WB_ROB_flag": 0,
+        "WB_pdest": 60,
+        "WB_data": 8,
+        "WB_valid": 1
+      },
+      "3003": {
+        "COMMIT2_ROB_index": 42,
+        "COMMIT2_ROB_flag": 0,
+        "COMMIT2_vecWen": 1,
+        "COMMIT2_pdest": 60,
+        "COMMIT2_ldest": 12,
+        "COMMIT2_instr": 44303883,
+        "COMMIT2_pc": 2147483874,
+        "COMMIT2_valid": 1,
+        "ROB_isCommit": 1
+      }
+    }
   }
 }
