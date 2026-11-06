@@ -47,7 +47,7 @@ VDOT_BAD_REF=$(sed -n 's/^FAULT_REFERENCE_BUILT //p' "$VDOT_ACCEPTANCE_DIR/fault
 bash "$VDOT_REPRO_ROOT/scripts/run_fault_check.sh" "$VDOT_BAD_REF"
 ```
 
-打开第三阶段PDF和FST：vdot输入到输出2拍；此次基线首个乘法输入至最终归约16拍，包含配置/清零/调度。解释组合路径、程序片段、吞吐三个边界，不能混称。
+打开三阶段性能分析文档和FST：vdot输入到输出2拍；此次基线首个乘法输入至最终归约16拍，包含配置/清零/调度。解释组合路径、程序片段、吞吐三个边界，不能混称。
 
 展示两条RVV基线、三长度五重复的原始周期、540条前后样本和含访存结果。重点说明旧vd虚假依赖消除在独立TU场景有效，真实依赖链及含访存未因此普遍改善；没有面积、功耗或LLM收益实测。
 

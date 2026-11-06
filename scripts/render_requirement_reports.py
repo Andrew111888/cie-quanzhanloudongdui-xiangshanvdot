@@ -1,4 +1,4 @@
-"""Render the three numbered contest reports from verified recorded evidence."""
+"""Render six Chinese-named contest documents with team-only PDF metadata."""
 import argparse
 from datetime import datetime
 import hashlib
@@ -48,6 +48,7 @@ pdfmetrics.registerFont(TTFont('CJK','/usr/share/fonts/truetype/droid/DroidSansF
 W = A4[0]-96
 body = ParagraphStyle('body',fontName='Latin',fontSize=9.3,leading=14.7,spaceAfter=7,wordWrap='CJK')
 cell = ParagraphStyle('cell',parent=body,fontSize=7.6,leading=11,spaceAfter=0)
+reference_style = ParagraphStyle('reference',parent=body,fontSize=8.2,leading=12,spaceAfter=4)
 h1 = ParagraphStyle('h1',parent=body,fontSize=18,leading=25,textColor=colors.HexColor('#163c56'),spaceBefore=10,spaceAfter=14,keepWithNext=True)
 h2 = ParagraphStyle('h2',parent=h1,fontSize=13,leading=20,spaceBefore=13,spaceAfter=8)
 h3 = ParagraphStyle('h3',parent=h1,fontSize=10.5,leading=17,spaceBefore=10,spaceAfter=6)
@@ -65,14 +66,19 @@ def inline(s):
 def p(s,style=body):
     return Paragraph(inline(s),style)
 
-def parse(path):
-    content = path.read_text().replace('hello xiangshan, I am 全栈漏洞队, <本机IP>',greeting)
+def parse(path, content):
+    content = content.replace('hello xiangshan, I am 全栈漏洞队, <本机IP>',greeting)
     content = content.replace('{{BASIC_CASE_OUTPUT}}',case_output)
     content = content.replace('<!-- LOCAL_ENVIRONMENT_IMAGE -->','![实际仿真输出画面](evidence:environment-output.png)')
+    content = content.split('\n',1)[1]
+    content = content.replace('\n队伍：全栈漏洞队。参赛单位：西安电子科技大学。\n','\n',1)
     assert '{{' not in content
-    lines=content.splitlines(); out=[]; pending=[];i=0
+    lines=content.splitlines(); out=[]; pending=[];i=0;reference_section=False
     def flush():
-        if pending: out.append(p(' '.join(pending)));pending.clear()
+        if pending:
+            text=' '.join(pending)
+            footnote=reference_section or text.startswith('上述为原日志差异行按版面折行。')
+            out.append(p(text,reference_style if footnote else body));pending.clear()
     while i<len(lines):
         s=lines[i]
         if not s.strip():flush();i+=1;continue
@@ -108,7 +114,8 @@ def parse(path):
             out += [pic,p(im[1],cell),Spacer(1,10)];i+=1;continue
         if s.startswith('#'):
             flush();level=len(s)-len(s.lstrip('#'));out.append(p(s.lstrip('#').strip(),h1 if level==1 else h2 if level==2 else h3))
-        elif s.startswith('- '):flush();out.append(p(s))
+            reference_section=s.lstrip('#').strip()=='参考资料'
+        elif s.startswith('- '):flush();out.append(p(s,reference_style if reference_section else body))
         else:pending.append(s)
         i+=1
     flush();return out
@@ -118,14 +125,53 @@ def footer(canvas,doc):
     x=p('全栈漏洞队 | 赛题编号交付版 | 2026-11-06',cell);x.wrap(W,20);x.drawOn(canvas,48,26)
     canvas.setFont('Latin',8);canvas.drawRightString(A4[0]-48,27,str(doc.page))
 
+def split_at(content, marker):
+    assert content.count(marker) == 1, marker
+    before, after = content.split(marker, 1)
+    return before.rstrip(), marker.lstrip('\n') + after
+
+stage1 = (root/'docs/submission/stage1.md').read_text()
+stage2 = (root/'docs/submission/stage2.md').read_text()
+stage3 = (root/'docs/submission/stage3.md').read_text()
+stage1_logs, stage1_process = split_at(stage1, '\n## 1.3 ')
+stage1_process, bound_note_count = re.subn(
+    r'官方文档用于解释机制，具体模块、信号与周期以固定源码和真实FST为准。完整构建实际源码为[0-9a-f]{40}；当前作品与真实验收身份由source-binding\.json分别记录。',
+    '具体信号、周期及源码身份以真实FST和source-binding.json为准。官方文档用于解释机制。',
+    stage1_process)
+assert bound_note_count == 1
+stage2_design, stage2_tests = split_at(stage2, '\n## 2.3.1 ')
+stage3_cosim, stage3_performance = split_at(stage3, '\n## 3.2 ')
+stage3_cosim = stage3_cosim.replace(
+    '\n\n原始正例、负例、恢复三份日志', '\n原始正例、负例、恢复三份日志', 1)
+
+def document(title, content):
+    if content.startswith('# '):
+        return '# '+title+'\n'+content.split('\n',1)[1]
+    return '# '+title+'\n\n队伍：全栈漏洞队。参赛单位：西安电子科技大学。\n\n'+content
+
+documents = [
+    (1, '一阶段执行日志', ['1.1','1.2'], document('一阶段执行日志', stage1_logs)+
+     '\n\n## 参考资料\n\n- [R1] [香山官方开发环境](https://docs.xiangshan.cc/zh-cn/latest/tools/xsenv/)\n'),
+    (1, '一阶段过程文档', ['1.3'], document('一阶段过程文档', stage1_process.replace('图2：原始FST','图1：原始FST'))),
+    (2, '二阶段设计文档', ['2.1','2.2'], document('二阶段设计文档', stage2_design)),
+    (2, '二阶段基础测试文档', ['2.3.1','2.3.2','2.3.3'], document('二阶段基础测试文档',
+     '测试遵循设计文档中的暂定契约：SEW=8、VLEN=128、LMUL=1、VL=8、vstart=0、vm=1；低8对有符号int8求和，低32位补码结果、高96位清零。结果宽度及支持范围尚待赛题方确认。\n\n'+stage2_tests)),
+    (3, '三阶段协同仿真文档', ['3.1.1','3.1.2'], document('三阶段协同仿真文档', stage3_cosim)),
+    (3, '三阶段性能分析文档', ['3.2','3.3'], document('三阶段性能分析文档',
+     '本报告比较已验收RTL上的vdot与等价RVV基线。两条路径均按低8对有符号int8、低32位结果及高96位清零的暂定契约验证；指令支持范围及结果宽度尚待赛题方确认。\n\n'+stage3_performance)),
+]
+
 records=[]
-for stage,filename in [(1,'第一阶段-环境部署与向量加法.pdf'),(2,'第二阶段-vdot设计与基础测试.pdf'),(3,'第三阶段-协同仿真与延迟分析.pdf')]:
+for stage,title,headings,content in documents:
+    filename=title+'.pdf'
     source=root/f'docs/submission/stage{stage}.md'
-    story=[p('香山昆明湖 V2 自定义 vdot.vv',h1),p('作品源码：'+head),
-           p('真实完整构建/验收源码：'+binding['tested_project_head']),
-           p('补充逐例测试源码：'+basic['source_project_head']),
-           p('处理器、NEMU及原有关键输入逐字节绑定；新增逐例测试另存实际输入摘要。三段官网录屏由参赛者另行完成。')]
-    story += parse(source)
+    story=[p(title,h1),p('香山昆明湖 V2 自定义 vdot.vv'),
+           p('队伍：全栈漏洞队。参赛单位：西安电子科技大学。'),
+           p('作品源码：'+head,cell),
+           p('真实完整构建/验收源码：'+binding['tested_project_head'],cell),
+           p('补充逐例测试源码：'+basic['source_project_head'],cell),
+           p('关键输入已逐字节绑定，新增测试另存实际输入摘要。三段官网录屏由参赛者另行完成。',cell),Spacer(1,10)]
+    story += parse(source,content)
     buf=BytesIO();SimpleDocTemplate(buf,pagesize=A4,leftMargin=48,rightMargin=48,topMargin=43,bottomMargin=56).build(story,onFirstPage=footer,onLaterPages=footer)
     writer=PdfWriter();writer.clone_reader_document_root(PdfReader(BytesIO(buf.getvalue())))
     writer.metadata={'/Author':'全栈漏洞队'};writer.root_object.pop(NameObject('/Metadata'),None)
@@ -137,15 +183,21 @@ for stage,filename in [(1,'第一阶段-环境部署与向量加法.pdf'),(2,'�
     assert '{{' not in extracted and '<本机IP>' not in extracted
     banned='co'+'dex'
     assert banned not in extracted.lower() and banned.encode() not in target.read_bytes().lower()
+    forbidden_metadata_keys={key.casefold() for key in (
+        '/Company','/Organization','/Unit','/LastModifiedBy','/LastSavedBy','/LastAuthor',
+        '/Creator','/CreatorTool','/Producer','/CreationDate','/ModDate','/ModifyDate',
+        '/LastModified','/Metadata','/MetadataDate')}
     for number in reader.xref.get(0,{}):
         obj=reader.get_object(number)
+        if isinstance(obj,dict):
+            found=forbidden_metadata_keys & {str(key).casefold() for key in obj}
+            assert not found, (filename,found)
         if hasattr(obj,'get_data'):
             data=obj.get_data().lower()
             assert all(banned.encode(enc) not in data for enc in ('ascii','utf-16-be','utf-16-le'))
-    headings={1:['1.1','1.2','1.3'],2:['2.1','2.2','2.3.1','2.3.2','2.3.3'],3:['3.1.1','3.1.2','3.2','3.3']}[stage]
     assert all(h in extracted for h in headings)
-    if stage==2:assert all(x['vd_hex'] in extracted for x in basic['cases'])
-    records.append({'stage':stage,'file':str(target.resolve()),'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'pages':len(reader.pages),'required_sections':headings,'metadata_author':'全栈漏洞队','metadata_and_content_scan':'passed','source_markdown_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'visual_review':'pending'})
+    if title=='二阶段基础测试文档':assert all(x['vd_hex'] in extracted for x in basic['cases'])
+    records.append({'stage':stage,'title':title,'file':str(target.resolve()),'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'pages':len(reader.pages),'required_sections':headings,'metadata_author':'全栈漏洞队','metadata_fields':dict(reader.metadata),'company_metadata_present':False,'last_modified_by_metadata_present':False,'xmp_present':False,'metadata_and_content_scan':'passed','source_markdown_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'section_content_sha256':hashlib.sha256(content.encode()).hexdigest(),'visual_review':'pending'})
 manifest={'status':'documents_rendered_pending_visual_review','final_project_head':head,'tested_project_head':binding['tested_project_head'],'binding_sha256':hashlib.sha256(args.binding.read_bytes()).hexdigest(),'basic_validation':str(args.basic_run.resolve()),'basic_validation_source_head':basic['source_project_head'],'reports':records,'video_responsibility':'participant','videos_included':False}
 (args.output/'reports-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps({'reports':records},ensure_ascii=False,indent=2))
