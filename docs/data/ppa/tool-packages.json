@@ -1,0 +1,17 @@
+[
+  {
+    "file": "opensta_0~20191111gitc018cb2+dfsg-1.1_amd64.deb",
+    "sha256": "9ec29cc74cc66cd82e6fa85aad2d3897c6315aa26adbc380892416e7a5e87a1b",
+    "bytes": 1133330
+  },
+  {
+    "file": "yosys-abc_0.52-2_amd64.deb",
+    "sha256": "82e3e3d5f6498c10260eaaaf72ae418e28c03679edfbc02e3c6e2e03e585a45e",
+    "bytes": 5296928
+  },
+  {
+    "file": "yosys_0.52-2_amd64.deb",
+    "sha256": "e435ad95e0599d6f7a69fb5b229c822bd826662678367bbea26003473d6a61ae",
+    "bytes": 6600962
+  }
+]

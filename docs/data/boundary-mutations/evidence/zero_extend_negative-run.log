@@ -1,0 +1,2 @@
+RTL_CASE_PASS name=positive signed_expected=8 actual128=00000000000000000000000000000008
+RTL_MISMATCH name=negative phase=throughput cycle=4 signed_expected=-8 expected128=000000000000000000000000fffffff8 actual128=0000000000000000000000000007fff8

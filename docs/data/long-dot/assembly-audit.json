@@ -1,0 +1,44 @@
+{
+  "dot_four": {
+    "single_final_vector_store": true,
+    "final_store_pc": "0x800001dc",
+    "output_address_register": "a5",
+    "loop_modified_gprs": [
+      "a0",
+      "a3",
+      "a4"
+    ],
+    "output_address_does_not_alias_modified_gprs": true,
+    "asm_constraints": "three +&r early-clobber read-write GPRs",
+    "loop_instruction_count": 28,
+    "operation": "four independent eight-item dots"
+  },
+  "rvv_reduce_four": {
+    "single_final_vector_store": true,
+    "final_store_pc": "0x800002c8",
+    "output_address_register": "a5",
+    "loop_modified_gprs": [
+      "a0",
+      "a3",
+      "a4"
+    ],
+    "output_address_does_not_alias_modified_gprs": true,
+    "asm_constraints": "three +&r early-clobber read-write GPRs",
+    "loop_instruction_count": 28,
+    "operation": "four widening reductions seeded by old accumulators"
+  },
+  "rvv_lane_sixteen": {
+    "single_final_vector_store": true,
+    "final_store_pc": "0x80000388",
+    "output_address_register": "a5",
+    "loop_modified_gprs": [
+      "a0",
+      "a3",
+      "a4"
+    ],
+    "output_address_does_not_alias_modified_gprs": true,
+    "asm_constraints": "three +&r early-clobber read-write GPRs",
+    "loop_instruction_count": 16,
+    "operation": "sixteen active int8 lanes and int32 lane accumulation followed by final reduction"
+  }
+}

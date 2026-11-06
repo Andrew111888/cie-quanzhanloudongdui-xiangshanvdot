@@ -1,0 +1,7 @@
+RTL_CASE_PASS name=positive signed_expected=8 actual128=00000000000000000000000000000008
+RTL_CASE_PASS name=negative signed_expected=-8 actual128=000000000000000000000000fffffff8
+RTL_CASE_PASS name=boundary_min_min signed_expected=131072 actual128=00000000000000000000000000020000
+RTL_CASE_PASS name=boundary_min_max signed_expected=-130048 actual128=000000000000000000000000fffe0400
+RTL_CASE_PASS name=boundary_max_max signed_expected=129032 actual128=0000000000000000000000000001f808
+RTL_CASE_PASS name=boundary_zero signed_expected=0 actual128=00000000000000000000000000000000
+VDOT_RTL_PASS directed_cases=6 random_cases=1000 seed=20261106 arithmetic_cases=1006 enable_stress_cycles=1006 checked_cycles=2013 total_cycles=2015

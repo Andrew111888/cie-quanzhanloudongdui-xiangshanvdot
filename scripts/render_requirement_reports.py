@@ -23,6 +23,7 @@ parser.add_argument('--binding', type=Path, required=True)
 parser.add_argument('--basic-run', type=Path, required=True)
 parser.add_argument('--stage1-evidence', type=Path, required=True)
 parser.add_argument('--followup', type=Path)
+parser.add_argument('--enhancements', type=Path)
 parser.add_argument('--output', type=Path, required=True)
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
@@ -53,6 +54,14 @@ if args.followup:
     for name,value in followup['evidence_sha256'].items():
         assert hashlib.sha256(Path(name).read_bytes()).hexdigest() == value, name
     assert 'dirty: 0' in greeting_output and 'dirty: 0' in basic_status
+enhancements = None
+if args.enhancements:
+    enhancements = json.loads(args.enhancements.read_text())
+    assert enhancements['status'] == 'verified'
+    for name,value in enhancements['evidence_sha256'].items():
+        assert hashlib.sha256(Path(name).read_bytes()).hexdigest() == value, name
+    for name,value in enhancements['project_input_sha256'].items():
+        assert hashlib.sha256((root/name).read_bytes()).hexdigest() == value, name
 args.output.mkdir(parents=True, exist_ok=True)
 temporary = root/'tmp/pdfs/requirements'
 temporary.mkdir(parents=True,exist_ok=True)
@@ -116,7 +125,10 @@ def parse(path, content):
             weights={2:[.85,2.1],3:[1.0,1.4,2.1],4:[1.2,.8,1.2,2],5:[1.4,.55,1.6,1.6,.6],6:[1.7,.4,.6,.75,.75,.6]}.get(n,[1]*n)
             if rows[0][0]=='观察事件':weights=[1.3,.5,.6,2.9]
             if rows[0][0].startswith('512次'):weights=[1.7,.8,.8,.8,.9]
-            t=LongTable([[p(c,cell) for c in row] for row in rows],colWidths=[W*x/sum(weights) for x in weights],repeatRows=1,hAlign='LEFT')
+            if rows[0][0]=='指标':weights=[2.5,1.15,1.15]
+            if rows[0][0]=='K':weights=[.35,1.15,1.15,1.15,.75]
+            if rows[0][0]=='RTL变异':weights=[1.5,.65,.9,1.4,.5]
+            t=LongTable([[p(c,cell) for c in row] for row in rows],colWidths=[W*x/sum(weights) for x in weights],repeatRows=1,hAlign='LEFT',rowSplitRange=(2,len(rows)-2) if len(rows)>3 else None)
             t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#e6eef5')),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,colors.HexColor('#f7f9fb')]),('GRID',(0,0),(-1,-1),.35,colors.HexColor('#c8d5df')),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),6),('RIGHTPADDING',(0,0),(-1,-1),6),('TOPPADDING',(0,0),(-1,-1),5),('BOTTOMPADDING',(0,0),(-1,-1),5)]))
             t.spaceAfter=10;out.append(t);continue
         im=re.fullmatch(r'!\[([^]]*)\]\(([^)]+)\)',s)
@@ -173,7 +185,7 @@ documents = [
      '测试配置为SEW=8、VLEN=128、LMUL=1、VL=8、vstart=0、vm=1。两源低8对有符号int8相乘求和，结果存入目标低32位，高96位清零。\n\n'+stage2_tests)),
     (3, '三阶段协同仿真文档', ['3.1.1','3.1.2'], document('三阶段协同仿真文档', stage3_cosim)),
     (3, '三阶段性能分析文档', ['3.2','3.3'], document('三阶段性能分析文档',
-     '本报告比较vdot与等价RVV基线。两条路径均计算低8对有符号int8的点积，结果存入目标低32位，高96位清零。\n\n'+stage3_performance)),
+     '本报告比较vdot与等价RVV基线，分别测量8项分块点积与跨K长归约。各对照均使用相同输入与完整128位结果布局；具体计时边界随实验给出。\n\n'+stage3_performance)),
 ]
 
 records=[]
@@ -183,7 +195,7 @@ for stage,title,headings,content in documents:
     story=[p(title,h1),p('香山昆明湖 V2 自定义 vdot.vv'),
            p('队伍：全栈漏洞队。参赛单位：西安电子科技大学。'),Spacer(1,10)]
     story += parse(source,content)
-    buf=BytesIO();SimpleDocTemplate(buf,pagesize=A4,leftMargin=48,rightMargin=48,topMargin=43,bottomMargin=56).build(story,onFirstPage=footer,onLaterPages=footer)
+    buf=BytesIO();SimpleDocTemplate(buf,pagesize=A4,leftMargin=48,rightMargin=48,topMargin=43,bottomMargin=64).build(story,onFirstPage=footer,onLaterPages=footer)
     writer=PdfWriter();writer.clone_reader_document_root(PdfReader(BytesIO(buf.getvalue())))
     writer.metadata={'/Author':'全栈漏洞队'};writer.root_object.pop(NameObject('/Metadata'),None)
     writer.compress_identical_objects(remove_duplicates=True,remove_unreferenced=True)
@@ -214,5 +226,9 @@ if args.followup:
     manifest.update(followup_evidence=str(args.followup.resolve()),
                     followup_evidence_sha256=hashlib.sha256(args.followup.read_bytes()).hexdigest(),
                     clean_committed_run_logs_verified=True)
+if args.enhancements:
+    manifest.update(enhancement_evidence=str(args.enhancements.resolve()),
+                    enhancement_evidence_sha256=hashlib.sha256(args.enhancements.read_bytes()).hexdigest(),
+                    enhancement_groups=[record['name'] for record in enhancements['groups']])
 (args.output/'reports-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps({'reports':records},ensure_ascii=False,indent=2))

@@ -1,0 +1,6 @@
+variant,status,build_exit_status,run_exit_status,case,signed_expected,expected128,actual128
+normal,passed,0,0,,,,
+truncate_sum_18,detected_by_result_assertion,0,42,boundary_min_min,131072,00000000000000000000000000020000,000000000000000000000000fffe0000
+zero_extend_negative,detected_by_result_assertion,0,42,negative,-8,000000000000000000000000fffffff8,0000000000000000000000000007fff8
+corrupt_upper_zero,detected_by_result_assertion,0,42,positive,8,00000000000000000000000000000008,00000000000000000000000100000008
+restored,passed,0,0,,,,

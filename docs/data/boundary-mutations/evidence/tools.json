@@ -1,0 +1,8 @@
+{
+  "verilator": "Verilator 5.022 2024-02-24 rev conda-forge build 1",
+  "verilator_path": "/home/yh/chipyard/.conda-env/bin/verilator",
+  "verilator_driver_sha256": "8f524b25347f8cf62eccf30adbc58d056f9d8a4497dea4e6640381a6e13e8c07",
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "compiler_path": "/usr/bin/g++",
+  "jobs": 2
+}

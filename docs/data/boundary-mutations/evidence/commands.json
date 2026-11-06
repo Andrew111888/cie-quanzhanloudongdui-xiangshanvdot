@@ -1,0 +1,207 @@
+[
+  {
+    "name": "normal-generate",
+    "argv": [
+      "/home/yh/chipyard/.conda-env/bin/verilator",
+      "--cc",
+      "--exe",
+      "--top-module",
+      "VdotDatapath",
+      "--Mdir",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/normal/obj_dir",
+      "-O1",
+      "-CFLAGS",
+      "-std=c++17 -O2",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/normal/VdotDatapath.sv",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/normal/boundary_mutations.cpp"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "normal-build",
+    "argv": [
+      "/usr/bin/make",
+      "-C",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/normal/obj_dir",
+      "-f",
+      "VVdotDatapath.mk",
+      "-j",
+      "2",
+      "CXX=/usr/bin/g++",
+      "LINK=/usr/bin/g++",
+      "AR=/usr/bin/ar"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "normal-run",
+    "argv": [
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/normal/obj_dir/VVdotDatapath"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "truncate_sum_18-generate",
+    "argv": [
+      "/home/yh/chipyard/.conda-env/bin/verilator",
+      "--cc",
+      "--exe",
+      "--top-module",
+      "VdotDatapath",
+      "--Mdir",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/truncate_sum_18/obj_dir",
+      "-O1",
+      "-CFLAGS",
+      "-std=c++17 -O2",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/truncate_sum_18/VdotDatapath.sv",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/truncate_sum_18/boundary_mutations.cpp"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "truncate_sum_18-build",
+    "argv": [
+      "/usr/bin/make",
+      "-C",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/truncate_sum_18/obj_dir",
+      "-f",
+      "VVdotDatapath.mk",
+      "-j",
+      "2",
+      "CXX=/usr/bin/g++",
+      "LINK=/usr/bin/g++",
+      "AR=/usr/bin/ar"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "truncate_sum_18-run",
+    "argv": [
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/truncate_sum_18/obj_dir/VVdotDatapath"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "zero_extend_negative-generate",
+    "argv": [
+      "/home/yh/chipyard/.conda-env/bin/verilator",
+      "--cc",
+      "--exe",
+      "--top-module",
+      "VdotDatapath",
+      "--Mdir",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/zero_extend_negative/obj_dir",
+      "-O1",
+      "-CFLAGS",
+      "-std=c++17 -O2",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/zero_extend_negative/VdotDatapath.sv",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/zero_extend_negative/boundary_mutations.cpp"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "zero_extend_negative-build",
+    "argv": [
+      "/usr/bin/make",
+      "-C",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/zero_extend_negative/obj_dir",
+      "-f",
+      "VVdotDatapath.mk",
+      "-j",
+      "2",
+      "CXX=/usr/bin/g++",
+      "LINK=/usr/bin/g++",
+      "AR=/usr/bin/ar"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "zero_extend_negative-run",
+    "argv": [
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/zero_extend_negative/obj_dir/VVdotDatapath"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "corrupt_upper_zero-generate",
+    "argv": [
+      "/home/yh/chipyard/.conda-env/bin/verilator",
+      "--cc",
+      "--exe",
+      "--top-module",
+      "VdotDatapath",
+      "--Mdir",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/corrupt_upper_zero/obj_dir",
+      "-O1",
+      "-CFLAGS",
+      "-std=c++17 -O2",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/corrupt_upper_zero/VdotDatapath.sv",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/corrupt_upper_zero/boundary_mutations.cpp"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "corrupt_upper_zero-build",
+    "argv": [
+      "/usr/bin/make",
+      "-C",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/corrupt_upper_zero/obj_dir",
+      "-f",
+      "VVdotDatapath.mk",
+      "-j",
+      "2",
+      "CXX=/usr/bin/g++",
+      "LINK=/usr/bin/g++",
+      "AR=/usr/bin/ar"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "corrupt_upper_zero-run",
+    "argv": [
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/corrupt_upper_zero/obj_dir/VVdotDatapath"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "restored-generate",
+    "argv": [
+      "/home/yh/chipyard/.conda-env/bin/verilator",
+      "--cc",
+      "--exe",
+      "--top-module",
+      "VdotDatapath",
+      "--Mdir",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/restored/obj_dir",
+      "-O1",
+      "-CFLAGS",
+      "-std=c++17 -O2",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/restored/VdotDatapath.sv",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/restored/boundary_mutations.cpp"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "restored-build",
+    "argv": [
+      "/usr/bin/make",
+      "-C",
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/restored/obj_dir",
+      "-f",
+      "VVdotDatapath.mk",
+      "-j",
+      "2",
+      "CXX=/usr/bin/g++",
+      "LINK=/usr/bin/g++",
+      "AR=/usr/bin/ar"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  },
+  {
+    "name": "restored-run",
+    "argv": [
+      "/home/yh/cie/vdot-kmhv2/reports/boundary-mutations-20261106T114141Z-535106/builds/restored/obj_dir/VVdotDatapath"
+    ],
+    "cwd": "/home/yh/cie/vdot-kmhv2"
+  }
+]

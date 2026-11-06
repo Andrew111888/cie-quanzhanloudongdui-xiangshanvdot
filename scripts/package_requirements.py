@@ -15,6 +15,7 @@ parser.add_argument('--pdf-dir',type=Path,required=True)
 parser.add_argument('--basic-run',type=Path,required=True)
 parser.add_argument('--stage1-evidence',type=Path,required=True)
 parser.add_argument('--followup',type=Path)
+parser.add_argument('--enhancements',type=Path)
 parser.add_argument('--recorded-evidence-zip',type=Path,required=True)
 parser.add_argument('--output',type=Path,required=True)
 args=parser.parse_args()
@@ -35,6 +36,13 @@ if args.followup:
     assert followup['status']=='passed'
     assert pdfs['followup_evidence_sha256']==digest(args.followup)
     for name,value in followup['evidence_sha256'].items():assert digest(Path(name))==value,name
+enhancements=None
+if args.enhancements:
+    enhancements=json.loads(args.enhancements.read_text())
+    assert enhancements['status']=='verified'
+    assert pdfs['enhancement_evidence_sha256']==digest(args.enhancements)
+    for name,value in enhancements['evidence_sha256'].items():assert digest(Path(name))==value,name
+    for name,value in enhancements['project_input_sha256'].items():assert digest(root/name)==value,name
 basic=json.loads((args.basic_run/'cases.json').read_text())
 assert basic['status']=='passed' and basic['source_unchanged']
 assert digest(args.basic_run/'run.log')==basic['run_log_sha256']
@@ -112,6 +120,27 @@ if followup:
     tree(Path(followup['runs']['memory']['directory']),stages[3]/'3.3-访存瓶颈对照/正式运行')
     tree(Path(followup['memory_wave']['run_directory']),stages[3]/'3.3-访存瓶颈对照/波形运行')
     tree(Path(followup['memory_wave']['analysis_directory']),stages[3]/'3.3-访存瓶颈对照/加载依赖分析')
+if enhancements:
+    for stage in stages.values():copy(args.enhancements,stage/'深化实验来源.json')
+    for group in enhancements['groups']:
+        stage=stages[group['stage']]
+        destination=Path(group['delivery_directory'])
+        assert not destination.is_absolute() and '..' not in destination.parts and len(destination.parts)==1
+        assert group['status']=='verified'
+        links=[]
+        for label,key in (('分析正文','analysis_document'),('完整数据索引','data_index')):
+            relative=Path(group[key])
+            assert not relative.is_absolute() and '..' not in relative.parts
+            assert (root/relative).is_file()
+            links.append(f'[{label}](../源码与报告原稿/{relative.as_posix()})')
+        index=stage/destination/'README.md';index.parent.mkdir(parents=True,exist_ok=True)
+        index.write_text('# '+group['title']+'\n\n'+'；'.join(links)+'。\n\n'+group['scope']+'\n')
+        for item in group['files']:
+            source=Path(item['source']).resolve(strict=True)
+            relative=Path(item['relative_path'])
+            assert not relative.is_absolute() and '..' not in relative.parts
+            assert digest(source)==item['sha256']
+            copy(source,stage/destination/relative)
 
 archived=[]
 with zipfile.ZipFile(args.recorded_evidence_zip) as z:
@@ -183,9 +212,16 @@ if followup:
                     clean_core_commit=followup['clean_build']['core_commit'],
                     clean_nemu_commit=followup['clean_build']['nemu_commit'],
                     clean_committed_key_runs=True,memory_diagnostic_formal_samples=40)
+if enhancements:
+    manifest.update(enhancement_evidence_sha256=digest(args.enhancements),
+                    enhancement_groups=[{'name':group['name'],'stage':group['stage'],
+                                         'directory':group['delivery_directory'],'status':group['status']}
+                                        for group in enhancements['groups']])
 (out/'提交清单.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
 supplement_note=('本轮另从已提交的香山/NEMU扩展源码重新构建，vadd、smoke和六项逐例测试均以dirty: 0通过；40条访存正式样本与加载波形另行绑定。'
                  if followup else '补充逐例测试单独记录输入与源码身份。')
+if enhancements:
+    supplement_note+='新增边界RTL故障变异、两级/四级模块资源与时序对照，以及45条整核长点积样本；原始输入、日志与摘要随相应阶段保存。'
 readme=f'''# 参赛提交材料：按赛题要求
 
 队伍：全栈漏洞队；参赛单位：西安电子科技大学。

@@ -1,0 +1,35 @@
+Running as unit: vdot-long-dot-20261106T114648Z-542402.scope; invocation ID: 34d1aaf77b7e40789d3d7e2dd2e19eb5
+LONG_DOT_DIRECTED_PASS cases=12 lengths=2 variants=3
+LONG_DIR_HEADER,k,case,expected,actual0,actual1,actual2
+LONG_DIR,32,2,524288,524288,524288,524288
+LONG_DIR,32,3,-520192,-520192,-520192,-520192
+LONG_DIR,512,2,8388608,8388608,8388608,8388608
+LONG_DIR,512,3,-8323072,-8323072,-8323072,-8323072
+LONG_DOT_HEADER,variant,k,c0,c1,c2,c3,c4,result
+LONG_DOT,0,32,118,118,118,118,118,46348
+LONG_DOT,0,128,198,182,182,182,182,12398
+LONG_DOT,0,512,453,453,453,438,438,-38688
+LONG_DOT,1,32,126,126,126,126,126,46348
+LONG_DOT,1,128,215,207,207,207,207,12398
+LONG_DOT,1,512,548,548,548,548,535,-38688
+LONG_DOT,2,32,127,127,127,127,127,46348
+LONG_DOT,2,128,183,172,172,172,172,12398
+LONG_DOT,2,512,369,364,364,364,364,-38688
+LONG_DOT_PASS samples=45 lengths=3 full_128bit_final_results_checked=1
+emu compiled at Nov  6 2026, 18:27:31
+%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 38574' or larger
+Using simulated 1048576B flash
+use /home/yh/cie/vdot-kmhv2/reports/long-dot-20261106T114648Z-542402/workload/flash.bin as flash bin
+Core  0's Commit SHA is: f1efc9c5ec, dirty: 0
+Using simulated 128MB RAM
+The image is /home/yh/cie/vdot-kmhv2/reports/long-dot-20261106T114648Z-542402/workload/long-dot.bin
+The reference model is /home/yh/cie/vdot-kmhv2/build/clean-commit-validation-20261106/build/nemu/reference/riscv64-nemu-interpreter-so
+The first instruction of core 0 has commited. Difftest enabled. 
+[1;34m[src/monitor/image_loader.c:219,load_img] Loading flash image: /home/yh/cie/vdot-kmhv2/reports/long-dot-20261106T114648Z-542402/workload/flash.bin
+[0m
+[1;34m[src/monitor/image_loader.c:264,load_img] Read 8 bytes from file /home/yh/cie/vdot-kmhv2/reports/long-dot-20261106T114648Z-542402/workload/flash.bin to 0x0xf0000000[0m
+Core 0: [32mHIT GOOD TRAP at pc = 0x80000054
+[0m[35mCore-0 instrCnt = 74,205, cycleCnt = 135,554, IPC = 0.547420
+[0m[34mSeed=0 Guest cycle spent: 135,560 (this will be different from cycleCnt if emu loads a snapshot)
+[0m[34mHost time spent: 363,493ms
+[0m

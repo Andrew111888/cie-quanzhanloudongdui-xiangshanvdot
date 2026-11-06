@@ -1,2 +1,4 @@
-# Unified patch context lines include a single space for blank source lines.
-patches/*.patch -whitespace
+# Preserve generated RTL, raw simulation logs and upstream license bytes.
+docs/data/boundary-mutations/** -whitespace
+docs/data/long-dot/*.log -whitespace
+docs/data/ppa/OpenCellLibraryLicenseSi2.txt -whitespace

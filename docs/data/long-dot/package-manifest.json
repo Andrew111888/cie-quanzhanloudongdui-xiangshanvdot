@@ -1,0 +1,30 @@
+{
+  "status": "verified",
+  "source_report": "/home/yh/cie/vdot-kmhv2/reports/long-dot-20261106T114648Z-542402",
+  "files_sha256": {
+    "summary.csv": "c5d799b74099520625714dfcc5e52a9e9263ddcffecc5e70a234a823a919df0d",
+    "source.json": "c2e84749991d6f247f77e0862fff61f732f9136bc0ee649c439075cb517dd64e",
+    "time.txt": "e83421c83717b537cfa19661816194017de9ca0e8ccf8b0285ee16115701ffc0",
+    "results.json": "7b36eab9dfd32617b8843a6b2634474bae37179fd3f29ae060ed1fad25ada957",
+    "artifacts.json": "769544af8307235f796ada80b3df9c8750bf9d92f67c7e7942498f702d0aad35",
+    "comparisons.csv": "069c4933a848c97e2d2b4381b14b345a87bed7c23c71527a5229ff40a084e344",
+    "run.log": "871212a7634826e932c6c5182094b17c2205fccbb635ef89258f9326f80b16e9",
+    "README.md": "87d4e1bf16781c415ca084093b372347730a6869875a99ae5d1615824177e312",
+    "build.log": "8b20bd6fd233409b7dbdd9af096e5773bde6a6554360183e337f78e1f9a23181",
+    "exit-status.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "samples.csv": "00686d03384c7b66de85354b315ba85eef3da6a90ecf0facbbbc51ddb9d8dcc1",
+    "assembly-audit.json": "87cf66aa3c9c3b25112bd18e60c000ee2fdfa2681f99347acaa93be9150e1340",
+    "commands.json": "661647b4c1c2eced17003e43ad97e4d39e19653cf2a991873efcf941073e4299",
+    "inputs/console.h": "d104a747b9592229154b5696854b7df63f45e647acfad39888573d8c31f7ed58",
+    "inputs/link.ld": "1c6dd14937e88ae5e5ea0fa95cd3b4abfe9b0c3121caa9c8b1605380cdfd5d8a",
+    "inputs/start.S": "3c8cc301c699d2e2eb2a605353b5f91b3f2d9e03f723f7e2ef5d9ff1da2a7883",
+    "inputs/long_dot_kernel.c": "8d4c667e67ad9365e4a653c310a64decd8db795a79dc52c35112810d6708d9cf",
+    "workload/long-dot.bin": "0868a12370549a9f8d227fce3ac75aa3e9f9771d75235c77325d517d80ab5fae",
+    "workload/long-dot.dis": "b4edf384537adebc8323806500a8b006f6c497b6674e61c459e3ecf425b55f2e",
+    "workload/flash.bin": "12b791f69e01db906377cac6d6b15c4cce7cd09c226515f181f7687186f786bd",
+    "workload/long-dot.elf": "fc9ca93d083c4a4d5349b643b5779294582ce5e17f75bdb022641819a5e72f5c"
+  },
+  "sample_count": 45,
+  "directed_kernel_executions": 36,
+  "full_core_difftest": true
+}
