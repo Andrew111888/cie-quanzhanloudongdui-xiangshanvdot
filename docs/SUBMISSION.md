@@ -1,44 +1,26 @@
-# 按赛题要求提交成果
+# 赛题提交内容索引
 
-队伍：全栈漏洞队。参赛单位：西安电子科技大学。
+全栈漏洞队 · 西安电子科技大学
 
-正式评审从默认main分支及[统一评审入口](评审入口.md)开始。当前main已经整合原vdot和累加融合成果。
+| 编号 | 内容 | 文档或代码 |
+|---|---|---|
+| 1.1 | 环境验证：问候、队名及IP输出 | [一阶段执行记录](submission/stage1.md)、[向量加法程序](../workloads/vadd_test.c) |
+| 1.2 | 环境部署和操作日志 | [环境准备](BOOTSTRAP.md)、[构建说明](BUILDING.md)、[原始部署记录索引](CLEAN_REPRODUCTION.md) |
+| 1.3 | 向量加法的执行过程 | [一阶段过程文档](submission/stage1.md) |
+| 2.1 | 指令语义、微架构和数据通路 | [设计说明](DESIGN.md)、[二阶段设计与测试](submission/stage2.md) |
+| 2.2 | Chisel/RTL实现 | [香山补丁](../patches/xiangshan.patch)、[完整修改文件](../experiments/acc/generated/README.md)、[生成RTL](../rtl/README.md) |
+| 2.3.1 | 正数点积测试 | [六项基础测试程序](../examples/vdot_basic.c)、[二阶段测试](submission/stage2.md)、[实际运行](data/basic-current/README.md) |
+| 2.3.2 | 含负数的点积测试 | [六项基础测试程序](../examples/vdot_basic.c)、[二阶段测试](submission/stage2.md)、[实际运行](data/basic-current/README.md) |
+| 2.3.3 | 最大值、最小值、零等边界 | [六项基础测试程序](../examples/vdot_basic.c)、[整核随机回归](data/acc-results/validation/results.json) |
+| 3.1.1 | NEMU指令扩展 | [NEMU补丁](../patches/nemu.patch)、[三阶段协同仿真](submission/stage3.md) |
+| 3.1.2 | RTL/NEMU协同仿真 | [功能回归](data/acc-results/validation/results.json)、[故障检出与恢复](data/acc-results/fault/results.json)、[异常优先级](data/acc-results/precedence/results.json) |
+| 3.2 | 现有RVV指令组成的等价基线 | [基准程序](../examples/acc_benchmark.c)、[测量方法](累加融合性能方法.md) |
+| 3.3 | 延迟和性能分析 | [三阶段性能分析](submission/stage3.md)、[完整实验报告](累加融合实验结果.md)、[逐次数据](data/acc-results/README.md) |
 
-本入口按赛题编号组织代码和技术文档，原三阶段文档保存813be85验收基线的实际证据。三段录屏由参赛者自行完成；当前不制作PPT。官网材料的替换继续暂停，GitHub作品源码同步与官方加密提交、官网上传分别记录，不能相互代替。
+## 文件说明
 
-深化材料随第二、三阶段一并提供：[边界RTL变异](边界故障变异验证.md)、[模块资源与时序对照](资源与时序评估.md)、[含访存长点积](长点积内核分析.md)。新增实验与原有完整验收分别绑定输入及原始证据。原540条性能样本保留其基线身份；最新共享数据通路和180条补充性能样本见[累加融合报告](累加融合实验结果.md)及[原始数据](data/acc-results/README.md)。
+`patches/`保存相对固定上游的完整改动。`rtl/`保存当前生成模块，`rtl/baseline/`保存原平衡树实现供资源对照。各次实验的原始记录保留自身的源码摘要；旧FST的分析对象为原点积模型。
 
-| 编号 | 交付内容 | 源码或正文入口 | 评审包中的证据 |
-|---|---|---|---|
-| 1.1 | 环境部署验证输出 | [阶段一](submission/stage1.md)、[程序](../workloads/vadd_test.c) | 实际问候、队名、IP、VADD_PASS、GOOD TRAP、原始退出码 |
-| 1.2 | 完整部署和操作过程记录 | [环境准备](BOOTSTRAP.md)、[构建](BUILDING.md)、[复现](CLEAN_REPRODUCTION.md) | 原始日志、命令、工具与仓库版本、失败及恢复记录的顺序索引 |
-| 1.3 | 向量加法执行过程 | [阶段一1.3](submission/stage1.md) | 原始FST、信号清单、PC/ROB/物理目的关联、逐阶段说明及官方参考资料 |
-| 2.1 | vdot.vv设计文档 | [阶段二2.1](submission/stage2.md)、[完整设计](DESIGN.md) | 语义、编码、微架构、数据通路、两级流水与支持范围 |
-| 2.2 | RTL实现 | [香山补丁](../patches/xiangshan.patch)、[生成RTL](../rtl/README.md) | Chisel源码、VIMac包装器、生成RTL及其摘要 |
-| 2.3.1 | 正数点积 | [逐例程序](../examples/vdot_basic.c) | positive：输入1和1，期望8，实际完整128位结果 |
-| 2.3.2 | 负数点积 | [逐例程序](../examples/vdot_basic.c) | negative：输入-1和1，期望-8，实际低32位补码及高96位零 |
-| 2.3.3 | 边界值 | [逐例程序](../examples/vdot_basic.c) | -128/-128、-128/127、127/127、0/-128的期望、实际值与原始日志 |
-| 3.1.1 | NEMU扩展 | [NEMU补丁](../patches/nemu.patch) | 编码、配置合法性检查、独立有符号运算和完整写回 |
-| 3.1.2 | 协同仿真 | [阶段三3.1](submission/stage3.md)、[差分核验](DIFFTEST_CHECKS.md) | 正常差分、错误参考反例、恢复、随机和流水回归 |
-| 3.2 | 等价RVV基线 | [测试基线](../workloads/vdot_test.c)、[基线实验](../workloads/benchmark_rvv.c) | 有符号扩宽乘法、32位归约、完整结果布局及校验记录 |
-| 3.3 | 延迟加速分析 | [阶段三3.3](submission/stage3.md)、[优化结果](OPTIMIZATION_RESULTS.md) | 真实FST边界、片段周期、540条原始样本及加速比 |
+## 录屏
 
-## 官网文档位置
-
-第一阶段提供原始执行日志、完整部署日志索引与一阶段过程文档PDF；第二阶段提供二阶段设计文档、二阶段基础测试文档PDF；第三阶段提供三阶段协同仿真文档、三阶段性能分析文档PDF。共五份中文命名PDF，页脚仅保留居中页码。PDF元数据仅保留作者“全栈漏洞队”，单位、最后修改人及其他Info/XMP字段均清除。每阶段附配套原始证据包。实际文件、版本绑定和校验值见本机`output/按赛题要求提交/README.md`及其`提交清单.json`。原始环境IP、完整FST和私人联系信息不作为公有源码附件发布。
-
-补充的[干净提交验收](干净提交验收.md)提供dirty: 0关键日志和固定补丁提交包；[访存瓶颈分析](访存瓶颈分析.md)及[40条正式样本](data/memory-diagnostic/README.md)单独保留输入加载依赖与存储粒度的对照证据。
-
-## 视频和PPT
-
-第一阶段操作过程、第二阶段解题思路、第三阶段波形与性能分析三段录屏均由参赛者完成，本轮提交包不收录此前的自动终端录屏。录制入口和讲解要点见[录屏指南](RECORDING_GUIDE.md)。PPT保留为后续选拔赛/决赛任务，按当前参赛者安排暂不制作。
-
-## GitHub与加密信息
-
-作品仓库存放实现、测试、公开报告源稿与复现脚本。官方XiangShanLab的Fork只提交评审公钥加密的`submission.asc`，通过已有PR交给官方评审；不将作品地址、联系信息、性能数据或版本流水账添加到公开PR正文。
-
-`my_submission.txt`保存在本地私有目录，按指南填写团队、作品URL、GitHub用户名、邮箱、项目概述及已有成员/单位信息；官方脚本加密的是该信息文件。源码仍存于已确认的作品仓库中。PR标题和正文仅使用参赛者提供PDF的模板。
-
-完整干净构建与验收的真实源码为4e5cfce9461e5870f266cff5b5347dd1265493c9；最终文档树和补充逐例测试各保留自己的源码身份。处理器、NEMU、原有测试及配置的关键输入在绑定中逐字节核对，不能把文档提交号改写成真实硬件构建号。
-
-尚未明确的结果位宽、配置范围等仍按[暂定契约](../contract.json)披露；工程内部验证通过不代表官方确认或评审通过。
+[三阶段录屏指南](RECORDING_GUIDE.md)列出环境操作、设计讲解、波形与性能分析的命令和讲解顺序。

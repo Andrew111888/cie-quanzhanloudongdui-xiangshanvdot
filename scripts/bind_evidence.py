@@ -90,7 +90,7 @@ if set(run_records) != {'vadd', 'smoke', 'register', 'random', 'pipeline', 'benc
 driver = Path(acceptance['driver'])
 if hashlib.sha256(driver.read_bytes()).hexdigest() != acceptance['driver_sha256']:
     raise SystemExit('Acceptance driver changed after the recorded run')
-generated = json.loads((root / 'rtl/provenance.json').read_text())
+generated = json.loads((root / 'rtl/baseline/provenance.json').read_text())
 tested_root = directory.parents[1]
 build_report = tested_root / generated['build_report']
 if generated['build_status'] != 'completed' or generated['tested_project_head'] != tested['project_head']:
@@ -102,7 +102,7 @@ if hashlib.sha256((tested_root / 'third_party/XiangShan/build/rtl/SimTop.fir').r
 if hashlib.sha256((root / 'patches/xiangshan.patch').read_bytes()).hexdigest() != generated['xiangshan_patch_sha256']:
     raise SystemExit('Generated RTL patch identity differs')
 for module in generated['modules']:
-    delivered = root / 'rtl' / module['file']
+    delivered = root / 'rtl/baseline' / module['file']
     compiled = tested_root / module['generated_path']
     if any(hashlib.sha256(path.read_bytes()).hexdigest() != module['sha256']
            for path in (delivered, compiled)):

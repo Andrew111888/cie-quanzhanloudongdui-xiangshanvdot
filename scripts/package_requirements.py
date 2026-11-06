@@ -94,7 +94,7 @@ xs_paths=[
 ]
 for rel in xs_paths:
     copy(tested/'third_party/XiangShan'/rel,stages[2]/'2.2-RTL/Chisel'/rel)
-for rel in ['patches/xiangshan.patch','rtl/VdotDatapath.sv','rtl/VIMacU.sv','rtl/provenance.json','datapath/test/src/VdotDatapathTest.scala']:
+for rel in ['patches/xiangshan.patch','rtl/baseline/VdotDatapath.sv','rtl/baseline/VIMacU.sv','rtl/baseline/provenance.json','datapath/test/src/VdotDatapathTest.scala']:
     copy(root/rel,stages[2]/'2.2-RTL'/rel)
 for rel in ['examples/vdot_basic.c','scripts/run_basic_validation.sh','workloads/vdot_test.c','workloads/register_test.c','workloads/pipeline_test.c','tests/reference.py']:
     copy(root/rel,stages[2]/'2.3-基础测试/源码'/rel)

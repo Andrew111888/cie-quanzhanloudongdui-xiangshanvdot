@@ -49,7 +49,7 @@ def run(command, log, cwd=root):
     return log.read_text(errors='replace')
 
 
-source_names = ['rtl/VdotDatapath.sv', 'experiments/ppa/VdotPipelined4.sv',
+source_names = ['rtl/baseline/VdotDatapath.sv', 'experiments/ppa/VdotPipelined4.sv',
                 'experiments/ppa/PpaTop2.sv', 'experiments/ppa/PpaTop4.sv',
                 'experiments/ppa/PpaVerify.sv', 'experiments/ppa/verify.cpp',
                 'scripts/evaluate_datapath_ppa.py']
@@ -58,8 +58,8 @@ for name in source_names:
     path = root / name
     source_hashes[name] = digest(path)
     shutil.copy2(path, evidence / 'inputs' / path.name)
-provenance = json.loads((root / 'rtl/provenance.json').read_text())
-assert any(module['file'] == 'VdotDatapath.sv' and module['sha256'] == source_hashes['rtl/VdotDatapath.sv']
+provenance = json.loads((root / 'rtl/baseline/provenance.json').read_text())
+assert any(module['file'] == 'VdotDatapath.sv' and module['sha256'] == source_hashes['rtl/baseline/VdotDatapath.sv']
            for module in provenance['modules'])
 library_text = args.liberty.read_text()
 assert re.search(r'time_unit\s*:\s*"1ns"', library_text)

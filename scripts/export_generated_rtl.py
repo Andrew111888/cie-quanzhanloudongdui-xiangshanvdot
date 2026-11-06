@@ -24,7 +24,11 @@ subprocess.run(['sha256sum', '--check', str(report / 'emu.sha256')],
 
 
 def digest(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    value = hashlib.sha256()
+    with path.open('rb') as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            value.update(block)
+    return value.hexdigest()
 
 
 fir = tested_root / 'third_party/XiangShan/build/rtl/SimTop.fir'
@@ -33,10 +37,20 @@ if digest(fir) != (report / 'fir.sha256').read_text().split()[0]:
 original_patch = tested_root / 'patches/xiangshan.patch'
 if digest(root / 'patches/xiangshan.patch') != digest(original_patch):
     raise SystemExit('The destination uses another processor patch')
-output = root / 'rtl'
-output.mkdir(exist_ok=True)
+has_accumulator = (fir.parent / 'VdotAccRetimedDatapath.sv').is_file()
+output = root / 'rtl' if has_accumulator else root / 'rtl/baseline'
+arithmetic = 'VdotAccRetimedDatapath.sv' if has_accumulator else 'VdotDatapath.sv'
+verified = None
+if has_accumulator:
+    verified = json.loads((root / 'experiments/acc/generated/provenance.json').read_text())
+    if verified['core_commit'] != source['repositories']['XiangShan']['head']:
+        raise SystemExit('Update the verified source snapshot for this core before exporting')
+    for name in (arithmetic, 'VIMacU.sv'):
+        if digest(fir.parent / name) != verified['files']['rtl/' + name]['sha256']:
+            raise SystemExit('Generated RTL differs from the verified arithmetic output: ' + name)
+output.mkdir(parents=True, exist_ok=True)
 modules = []
-for name in ('VdotDatapath.sv', 'VIMacU.sv'):
+for name in (arithmetic, 'VIMacU.sv'):
     original = fir.parent / name
     target = output / name
     shutil.copyfile(original, target)
@@ -50,5 +64,15 @@ manifest = {'schema': 'generated-rtl/v1', 'build_status': 'completed',
             'firtool': version[1], 'build_report': str(report.relative_to(tested_root)),
             'fir_sha256': digest(fir), 'xiangshan_patch_sha256': digest(original_patch),
             'modules': modules}
+if has_accumulator:
+    for item in modules:
+        name = item['file']
+        item['verified_copy'] = 'experiments/acc/generated/rtl/' + name
+    manifest.update(schema='generated-rtl/v2', xiangshan_head=verified['core_commit'],
+                    initial_nemu_head=verified['initial_reference_commit'],
+                    corrected_nemu_head=verified['corrected_reference_commit'],
+                    nemu_patch_sha256=digest(root / 'patches/nemu.patch'),
+                    baseline_directory='baseline',
+                    source_manifest='../experiments/acc/generated/provenance.json')
 (output / 'provenance.json').write_text(json.dumps(manifest, indent=2) + '\n')
 print('GENERATED_RTL_EXPORTED', output)

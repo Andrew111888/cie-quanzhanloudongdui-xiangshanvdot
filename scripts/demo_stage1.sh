@@ -19,7 +19,7 @@ printf '\n$ git -C <XiangShan> rev-parse HEAD\n'
 git -C "$vdot_repro/third_party/XiangShan" rev-parse HEAD
 printf '\n全量构建已经完成：CHIRRTL -> firtool -> Verilator/C++。\n'
 printf '这里核对已完成构建，长时间编译不在本段重新执行。\n'
-python3 - "$VDOT_ROOT/rtl/provenance.json" "$vdot_repro" <<'PY'
+python3 - "$VDOT_ROOT/rtl/baseline/provenance.json" "$vdot_repro" <<'PY'
 from pathlib import Path
 import json,subprocess,sys
 r=json.load(open(sys.argv[1]));root=Path(sys.argv[2]);b=root/r['build_report']

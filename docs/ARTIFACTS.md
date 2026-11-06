@@ -1,65 +1,24 @@
-# 报告、视频、绑定与提交包生成
+# 报告与数据整理
 
-这些入口整理真实验收证据，不代替处理器构建和测试。执行顺序如下；实际目录参数以本轮报告为准，不能把占位路径当作已有结果。
+报告正文位于docs/submission/和[完整实验报告](累加融合实验结果.md)，原始结果位于docs/data/。运行日志保留输入、命令、退出码和源码摘要。
 
-```bash
-# 从本轮已完成构建导出生成RTL及来源；重新复现时改用新的构建报告。
-python3 scripts/export_generated_rtl.py /absolute/path/to/completed-vdot-build-report
+## 生成模块
 
-# 完整干净验收生成acceptance.json后，整理最终文档与原始CSV。
-python3 scripts/summarize_acceptance.py /absolute/path/to/completed-acceptance \
-  --pristine-run /absolute/path/to/historical-unmodified-core-vadd
+```sh
+python3 scripts/export_generated_rtl.py /absolute/path/to/completed-build-report
+python3 scripts/check_repository.py --replay-patches
 ```
 
-原核证据来自较早检出时，用显式参数保留其真实来源；不能把旧原核模拟器复制进新目录后声称本轮重新构建。优化报告必须先从完成的四组RTL原始日志生成，并核对before/after的工作负载、参考库、flash字节一致。
+导出器核对完成的构建、FIR、补丁和模块摘要。当前共享路径写入rtl/，原平衡树构建写入rtl/baseline/。
 
-先审阅文档、原始数据和演示脚本，再提交最终源码，保持Git工作区干净。绑定器比较处理器、NEMU、资源、工作负载、配置和关键构建/分析入口的字节；允许并记录后续报告/演示工具增加。子模块比较路径、SHA和初始化状态，不把不同克隆中的git-describe标签当作代码差异。rtl/中的两份生成模块另与本次完整构建的实际文件、FIR及补丁摘要比较，不把来源未明的生成文件混入交付。
+## PDF
 
-rtl/provenance.json记录当前导出模块的实际构建。重新生成整套材料时先更新本轮来源，再提交这些非处理器源文件变化；绑定器保留新验收提交和最终归档提交的区别。原始失败日志不改写；同源码、同FIR的分阶段恢复使用明确列出各阶段来源的composite-build.json。普通功能复现只需构建与verify_reproduction.sh，无须重发提交材料。
+依赖版本见[报告依赖](累加报告依赖.txt)。`scripts/render_acc_report.py`从实验正文和完整验收回执生成PDF；输出后用Poppler逐页渲染检查。作者为全栈漏洞队，页脚为居中页码。
 
-```bash
-python3 scripts/bind_evidence.py /absolute/path/to/completed-acceptance \
-  --output reports/final-source-binding.json
-bash scripts/render_reports.sh --binding reports/final-source-binding.json \
-  --output output/pdf/20261106-optimized --report-date 2026-11-06
-```
+原三阶段PDF工具为`scripts/render_requirement_reports.py`，输入绑定、基础测试及证据目录通过其`--help`查看。报告生成和代码构建分别执行。
 
-PDF入口需要ReportLab与pypdf，本机已验证4.4.9和6.10.0；版面复核使用Poppler。启动脚本使用VDOT_PDF_PYTHON指定的Python，未指定时使用系统Python。其他机器可在独立Python虚拟环境安装ReportLab和pypdf后设置VDOT_PDF_PYTHON。还需要DejaVu和Droid Sans Fallback字体、ImageMagick的SVG渲染。没有binding参数时仅生成标注待完成项的开发审阅稿；正式版写入output/pdf-release，须重新渲染并目视检查所有页。
+## 打包
 
-完成PDF逐页检查后录制真实会话。三个入口必须使用已通过的干净验收和已验证的优化报告；录制期间不修改源文件。
+`scripts/package_acc_experiment.py`整理源码、PDF、原始数据和SHA256清单，并检查ZIP完整性。打包使用已完成且摘要一致的实验回执。
 
-```bash
-export VDOT_REPRO_ROOT=/absolute/path/to/independent-checkout
-export VDOT_ACCEPTANCE_DIR=/absolute/path/to/completed-acceptance
-export VDOT_OPTIMIZATION_DIR=/absolute/path/to/completed-optimization-report
-python3 scripts/record_terminal.py scripts/demo_stage1.sh --output output/video/20261106-optimized/stage1
-python3 scripts/record_terminal.py scripts/demo_stage2.sh --output output/video/20261106-optimized/stage2
-python3 scripts/record_terminal.py scripts/demo_stage3.sh --output output/video/20261106-optimized/stage3
-```
-
-录屏依赖和隔离显示方式见VIDEO_PLAN.md。视频、脚本、终端日志、实际退出码、源码前后清单与MP4参数一起保存；必须检查完整解码、关键画面可读性和源摘要。工具预检短片不作为赛题视频。本轮不制作PPT，官网上传继续暂停。
-
-```bash
-python3 scripts/package_submission.py --binding reports/final-source-binding.json \
-  --pdf-dir output/pdf/20261106-optimized \
-  --stage1-video output/video/20261106-optimized/stage1 \
-  --stage2-video output/video/20261106-optimized/stage2 \
-  --stage3-video output/video/20261106-optimized/stage3 \
-  --pristine-run /absolute/path/to/historical-unmodified-core-vadd \
-  --optimization-dir /absolute/path/to/completed-optimization-report \
-  --reproduction-status /absolute/path/to/completed-clean-reproduction/status.json \
-  --output output/submission-package
-```
-
-该入口生成四类ZIP和SHA256SUMS，核对报告、视频及验收身份，检查ZIP完整性和450MB内部上限。证明材料包含原始环境输出，仅用于官网评审上传；公有源码包只使用Git跟踪文件，不包含private/、原始运行日志或报名个人资料。
-
-只有包完整并绑定当前源码，才执行本地加密准备。该入口采用已与官方仓库比对的公钥和指纹，读取private/下用户确认的联系信息，明文保持0600，只打印输出目录；不执行推送、PR或官网提交。
-
-```bash
-python3 scripts/prepare_encrypted_submission.py --packages output/submission-package \
-  --official-key reports/official-public-key-20261105.asc
-```
-
-只将生成的submission.asc放入官方脚本指定的赛题/队伍目录。提交前再次核对所有材料、仓库提交与阶段完成情况；上传与加密准备是不同步骤，不能以ZIP或密文存在推定官网已接收。
-
-仓库及材料链接统一使用 https://github.com/Andrew111888/cie-quanzhanloudongdui-xiangshanvdot 。正式PDF元数据仅保留作者全栈漏洞队，其余Info字段及XMP清除。重新发布可通过render_reports.py的--output和package_submission.py的--pdf-dir指定新的报告目录，保留历史报告；--submission-checklist和--workflow-receipt将当前核对清单、提交信息放入四类ZIP。
+录屏命令和讲解顺序见[录屏指南](RECORDING_GUIDE.md)。官网材料分类见[上传安排](UPLOAD_MANIFEST.md)。

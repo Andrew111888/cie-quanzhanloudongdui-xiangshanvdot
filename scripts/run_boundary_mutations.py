@@ -26,9 +26,9 @@ inputs = report / 'inputs'; inputs.mkdir()
 evidence = report / 'evidence'; evidence.mkdir()
 builds = report / 'builds'; builds.mkdir()
 sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
-source = root / 'rtl/VdotDatapath.sv'
+source = root / 'rtl/baseline/VdotDatapath.sv'
 harness = root / 'verification/boundary_mutations.cpp'
-provenance = root / 'rtl/provenance.json'
+provenance = root / 'rtl/baseline/provenance.json'
 binding = json.loads(provenance.read_text())
 module = next(item for item in binding['modules'] if item['file'] == source.name)
 assert sha(source) == module['sha256'] and binding['build_status'] == 'completed'

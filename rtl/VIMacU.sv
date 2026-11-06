@@ -230,7 +230,8 @@ module VIMacU(
   wire         _vimacs_1_io_isMacc_T = io_in_bits_ctrl_fuOpType[2:0] == 3'h2;
   wire         _vimacs_1_io_isSub_T = io_in_bits_ctrl_fuOpType[2:0] == 3'h3;
   wire         _vimacs_1_io_isFixP_T = io_in_bits_ctrl_fuOpType[2:0] == 3'h6;
-  wire         outIsDot = io_in_bits_ctrlPipe_2_fuOpType == 9'h100;
+  wire         outIsDot =
+    io_in_bits_ctrlPipe_2_fuOpType == 9'h100 | io_in_bits_ctrlPipe_2_fuOpType == 9'h101;
   always @(posedge clock or posedge reset) begin
     if (reset) begin
       validVecThisFu_1 <= 1'h0;
@@ -512,10 +513,12 @@ module VIMacU(
     .io_out_vd          (_mgu_io_out_vd),
     .io_out_active      (_mgu_io_out_active)
   );
-  VdotDatapath dot (
+  VdotAccRetimedDatapath dot (
     .clock      (clock),
     .io_vs1     (io_in_bits_data_src_0),
     .io_vs2     (io_in_bits_data_src_1),
+    .io_acc
+      (io_in_bits_ctrl_fuOpType == 9'h101 ? io_in_bits_data_src_2[31:0] : 32'h0),
     .io_enable1 (io_in_bits_validPipe_0 & io_in_valid & rdyVec_0),
     .io_enable2 (io_in_bits_validPipe_1 & validVecThisFu_1 & rdyVec_1),
     .io_result  (_dot_io_result)

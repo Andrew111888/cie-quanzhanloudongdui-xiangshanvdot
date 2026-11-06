@@ -1,64 +1,51 @@
-# 参赛者自行录屏入口
+# 三阶段录屏指南
 
-三段录屏由参赛者自行完成。本文提供可操作的命令和讲解点，不生成或上传视频。PPT按当前安排暂不制作。
+## 准备
 
-## 使用已完成的本机仿真环境
+在本机工程根目录设置已构建的模型和参考库：
 
-```bash
+```sh
 cd /home/yh/cie/vdot-kmhv2
 source scripts/env.sh
-export VDOT_REPRO_ROOT=/home/yh/cie/vdot-kmhv2/build/clean-commit-validation-20261106
-export VDOT_ACCEPTANCE_DIR=/home/yh/cie/vdot-kmhv2-repro-20261106/reports/acceptance-20261106T023150Z-228441
-export VDOT_EMU_PATH="$VDOT_REPRO_ROOT/third_party/XiangShan/build/emu"
-export VDOT_REF_SO="$VDOT_REPRO_ROOT/build/nemu/reference/riscv64-nemu-interpreter-so"
+export VDOT_MODEL_ROOT="$PWD/build/acc-core-20261106"
+export VDOT_CURRENT_EMU="$VDOT_MODEL_ROOT/third_party/XiangShan/build/emu"
+export VDOT_CURRENT_REF="$PWD/build/acc-nemu-precedence/reference/riscv64-nemu-interpreter-so"
+export VDOT_FLASH="$VDOT_MODEL_ROOT/build/workloads/flash.bin"
 ```
 
-本机新增的干净提交模型已完成vadd、smoke和六项基础测试，运行打印dirty: 0。早先完整回归及540条性能记录仍保留其实际来源。下方前两阶段使用干净提交模型；第三阶段的故障反例与历史波形使用已完成的原验收记录。
+## 第一阶段：环境与向量加法
 
-## 第一阶段：操作过程
+展示固定版本、构建日志、问候、队名及IP输出，再按第一阶段文档中的PC、ROB和物理目的关联解释波形。
 
-说明固定版本、单核保留向量的配置，打开提交包中的部署操作索引并解释实际内存故障及恢复；长时间构建可展示已有日志，不声称现场重新编译。
+已有带波形的原点积模型可用于vadd操作录制：
 
-```bash
-VDOT_WAVE_BEGIN=0 VDOT_WAVE_END=15000 \
-  bash "$VDOT_REPRO_ROOT/scripts/run_rtl.sh" vadd_test
+```sh
+export VDOT_TRACE_ROOT="$PWD/build/clean-commit-validation-20261106"
+VDOT_EMU_PATH="$VDOT_TRACE_ROOT/third_party/XiangShan/build/emu" VDOT_REF_SO="$VDOT_TRACE_ROOT/build/nemu/reference/riscv64-nemu-interpreter-so" VDOT_WAVE_BEGIN=0 VDOT_WAVE_END=15000   bash "$VDOT_TRACE_ROOT/scripts/run_rtl.sh" vadd_test
 ```
 
-命令结束会打印实际RTL evidence目录；打开该目录run.log展示hello xiangshan、队名、IP、VADD_PASS和GOOD TRAP。IP来自工作负载构建时的本机地址。再展示正式验收FST和报告中的PC=0x80000118、ROB=(1,18)、P51关联，解释译码到提交31拍与ALU运算1拍的区别。
+打开命令输出目录中的run.log和wave.fst。完整部署记录及vadd分析见[第一阶段](submission/stage1.md)。当前共享路径的性能模型关闭了波形；上述FST对应带波形模型。
 
-现场重跑使用上方命令，配合本轮一阶段过程文档及原始FST讲解。
+## 第二阶段：设计与基础测试
 
-## 第二阶段：解题思路与基础测试
+展示[语义](DESIGN.md)、[数据通路图](figures/acc-retimed-datapath.svg)、Chisel补丁和当前rtl/目录。
 
-先展示contract.json、两级数据通路图与patches/xiangshan.patch：8路有符号乘法、16位乘积、17/18/19位归约、低32位结果和高96位清零，以及复用VIMac通路和共享资源的取舍。
+依次解释8路乘法、提前一级压缩、前缀加法、两级使能及高96位清零。普通点积选择累加输入0，累加版读取旧vd低32位；译码分别消除假依赖和保留真实依赖。
 
-```bash
-bash scripts/run_basic_validation.sh \
-  "$VDOT_REPRO_ROOT/third_party/XiangShan/build/emu" \
-  "$VDOT_REPRO_ROOT/build/nemu/reference/riscv64-nemu-interpreter-so"
+```sh
+bash scripts/run_basic_validation.sh "$VDOT_CURRENT_EMU" "$VDOT_CURRENT_REF"
 ```
 
-现场日志逐例展示positive=8、negative=-8、正边界131072、负边界-130048、最大值129032、零值0，并打印完整128位结果。解释负数只在低32位补码保存，高96位仍为零。展示完整随机/寄存器/流水回归时说明它们是已有完成记录。
+日志逐例显示正数8、负数-8、正边界131072、负边界-130048、最大值129032和零值0，核对完整128位。测试结束检查VDOT_BASIC_PASS、GOOD TRAP和退出码。
 
-补充展示docs/边界故障变异验证.md及docs/data/boundary-mutations中的正常、三个变异、恢复日志：三个变异均成功编译，再因指定数值断言退出42。结合设计文档解释131072超出18位有符号正边界。资源对照可展示docs/资源与时序评估.md：四级面积增加17.856%、两者1 ns建立约束均未通过，正式整核仍为两级。
+## 第三阶段：差分与性能
 
-## 第三阶段：波形、差分与性能
+展示NEMU的独立计算及目标写回，再打开[错误参考记录](data/acc-results/fault/results.json)及同目录日志。正确值0x12345680，错误参考0x12345681，三轮退出码0/1/0。交叉异常的修正前后对照见[48例记录](data/acc-results/precedence/results.json)。
 
-先展示NEMU补丁中的独立计算和完整写回。用已构建故障参考库运行真实正确→错误→恢复，展示错误比较能失败；故障退出1是预期反例，恢复必须成功。原始例子的首条vdot提交PC与差异诊断PC有区别。
+性能部分使用[完整报告](累加融合实验结果.md)和[逐次CSV](data/acc-results/README.md)，说明计时边界、预热、五次重复及较快RVV基线。
 
-```bash
-VDOT_BAD_REF=$(sed -n 's/^FAULT_REFERENCE_BUILT //p' "$VDOT_ACCEPTANCE_DIR/fault-build.log")
-VDOT_EMU_PATH=/home/yh/cie/vdot-kmhv2-repro-20261106/third_party/XiangShan/build/emu \
-VDOT_REF_SO=/home/yh/cie/vdot-kmhv2-repro-20261106/build/nemu/reference/riscv64-nemu-interpreter-so \
-  bash /home/yh/cie/vdot-kmhv2-repro-20261106/scripts/run_fault_check.sh "$VDOT_BAD_REF"
-```
+- 单链融合更慢，4/8条独立链在512轮时的周期比为1.428/2.255。
+- 含访存长点积K=32有收益，K=128/512仍由RVV16更快。
+- 算术模块的1.5 ns裕量、1 ns失败和面积单位按实际约束解释。
 
-打开三阶段性能分析文档和FST：vdot输入到输出2拍；此次基线首个乘法输入至最终归约16拍，包含配置/清零/调度。解释组合路径、程序片段、吞吐三个边界，不能混称。
-
-展示两条RVV基线、三长度五重复的原始周期、540条前后样本和含访存结果。重点说明旧vd虚假依赖消除在独立TU场景有效，真实依赖链及含访存未因此普遍改善。再展示docs/访存瓶颈分析.md中固定/轮换加载寄存器的波形对照。
-
-长归约使用docs/长点积内核分析.md及docs/data/long-dot中的45条样本：K=32时比例1.068，K=128和512时较强RVV16路径更快，比例0.945和0.804。讲清每8项分别输出与跨K只输出一次的区别。模块综合/STA不代表全核面积、功耗或LLM收益。
-
-## 录制完成后
-
-自行检查每段能看清命令、输入输出、波形和解释；不要在视频中打开私人联系信息或提交明文。三个视频文件由参赛者交付后，再核对文件、最终源码绑定及官网上传次数，统一更新官网材料。
+讲解当前共享路径时使用当前源码和数据。原平衡树FST可用于说明原点积流水，模型身份见该次记录。

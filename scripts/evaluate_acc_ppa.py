@@ -46,7 +46,7 @@ def run(argv,log,cwd=root):
     log.with_suffix(log.suffix+'.exit-status.txt').write_text(str(completed.returncode)+'\n')
     if completed.returncode:raise RuntimeError('Command failed: '+str(log))
     return log.read_text(errors='replace')
-source_names=['rtl/VdotDatapath.sv','experiments/acc/VdotAccPlain.sv','experiments/acc/VdotAccCsa.sv',
+source_names=['rtl/baseline/VdotDatapath.sv','experiments/acc/VdotAccPlain.sv','experiments/acc/VdotAccCsa.sv',
               'experiments/acc/VdotAccCsaPrefix.sv','experiments/acc/VdotAccCsaPrefixOr.sv','experiments/acc/VdotAccRetimed.sv','experiments/acc/AccVerify.sv','verification/acc_arithmetic.cpp','scripts/evaluate_acc_ppa.py']
 source_hashes={}
 for name in source_names:
@@ -56,8 +56,8 @@ if args.chisel_plain:
         path=path.resolve(strict=True);source_hashes[str(path)]=digest(path);shutil.copy2(path,evidence/'inputs'/path.name)
     chisel_source=root/'third_party/XiangShan/src/main/scala/xiangshan/backend/fu/vector/Vdot.scala'
     source_hashes[str(chisel_source)]=digest(chisel_source);shutil.copy2(chisel_source,evidence/'inputs/Vdot.scala')
-provenance=json.loads((root/'rtl/provenance.json').read_text())
-assert any(m['file']=='VdotDatapath.sv' and m['sha256']==source_hashes['rtl/VdotDatapath.sv'] for m in provenance['modules'])
+provenance=json.loads((root/'rtl/baseline/provenance.json').read_text())
+assert any(m['file']=='VdotDatapath.sv' and m['sha256']==source_hashes['rtl/baseline/VdotDatapath.sv'] for m in provenance['modules'])
 shutil.copy2(root/'docs/data/ppa/OpenCellLibraryLicenseSi2.txt',evidence/'inputs/OpenCellLibraryLicenseSi2.txt')
 start_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
 library_text=args.liberty.read_text()

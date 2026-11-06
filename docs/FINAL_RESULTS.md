@@ -1,10 +1,13 @@
-# 干净检出完整验收
+# 验证结果
 
-下列报告全部来自已完成的独立检出验收。最终源码与实际构建提交通过发布包source-binding.json连接，不改写原始证据身份。
+当前实现的验证和性能结果见[完整实验报告](累加融合实验结果.md)。
 
-- [阶段一：环境与向量加法](results/stage1-clean.md)
-- [阶段二：整核功能与流水](results/stage2-clean.md)
-- [阶段三：协同仿真与性能](results/stage3-clean.md)
-- [原始数据与来源摘要](data/clean/provenance.json)
+- [整核功能差分](data/acc-results/validation/results.json)
+- [流水测试](data/acc-results/pipeline/results.json)
+- [边界寄存器](data/acc-results/registers/results.json)
+- [错误参考与恢复](data/acc-results/fault/results.json)
+- [交叉异常](data/acc-results/precedence/results.json)
+- [性能逐次数据](data/acc-results/README.md)
+- [实际算术模块PPA](data/acc-ppa/full-core/results.json)
 
-赛题未明确语义仍按contract.json暂定解释披露，官方问题见QUESTIONS.md；不将工程验收通过表述为官方评审通过。
+原平衡归约模型的环境、FST和性能记录保存在[阶段一](results/stage1-clean.md)、[阶段二](results/stage2-clean.md)、[阶段三](results/stage3-clean.md)及[原始摘要](data/clean/provenance.json)。

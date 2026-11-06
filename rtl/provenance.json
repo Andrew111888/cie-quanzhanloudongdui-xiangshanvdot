@@ -1,22 +1,30 @@
 {
-  "schema": "generated-rtl/v1",
+  "schema": "generated-rtl/v2",
   "build_status": "completed",
-  "tested_project_head": "4e5cfce9461e5870f266cff5b5347dd1265493c9",
-  "upstream_xiangshan_head": "7b16188f7f18a97be69c9b1a2dae8a446eec3b47",
+  "tested_project_head": "dc5d8cd58eafbbb6ccae80ac28492b37ec5af250",
+  "upstream_xiangshan_head": "14c8b3489a610d9b210ab57b5bf30901f8cf4263",
   "firtool": "1.62.1",
-  "build_report": "reports/completed-build-20261106",
-  "fir_sha256": "fa5e68cce015dc81e561d9f0bff3f0c565368c2e10a17df4a443c92fcea757ad",
-  "xiangshan_patch_sha256": "76ef1a49dbfd17a51654e40bded2d2431f483ace9112bbbc50dae8680a757555",
+  "build_report": "reports/vdot-build-20261106T133403Z-630486",
+  "fir_sha256": "6d74275e0245a5ec6fe6e9b3689f2989bafa1d745a18bc68904cac5fa9db7d8b",
+  "xiangshan_patch_sha256": "643253b1ba96469ca943849206eb14d0d05d4a9f48ec9948f7928fddc6536ff8",
   "modules": [
     {
-      "file": "VdotDatapath.sv",
-      "generated_path": "third_party/XiangShan/build/rtl/VdotDatapath.sv",
-      "sha256": "868ca4b2f21e499a37c14161c72e0776817086eb73a27354102722008de20b89"
+      "file": "VdotAccRetimedDatapath.sv",
+      "generated_path": "third_party/XiangShan/build/rtl/VdotAccRetimedDatapath.sv",
+      "sha256": "4723293e599df8d4221797422ec742e7f1db149308a6fa929bc1cfa52e6f654e",
+      "verified_copy": "experiments/acc/generated/rtl/VdotAccRetimedDatapath.sv"
     },
     {
       "file": "VIMacU.sv",
       "generated_path": "third_party/XiangShan/build/rtl/VIMacU.sv",
-      "sha256": "7a3a577e40340ec16162afa9d453756879729d749e4966e6d9f524784482ba74"
+      "sha256": "a728e8f109bd0c3261af12c644ee0f5a003b6ad4ae08dbe2573bf24f2207d1c8",
+      "verified_copy": "experiments/acc/generated/rtl/VIMacU.sv"
     }
-  ]
+  ],
+  "xiangshan_head": "14c8b3489a610d9b210ab57b5bf30901f8cf4263",
+  "initial_nemu_head": "3cdf27f53cc7a6ecef9b2c5f63ee836307042a08",
+  "corrected_nemu_head": "3097fa05435c3e85c1541f09027457ee7ee13f43",
+  "nemu_patch_sha256": "e6ebf001f287014a1fb8ba5a2f56cdfc76ac53b51bb42b1f69a334a6953e36ac",
+  "baseline_directory": "baseline",
+  "source_manifest": "../experiments/acc/generated/provenance.json"
 }

@@ -6,3 +6,5 @@ patches/*.patch -whitespace
 docs/data/acc-ppa/** -whitespace
 docs/data/acc-results/** -whitespace
 experiments/acc/generated/** -whitespace
+rtl/**/*.sv -whitespace
+docs/data/basic-current/** -whitespace
