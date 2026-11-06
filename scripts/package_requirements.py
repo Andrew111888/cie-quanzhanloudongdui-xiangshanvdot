@@ -86,13 +86,13 @@ nemu_source=json.loads((Path(binding['acceptance'])/'source-after.json').read_te
 for rel,value in nemu_source.items():
     src=tested/'third_party/NEMU'/rel;assert digest(src)==value
     copy(src,stages[3]/'3.1-NEMU扩展/展开源码'/rel)
-for rel in ['patches/nemu.patch','configs/nemu-reference.config','configs/nemu-standalone.config','docs/DIFFTEST_CHECKS.md']:
+for rel in ['patches/nemu.patch','configs/nemu-reference.config','configs/nemu-standalone.config']:
     copy(root/rel,stages[3]/'3.1-NEMU扩展'/rel)
+(stages[3]/'3.1-NEMU扩展/README.md').write_text('# NEMU扩展与差分说明\n\n补丁、配置和展开源码位于本目录。\n\n[完整差分说明](../源码与报告原稿/docs/DIFFTEST_CHECKS.md)\n')
 for rel in ['workloads/vdot_test.c','workloads/benchmark.c','workloads/benchmark_rvv.c','workloads/dot_memory.c','workloads/latency_probe.c','scripts/performance_report.py','scripts/optimization_report.py']:
     copy(root/rel,stages[3]/'3.2-基线与测量源码'/rel)
-for rel in ['docs/OPTIMIZATION.md','docs/OPTIMIZATION_RESULTS.md','docs/PERFORMANCE.md']:
-    copy(root/rel,stages[3]/'3.3-性能分析'/Path(rel).name)
 tree(root/'docs/data/optimization',stages[3]/'3.3-性能分析/公开数据')
+(stages[3]/'3.3-性能分析/README.md').write_text('# 性能分析入口\n\n[方法](../源码与报告原稿/docs/OPTIMIZATION.md)\n\n[优化结果](../源码与报告原稿/docs/OPTIMIZATION_RESULTS.md)\n\n[完整性能边界](../源码与报告原稿/docs/PERFORMANCE.md)\n\n本目录公开数据和同阶段原始协同与性能证据保留实测来源。\n')
 
 archived=[]
 with zipfile.ZipFile(args.recorded_evidence_zip) as z:
@@ -122,6 +122,14 @@ for name in tracked:
     for stage in stages.values():
         copy(root/name,stage/'源码与报告原稿'/name)
 
+offline_links=0
+for stage in stages.values():
+    for path in stage.rglob('*.md'):
+        for link in re.findall(r'\]\(([^)]+)\)',path.read_text(errors='replace')):
+            if link.startswith(('http:','https:','#')):continue
+            assert (path.parent/link.split('#')[0]).exists(),(str(path),link)
+            offline_links+=1
+
 def archive(path,files,readme):
     sums=[]
     with zipfile.ZipFile(path,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:
@@ -150,6 +158,7 @@ requirements=[]
 for n,ids in {1:['1.1','1.2','1.3'],2:['2.1','2.2','2.3.1','2.3.2','2.3.3'],3:['3.1.1','3.1.2','3.2','3.3']}.items():
     for identifier in ids:requirements.append({'id':identifier,'stage':n,'status':'technical_materials_verified','directory':str(stages[n])})
 manifest={'status':'non_video_materials_ready_videos_pending_portal_held','prepared_utc':datetime.now(timezone.utc).isoformat(),'final_project_head':head,'tested_project_head':binding['tested_project_head'],'basic_validation_source_head':basic['source_project_head'],'basic_validation_log_sha256':basic['run_log_sha256'],'source_binding_sha256':digest(args.binding),'requirements':requirements,'reports':pdfs['reports'],'packages':packages,'copied_source_records':records,'preserved_archive_source':{'path':str(args.recorded_evidence_zip),'sha256':old_recorded_digest},'extracted_records':archived,'videos':[{'stage':i,'status':'awaiting_participant_recording'} for i in (1,2,3)],'ppt':'deferred_by_participant','official_portal_updated':False,'official_pr_updated':False,'encryption':'pending_local_preparation'}
+manifest['offline_markdown_links_checked']=offline_links
 (out/'提交清单.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
 readme=f'''# 参赛提交材料：按赛题要求
 
