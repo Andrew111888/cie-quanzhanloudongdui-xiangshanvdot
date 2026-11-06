@@ -8,6 +8,9 @@ volatile uint32_t expected_illegal;
 #ifndef ACC_BENCH_SHARDS
 #define ACC_BENCH_SHARDS 1
 #endif
+#ifndef ACC_BENCH_VERBOSE
+#define ACC_BENCH_VERBOSE 0
+#endif
 #define SELECT_GROUP(x) ((x) % ACC_BENCH_SHARDS == ACC_BENCH_SHARD)
 enum { MAX_K=512, LONG_VARIANTS=4, CHAIN_VARIANTS=2, SIZES=3,
        CHAIN_COUNTS=4, REPEATS=5, MAX_CHAINS=8 };
@@ -32,7 +35,17 @@ static inline uint64_t cycle(void) {
   return result;
 }
 static void fail(unsigned code) {
+  puts_uart("ACC_BENCH_FAIL code="); print_uint(code); putch('\n');
   __asm__ volatile("mv a0,%0\n .word 0x0000006b" : : "r"((uintptr_t)code) : "a0", "memory");
+}
+static void fail_word(unsigned code,unsigned index,unsigned word,uint32_t actual,uint32_t expected) {
+  puts_uart("ACC_BENCH_MISMATCH,"); print_uint(code); putch(','); print_uint(index);
+  putch(','); print_uint(word); putch(','); print_uint(actual); putch(','); print_uint(expected); putch('\n');
+  fail(code);
+}
+/* Ordered 32-bit FNV mixing keeps all directed result values in a compact UART proof. */
+static uint32_t mix_checksum(uint32_t state,uint32_t value) {
+  return (state^value)*16777619u;
 }
 static uint32_t random_word(uint32_t *state) {
   *state^=*state<<13; *state^=*state>>17; *state^=*state<<5;
@@ -105,7 +118,10 @@ __attribute__((noinline)) static uint64_t NAME(unsigned k) { \
   __asm__ volatile(INIT "1:\n" BODY "addi %2,%2,-32\n bnez %2,1b\n" FINISH \
     : "+&r"(a),"+&r"(b),"+&r"(remaining) : "r"(output) : "memory",ALL_VECTOR_REGS); \
   uint64_t elapsed=cycle()-begin; \
-  if (output[0]!=(uint32_t)expected_result || output[1] || output[2] || output[3]) fail(96); \
+  for (unsigned j=0;j<4;++j) { \
+    uint32_t want=j ? 0u : (uint32_t)expected_result; \
+    if (output[j]!=want) fail_word(96,k,j,output[j],want); \
+  } \
   return elapsed; \
 }
 LONG_KERNEL(dot_four,FOUR_ACC_INIT,DOT_BODY,FOUR_ACC_FINISH)
@@ -154,10 +170,11 @@ __attribute__((noinline)) static uint64_t NAME(unsigned iterations) { \
   uint64_t elapsed=cycle()-begin; \
   for (unsigned i=0;i<N;++i) { \
     uint32_t want=chain_initial[i][0]+iterations*chain_dot; \
-    if (chain_output[i][0]!=want || chain_output[i][1] || chain_output[i][2] || chain_output[i][3]) fail(97); \
+    for (unsigned j=0;j<4;++j) \
+      if (chain_output[i][j]!=(j ? 0u : want)) fail_word(97,i,j,chain_output[i][j],j ? 0u : want); \
   } \
   for (unsigned i=N;i<MAX_CHAINS;++i) \
-    for (unsigned j=0;j<4;++j) if (chain_output[i][j]!=0x5aa5a55a) fail(98); \
+    for (unsigned j=0;j<4;++j) if (chain_output[i][j]!=0x5aa5a55a) fail_word(98,i,j,chain_output[i][j],0x5aa5a55a); \
   return elapsed; \
 }
 CHAIN_KERNEL(dot_add_1,1,DOTS_1 E32_4 ADDS_1 E8_8,STORES_1)
@@ -232,6 +249,7 @@ int main(void) {
         chain_count+=REPEATS;
       }
   if (ACC_BENCH_SHARD==0) {
+#if ACC_BENCH_VERBOSE
   puts_uart("ACC_LONG_DIRECTED_PASS cases=12 variants=4 executions=48\n");
   for (unsigned size=0;size<2;++size)
     for (unsigned test=0;test<6;++test) {
@@ -248,6 +266,29 @@ int main(void) {
         puts_uart("ACC_CHAIN_DIR,");print_uint(test);putch(',');print_uint(variant);putch(',');
         print_uint(counts[count]);putch(',');print_uint(chain_directed[test][variant][count]);putch('\n');
       }
+#else
+  uint32_t long_check=2166136261u,chain_check=2166136261u;
+  for (unsigned size=0;size<2;++size)
+    for (unsigned test=0;test<6;++test)
+      for (unsigned variant=0;variant<LONG_VARIANTS;++variant) {
+        long_check=mix_checksum(long_check,directed_sizes[size]);
+        long_check=mix_checksum(long_check,test);
+        long_check=mix_checksum(long_check,variant);
+        long_check=mix_checksum(long_check,(uint32_t)long_directed[size][test][variant]);
+      }
+  for (unsigned test=0;test<6;++test)
+    for (unsigned variant=0;variant<CHAIN_VARIANTS;++variant)
+      for (unsigned count=0;count<CHAIN_COUNTS;++count) {
+        chain_check=mix_checksum(chain_check,test);
+        chain_check=mix_checksum(chain_check,variant);
+        chain_check=mix_checksum(chain_check,counts[count]);
+        chain_check=mix_checksum(chain_check,chain_directed[test][variant][count]);
+      }
+  puts_uart("ACC_LONG_DIRECTED_SUMMARY cases=12 variants=4 executions=48 checksum=");
+  print_uint(long_check);putch('\n');
+  puts_uart("ACC_CHAIN_DIRECTED_SUMMARY cases=6 chain_counts=4 variants=2 executions=48 checksum=");
+  print_uint(chain_check);putch('\n');
+#endif
   }
   puts_uart("ACC_LONG_HEADER,variant,k,c0,c1,c2,c3,c4,result\n");
   for (unsigned variant=0;variant<LONG_VARIANTS;++variant)
@@ -265,11 +306,17 @@ int main(void) {
         puts_uart("ACC_CHAIN,");print_uint(variant);putch(',');print_uint(counts[count]);putch(',');print_uint(sizes[size]);
         for (unsigned repeat=0;repeat<REPEATS;++repeat) { putch(',');print_uint(chain_samples[variant][count][size][repeat]); }
         putch('\n');
+#if ACC_BENCH_VERBOSE
         for (unsigned i=0;i<counts[count];++i) {
           puts_uart("ACC_CHAIN_RESULT,");print_uint(variant);putch(',');print_uint(counts[count]);putch(',');print_uint(sizes[size]);putch(',');print_uint(i);
           for (unsigned j=0;j<4;++j) { putch(',');print_uint(chain_results[variant][count][size][i][j]); }
           putch('\n');
         }
+#else
+        puts_uart("ACC_CHAIN_RESULT_PACK,");print_uint(variant);putch(',');print_uint(counts[count]);putch(',');print_uint(sizes[size]);
+        for (unsigned i=0;i<counts[count];++i) { putch(',');print_uint(chain_results[variant][count][size][i][0]); }
+        putch('\n');
+#endif
       }
   puts_uart("ACC_BENCH_PASS long_samples=");print_uint(long_count);
   puts_uart(" chain_samples=");print_uint(chain_count);puts_uart(" full_128bit_results=1\n");

@@ -89,6 +89,9 @@ def audit(disassembly,report):
     return audits
 
 def summarize(report,text,artifacts,source_hashes,version,head,completed,args):
+    def checksum_word(state, value):
+        return ((state ^ (value & 0xffffffff)) * 16777619) & 0xffffffff
+
     def random_word(state):
         state ^= (state << 13) & 0xffffffff
         state ^= state >> 17
@@ -119,6 +122,19 @@ def summarize(report,text,artifacts,source_hashes,version,head,completed,args):
         want = k * edges[case][0] * edges[case][1]
         assert expected == want and actual == [want] * 4
         long_directed.append({'k': k, 'case': case, 'expected': want, 'actual': actual})
+    long_checksums = re.findall(r'^ACC_LONG_DIRECTED_SUMMARY cases=12 variants=4 executions=48 checksum=(\d+)$', text, re.M)
+    if long_checksums:
+        assert len(long_checksums) == 1 and not long_directed
+        checksum = 2166136261
+        for k in (32, 512):
+            for case, edge in enumerate(edges):
+                want = k * edge[0] * edge[1]
+                for variant in range(4):
+                    for value in (k, case, variant, want):
+                        checksum = checksum_word(checksum, value)
+                long_directed.append({'k': k, 'case': case, 'expected': want, 'actual': [want] * 4,
+                                      'verification': 'guest per-result check plus independent ordered-checksum comparison'})
+        assert int(long_checksums[0]) == checksum
     assert len(long_directed) == 12 and len({(r['k'], r['case']) for r in long_directed}) == 12
     chain_rows, chain_summary = [], []
     for row in re.findall(r'^ACC_CHAIN,(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),(\d+),(\d+)$', text, re.M):
@@ -139,6 +155,19 @@ def summarize(report,text,artifacts,source_hashes,version,head,completed,args):
         expected = (0x7ffffff0 + index * 0x10203 + rounds * golden[8]) & 0xffffffff
         assert actual == [expected, 0, 0, 0]
         chain_results.append({'variant': variant, 'chains': chains, 'rounds': rounds, 'index': index, 'words32': actual})
+    packed_results = re.findall(r'^ACC_CHAIN_RESULT_PACK,(\d+),(\d+),(\d+),([\d,]+)$', text, re.M)
+    if packed_results:
+        assert not chain_results
+        for variant_text, chains_text, rounds_text, values_text in packed_results:
+            variant, chains, rounds = map(int, (variant_text, chains_text, rounds_text))
+            actual = list(map(int, values_text.split(',')))
+            assert variant in (0, 1) and chains in (1, 2, 4, 8) and rounds in (32, 128, 512) and len(actual) == chains
+            for index, low32 in enumerate(actual):
+                expected = (0x7ffffff0 + index * 0x10203 + rounds * golden[8]) & 0xffffffff
+                assert low32 == expected
+                chain_results.append({'variant': variant, 'chains': chains, 'rounds': rounds, 'index': index,
+                                      'words32': [low32, 0, 0, 0],
+                                      'verification': 'low32 independently checked from compact log; high96 checked by guest every invocation'})
     assert len(chain_results) == 90 and len({(r['variant'], r['chains'], r['rounds'], r['index']) for r in chain_results}) == 90
     directed_chains = []
     for row in re.findall(r'^ACC_CHAIN_DIR,(\d+),(\d+),(\d+),(\d+)$', text, re.M):
@@ -151,6 +180,23 @@ def summarize(report,text,artifacts,source_hashes,version,head,completed,args):
             expected ^= (seed + index * 0x10203 + 32 * dot) & 0xffffffff
         assert actual == expected
         directed_chains.append({'case': case, 'variant': variant, 'chains': chains, 'checksum': actual})
+    chain_checksums = re.findall(r'^ACC_CHAIN_DIRECTED_SUMMARY cases=6 chain_counts=4 variants=2 executions=48 checksum=(\d+)$', text, re.M)
+    if chain_checksums:
+        assert len(chain_checksums) == 1 and not directed_chains
+        checksum = 2166136261
+        for case, edge in enumerate(edges):
+            dot = 8 * edge[0] * edge[1]
+            seed = 0x80000000 if dot < 0 else 0x7ffffff0
+            for variant in (0, 1):
+                for chains in (1, 2, 4, 8):
+                    expected = 0
+                    for index in range(chains):
+                        expected ^= (seed + index * 0x10203 + 32 * dot) & 0xffffffff
+                    for value in (case, variant, chains, expected):
+                        checksum = checksum_word(checksum, value)
+                    directed_chains.append({'case': case, 'variant': variant, 'chains': chains, 'checksum': expected,
+                                            'verification': 'guest per-result check plus independent ordered-checksum comparison'})
+        assert int(chain_checksums[0]) == checksum
     assert len(directed_chains) == 48 and len({(r['case'], r['variant'], r['chains']) for r in directed_chains}) == 48
     comparisons = []
     for k in (32, 128, 512):
@@ -188,6 +234,8 @@ def summarize(report,text,artifacts,source_hashes,version,head,completed,args):
         'golden_results': golden, 'long_sample_count': len(long_rows), 'chain_sample_count': len(chain_rows),
         'repeats': 5, 'lengths': [32, 128, 512], 'independent_chain_counts': [1, 2, 4, 8],
         'long_directed': long_directed, 'chain_directed': directed_chains, 'full_chain_results': chain_results,
+        'uart_result_format': 'compact ordered directed checksums and packed chain low32' if packed_results else 'verbose full results',
+        'chain_high_words_check': 'guest checks every 128-bit result and all unused sentinel slots; compact logs retain low32 values',
         'long_rows': long_rows, 'long_summary': long_summary, 'long_comparisons': comparisons,
         'chain_rows': chain_rows, 'chain_summary': chain_summary, 'chain_comparisons': chain_comparisons,
         'input_sha256': artifacts, 'run_log_sha256': digest(report / 'run.log'),

@@ -84,6 +84,7 @@ binary = elf.with_suffix('.bin')
 with (report / 'build.log').open('w') as log:
     run([toolchain['gcc']['path'], '-march=rv64gcv', '-mabi=lp64d', '-mcmodel=medany', '-O2',
          '-fno-tree-vectorize', '-ffreestanding', '-fno-builtin', '-nostdlib', '-nostartfiles',
+         '-DACC_BENCH_VERBOSE=1',
          '-I' + str(report / 'inputs'), '-Wl,--no-relax', '-Wl,-T,' + str(report / 'inputs/link.ld'),
          report / 'inputs/start.S', report / 'inputs/acc_benchmark.c', '-o', elf], stdout=log, stderr=log)
     if args.flash:

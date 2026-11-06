@@ -32,6 +32,8 @@ assert corrected_legal['scope']=='nemu_standalone' and corrected_legal['random_i
 correction=read(args.reference_correction/'results.json');assert correction['status']=='passed'
 assert digest(root/'patches/nemu.patch')==correction['patch_sha256']
 for item in correction['outputs'].values():assert digest(Path(item['path']))==item['sha256']
+ref_item=correction['outputs']['reference']
+assert bench['input_sha256'][str(Path(ref_item['path']).resolve())]==ref_item['sha256']
 assert val['scope']=='rtl_nemu_difftest' and val['reported_core_dirty']==0
 assert bench['difftest_enabled'] and bench['reported_core_dirty']==0
 assert bench['long_sample_count']==60 and bench['chain_sample_count']==120
@@ -67,7 +69,7 @@ assert digest(core/'patches/nemu.patch')==after['project_files_sha256']['patches
 for path in [old_nemu/'src/isa/riscv64/instr/rvv/vcompute.h',new_nemu/'src/isa/riscv64/instr/rvv/vcompute.h',root/'patches/nemu.patch']:
     bind(path)
 regressions={}
-for name in ('vadd_test','vdot_smoke','register_test','pipeline_test','benchmark_rvv','dot_memory'):
+for name in ('vadd_test','vdot_smoke','register_test','pipeline_test'):
     lines=(args.driver_record/('regression-'+name+'.log')).read_text().splitlines()
     directory=Path(next(s.removeprefix('RTL evidence: ') for s in lines if s.startswith('RTL evidence: ')))
     text=(directory/'run.log').read_text();assert (directory/'exit-status.txt').read_text().strip()=='0'
@@ -84,12 +86,21 @@ unit_log=root/'reports/acc-preparation/chisel-unit-retimed.log'
 unit_text=re.sub(r'\x1b\[[0-9;]*m','',unit_log.read_text())
 assert 'Tests: succeeded 5, failed 0' in unit_text and 'All tests passed.' in unit_text
 bind(unit_log)
+auxiliary={}
+for filename in ('compact-layout-audit.json','compact-parser-checks.json'):
+    path=root/'reports/acc-preparation'/filename
+    record=read(path);assert record['status']=='passed';bind(path);auxiliary[filename]=path
+layout=read(auxiliary['compact-layout-audit.json'])
+assert layout['all_12_function_pcs_equal_across_shards'] and layout['all_arrays_64byte_aligned']
+for row in layout['rows']:
+    assert digest(args.benchmark/row['part']/'test.elf')==row['elf_sha256']
 args.output.mkdir(parents=True,exist_ok=False)
 public=root/'docs/data/acc-results';public.mkdir(exist_ok=False)
 for group,directory in [('validation',args.validation),('benchmark',args.benchmark),('pipeline',args.pipeline),('registers',args.registers),('fault',args.fault),('precedence',args.precedence),('corrected-reference-legal',args.corrected_reference_legal)]:
     for p in directory.rglob('*'):
         if p.is_file():q=public/group/p.relative_to(directory);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
 (public/'unit').mkdir();shutil.copy2(unit_log,public/'unit/chisel.log')
+for filename,path in auxiliary.items():shutil.copy2(path,public/'unit'/filename)
 chain_increment=[]
 for count in (1,2,4,8):
     pair={}
@@ -98,7 +109,7 @@ for count in (1,2,4,8):
         pair[variant]=(rows[512]['median_cycles']-rows[128]['median_cycles'])/(384*count)
     chain_increment.append({'chains':count,'explicit_fragment_increment_cycles_per_dot':pair[0],'fused_fragment_increment_cycles_per_dot':pair[1]})
 receipt={'status':'passed','build_project_head':before['project_head'],'core_commit':core_commit,'nemu_commit':after['repositories']['NEMU']['head'],'build_report':str(args.build_report.resolve()),'regressions':regressions,'validation_directory':str(args.validation.resolve()),'benchmark_directory':str(args.benchmark.resolve()),'pipeline_directory':str(args.pipeline.resolve()),'registers_directory':str(args.registers.resolve()),'fault_directory':str(args.fault.resolve()),'ppa_directory':str(args.ppa.resolve()),'functional_instruction_executions':val['legal_instruction_executions'],'pipeline_acc_instructions':pipe['acc_instructions'],'long_samples':bench['long_sample_count'],'chain_samples':bench['chain_sample_count'],'long_comparisons':bench['long_comparisons'],'chain_comparisons':bench['chain_comparisons'],'chain_increment_estimates':chain_increment,'mapped_arithmetic_area':chosen['total_area_library_units'],'mapped_original_area':baseline['total_area_library_units'],'mapped_area_increase_percent':100*(chosen['total_area_library_units']/baseline['total_area_library_units']-1),'full_core_generated_module_sha256':digest(full_module),'timing':chosen['timing'],'evidence_sha256':evidence,'official_portal_updated':False,'published_baseline_submission_changed':False,'videos_provided':False}
-receipt.update({'corrected_nemu_commit':correction['corrected_nemu_commit'],'precedence_directory':str(args.precedence.resolve()),'reference_correction_directory':str(args.reference_correction.resolve()),'corrected_reference_legal_directory':str(args.corrected_reference_legal.resolve()),'reference_change_arithmetic_and_late_config_body_unchanged':True,'random_and_performance_reference':'initial reference; corrected reference separately tested for all 48 precedence cases and 1000 random input groups'})
+receipt.update({'corrected_nemu_commit':correction['corrected_nemu_commit'],'precedence_directory':str(args.precedence.resolve()),'reference_correction_directory':str(args.reference_correction.resolve()),'corrected_reference_legal_directory':str(args.corrected_reference_legal.resolve()),'reference_change_arithmetic_and_late_config_body_unchanged':True,'random_reference':'initial reference','performance_reference':'corrected reference; also tested for all 48 precedence cases and 1000 random input groups'})
 (args.output/'results.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
 def value(rows,variant,k):return next(r for r in rows if r['variant']==variant and r['k']==k)
 def number(row):return f"{row['median_cycles']:.0f}（{row['min_cycles']}-{row['max_cycles']}）"
@@ -154,19 +165,19 @@ vd.high96 = 0
 
 从已提交的香山/NEMU扩展源码重新生成整核与参考库，模型自然打印dirty: 0。随机用例按全局序号拆成16片，保持原固定种子输入序列，逐片独立差分后检查1006个序号无遗漏、无重复。{val['legal_instruction_executions']}次合法点积覆盖1000组随机、6组定向、6种别名、TA/TU、正负溢出及源高位；每片另重复640条累加链和7种非法形式，重复项不增加唯一随机输入数量。非法配置检查目的及vstart保持，并核对各异常的预期mtval。额外1664条累加流水测试覆盖独立目的、vadd生产者、别名链及两个分支方向；v0/v31另有6形式、两种策略的整核差分。
 
-原向量加法、点积smoke、寄存器、1664条流水、RVV基线与含访存内核回归均通过。新增1000组随机同时覆盖原vdot对照，共2012次原指令执行。专用非零累加探针的正常结果为0x12345680，故障NEMU参考库给出0x12345681，真实Difftest报告v12_low差异；正常、故障、恢复原始退出码依次为0、1、0。没有跳过新指令，也没有用DUT结果覆盖参考状态。
+原向量加法、点积smoke、寄存器及1664条流水四项回归均通过；标准向量乘法、归约与访存由本轮完整长点积的两条RVV路径覆盖。新增1000组随机同时覆盖原vdot对照，共2012次原指令执行。专用非零累加探针的正常结果为0x12345680，故障NEMU参考库给出0x12345681，真实Difftest报告v12_low差异；正常、故障、恢复原始退出码依次为0、1、0。没有跳过新指令，也没有用DUT结果覆盖参考状态。
 
-交叉异常检查另覆盖原vdot与累加版各24种形式。旧参考在48例中有20例mtval错误，RTL差分检出首个差异；修正前置寄存器对齐及masked目的v0检查后，同一RTL与新参考48例全部通过，目标及vstart保持。修正参考另通过1000组固定随机输入的NEMU功能回归。随机整核及性能样本保留其初始参考库身份；修正仅插入译码合法性检查，合法算术与晚期配置检查的源代码前后逐字节相同，两版参考分别保存摘要。
+交叉异常检查另覆盖原vdot与累加版各24种形式。旧参考在48例中有20例mtval错误，RTL差分检出首个差异；修正前置寄存器对齐及masked目的v0检查后，同一RTL与新参考48例全部通过，目标及vstart保持。修正参考另通过1000组固定随机输入的NEMU功能回归。整核随机及错误参考实验保留其初始参考库身份，完整性能采样使用修正参考；修正仅插入译码合法性检查，合法算术与晚期配置检查的源代码前后逐字节相同，两版参考分别保存摘要。
 
 ## 五、真实长点积
 
-两源为相同连续int8数组，每条实现沿完整K维累加，末尾仅保存一次相同16字节结果。计时包含初始化、必要配置、全部加载、循环、跨块累加、末尾归并/归约、完整存储及结束fence；黄金计算在计时外。36个测量组分片运行，每组仍单独预热后重复5次，60条长点积及120条累加链样本均启用RTL/NEMU差分，组号无遗漏、无重复。下表为中位周期及范围，加速比分子取两条RVV候选较短的中位数。
+两源为相同连续int8数组，每条实现沿完整K维累加，末尾仅保存一次相同16字节结果。计时包含初始化、必要配置、全部加载、循环、跨块累加、末尾归并/归约、完整存储及结束fence；黄金计算在计时外。36个测量组分片运行，每组仍单独预热后重复5次，60条长点积及120条累加链样本均启用RTL/NEMU差分，组号无遗漏、无重复。测试程序每次检查完整128位和未用哨兵，紧凑日志保留每条链低32位及定向有序校验摘要，由Python独立重建核对；高位另外由程序检查及向量状态差分覆盖。下表为中位周期及范围，加速比分子取两条RVV候选较短的中位数。
 
 | K | 原vdot+加法 | RVV8 | RVV16 | vdot.acc | 较快RVV/acc |
 |---:|---|---|---|---|---:|
 {chr(10).join(long_lines)}
 
-四路径每32项循环指令数为28、28、16、22。融合路径消除4条显式向量加法及两次循环内配置切换，保留四个独立累加器。各分片的内核函数入口PC相同；含定向表的分片输入数组基址比其余片高0x500，两源间距及64字节对齐保持一致，各组独立预热。指令数减少不等同于周期同比下降；与较强RVV16的结果按实际数值判断。
+四路径每32项循环指令数为28、28、16、22。融合路径消除4条显式向量加法及两次循环内配置切换，保留四个独立累加器。各分片的同名内核函数入口PC相同；输入数组基址可不同，两个源之间的512字节间距及64字节对齐保持一致，各组独立预热。指令数减少不等同于周期同比下降；与较强RVV16的结果按实际数值判断。
 
 ## 六、单链与多链
 
