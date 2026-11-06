@@ -174,5 +174,93 @@
     "docs/data/acc-results/precedence/results.json": "183cfe79affa572facb5f8c8ca7f720f06cfd85d3fa9b333201d09b8e7aa62be",
     "docs/data/basic-current/cases.json": "c4f0ebfbf11401c0d7ed2e2ee555c6440f1a9ce04e9e94415d2e590c0c756695",
     "docs/data/acc-ppa/full-core/results.json": "8bf1d0071594e9a90cdbc08982a58bc91c4b38e33c88ba6608b4d96676580da4"
+  },
+  "original_vdot_waveform": {
+    "implementation": "original_vdot_balanced_tree",
+    "fst_file": "wave.fst",
+    "fst_sha256": "bb769f6404f7f430ede18c597fa017b5869965765a5c355bab4f72b1982ab7aa",
+    "run_log_sha256": "0376a2232a39db7b3b9ef01370f85f3947a1296612d31544c579981b964ce5c0",
+    "source_record_sha256": "f963c89bec65e0957b930cd0f8c505e45ce7f5c75b4e9363111d09034a620a81",
+    "core_upstream_commit": "7b16188f7f18a97be69c9b1a2dae8a446eec3b47",
+    "core_working_tree_dirty_at_capture": true,
+    "changed_source_sha256": {
+      "src/main/scala/xiangshan/backend/decode/VecDecoder.scala": "abd554f3172b6e47c5e10968c5a96a84052b4cc9f3dbfad9eebfd6b4f505b9df",
+      "src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala": "4e0800b70699eb24557352b144741e8ed480ce51de64aa2dbccee3c4c72d2f50",
+      "src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala": "1845e685513507b724ba7e37ab46eb42c7b32c7fa2477644c4d728230a508fce",
+      "src/main/scala/xiangshan/backend/fu/vector/Vdot.scala": "d758aff49a6d10c0369a6d06968a5782cc8d1e13cad2c6a967d919b782adf6b4"
+    },
+    "sampling": "before rising backend clock edge",
+    "timescale": "1ps",
+    "pc": "0x800000e2",
+    "rob": {
+      "flag": 0,
+      "value": 42
+    },
+    "logical_destination": "v12",
+    "physical_destination": 60,
+    "events": {
+      "fu_input": 1477,
+      "fu_output": 1479,
+      "writeback": 1479,
+      "commit": 1502
+    },
+    "fu_input_to_output_cycles": 2,
+    "result_hex": "00000000000000000000000000000008",
+    "arithmetic_handshakes": {
+      "multiply": [
+        {
+          "pdest": 51,
+          "uop": 0,
+          "fu": "inner_vfExuBlock.exus.Vimac",
+          "input_edge": 1468,
+          "output_edge": 1470,
+          "cycles": 2,
+          "result_hex": "00010001000100010001000100010001"
+        },
+        {
+          "pdest": 52,
+          "uop": 1,
+          "fu": "inner_vfExuBlock.exus.Vimac",
+          "input_edge": 1469,
+          "output_edge": 1471,
+          "cycles": 2,
+          "result_hex": "90a0b3b63d4296112a3951e65b940b39"
+        }
+      ],
+      "reduce": [
+        {
+          "pdest": 55,
+          "uop": 0,
+          "fu": "inner_vfExuBlock.exus_1.Vipu",
+          "input_edge": 1475,
+          "output_edge": 1477,
+          "cycles": 2,
+          "result_hex": "00000002000000020000000200000002"
+        },
+        {
+          "pdest": 56,
+          "uop": 1,
+          "fu": "inner_vfExuBlock.exus_1.Vipu",
+          "input_edge": 1482,
+          "output_edge": 1484,
+          "cycles": 2,
+          "result_hex": "00000000000000000000000000000008"
+        }
+      ],
+      "vdot": [
+        {
+          "pdest": 60,
+          "uop": 0,
+          "fu": "inner_vfExuBlock.exus.Vimac",
+          "input_edge": 1477,
+          "output_edge": 1479,
+          "cycles": 2,
+          "result_hex": "00000000000000000000000000000008"
+        }
+      ]
+    },
+    "figure_file": "docs/figures/vdot-handshake-timeline.svg",
+    "figure_sha256": "9a67bf617a37c11115608f191a193757dc697cc30fffeb9923dab25e57ac9e96",
+    "latest_accumulator_core_fst_available": false
   }
 }
