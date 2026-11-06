@@ -1,8 +1,10 @@
 # 干净源码检出的环境准备
 
-核对日期：2026-11-05。本文件依据当前脚本、上游固定源码、本机工具及官方工件元数据整理，提供环境准备和源码复现步骤。独立目录的实际执行结果、构建身份和失败修复以CLEAN_REPRODUCTION.md为准。
+核对日期：2026-11-06。本文件依据当前脚本、上游固定源码、本机工具及官方工件元数据整理，提供环境准备和源码复现步骤。独立目录的实际执行结果、构建身份和失败修复以CLEAN_REPRODUCTION.md为准。
 
-同机使用既有工具的干净源码复现，与在全新操作系统重建全部工具环境是两项不同验证。已有目录、已有编译缓存或单独模块通过，都不能作为整套流程成功证据。当前独立目录为/home/yh/cie/vdot-kmhv2-repro-20261105，详细证据和中断恢复状态见CLEAN_REPRODUCTION.md。
+同机使用既有工具的干净源码复现，与在全新操作系统重建全部工具环境是两项不同验证。已有目录、已有编译缓存或单独模块通过，都不能作为整套流程成功证据。本轮独立目录为/home/yh/cie/vdot-kmhv2-repro-20261106，详细证据和中断恢复状态见CLEAN_REPRODUCTION.md。
+
+PDF中的长命令和校验记录可能因版面折行；实际执行使用仓库中同名Markdown或脚本的原始换行。
 
 ## 1. 准备独立检出并固定作品版本
 
@@ -221,8 +223,8 @@ bash scripts/build_nemu.sh reference
 bash scripts/build_emu.sh
 ```
 
-`build_emu.sh` 分离 CHIRRTL、firtool、模型生成及 C++ 编译，默认保留向量的单核 `MinimalConfig`、FST、两个 C++ 任务；资源上限依赖可用的用户 systemd 会话。它显式使用本项目 `configs/verilator_5_022.mk` 和版本专用 trace 兼容头，因此不会只凭装上另一版本 Verilator 就自然兼容。`scripts/lowmem-bin/verilator` 在全部 `-O` 之后显式设置 `--inline-mult 2000`。其详细资源设置及宿主 GCC 选项见 `docs/BUILDING.md`。
+`build_emu.sh` 分离 CHIRRTL、firtool、模型生成及 C++ 编译，默认保留向量的单核 `MinimalConfig`、FST、两个 C++ 任务；资源上限依赖可用的用户 systemd 会话。它显式使用本项目 `configs/verilator_5_022.mk` 和版本专用 trace 兼容头，因此不会只凭装上另一版本 Verilator 就自然兼容。`scripts/lowmem-bin/verilator` 在全部 `-O` 之后显式设置内联参数，默认 `--inline-mult 2000`，本轮由VDOT_INLINE_MULT覆盖为1。其详细资源设置及宿主 GCC 选项见 `docs/BUILDING.md`。
 
 源码与工具身份记录应在本次真实测试前生成，并在结束后复核。至少包含作品交付 SHA、三个上游及全部已用资源、补丁和配置校验值、Java/Verilator/GCC/Mill/firtool 版本及关键工件 SHA256。只有实际 `build/emu` 生成并成功运行后，才能继续按 `docs/BUILDING.md` 和 `scripts/run_rtl.sh` 复现向量加法、vdot、真实差分、故障注入恢复及性能结果。
 
-本轮没有复制原工程的生成RTL、C++或模拟器。原核firtool阶段被停止后，已按源身份和FIR摘要校验恢复，并完成原核全量构建和真实vadd；随后应用补丁，从空的硬件生成目录重建扩展核。各阶段最终结果见CLEAN_REPRODUCTION.md。`resume_model_build.sh`依赖既有生成输入，不能单独替代本节全流程；原始干净检出到恢复完成的证据必须一并保留。
+各轮均未复制原工程的生成RTL、C++或模拟器。首轮2026-11-05原核firtool阶段被停止后，已按源身份和FIR摘要校验恢复，并完成原核全量构建和真实vadd；随后应用补丁，从空的硬件生成目录重建扩展核。各阶段最终结果见CLEAN_REPRODUCTION.md。`resume_model_build.sh`依赖既有生成输入，不能单独替代本节全流程；原始干净检出到恢复完成的证据必须一并保留。

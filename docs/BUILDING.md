@@ -32,9 +32,9 @@ VDOT_COMPILE_MEMORY_MAX=8G bash scripts/build_emu.sh
 
 在新的 `third_party/XiangShan`、`third_party/NEMU` 检出上述基准提交并初始化子模块后，分别执行 `git apply ../../patches/xiangshan.patch`、`git apply ../../patches/nemu.patch`。应用前确认目标工作区干净；当前开发目录中补丁已经应用，不要重复应用。
 
-## 当前工具环境
+## 工具版本与初始环境快照
 
-实际宿主为Ubuntu 26.04.1 LTS、x86_64、Linux 7.0.0-38-generic，Intel Core i7-11700、16个逻辑线程；内存总量16056976KiB（约15.3GiB），交换空间4194300KiB。采集在独立目录reports/host-environment.json，不包含主机名、网络地址或联系信息；可用磁盘空间随运行变化，不能当作最低配置。
+初始环境快照的宿主为Ubuntu 26.04.1 LTS、x86_64、Linux 7.0.0-38-generic，Intel Core i7-11700、16个逻辑线程；内存总量16056976KiB（约15.3GiB），初始交换空间4194300KiB；2026-11-06构建恢复阶段另启用8GiB临时交换，详见CLEAN_REPRODUCTION.md。首次快照保存在独立目录reports/host-environment.json，不包含主机名、网络地址或联系信息；可用磁盘空间随运行变化，不能当作最低配置。
 
 `scripts/env.sh` 只配置当前 Shell，默认复用本机 `/home/yh/chipyard/.conda-env` 的 RISC-V GCC、Java 和辅助程序，以及本项目 `tools/` 中的 Mill、依赖库。路径可通过本地 `local.env` 或 `VDOT_CHIPYARD_ENV` 覆盖。
 
@@ -94,7 +94,7 @@ C++阶段默认两个编译任务，总内存仍受5500MiB上限约束。可用`
 
 默认Java堆8GiB、Chisel进程组上限4800MiB、firtool上限5500MiB、模型编译上限5500MiB。每阶段独立记录命令、日志、退出状态和资源，最后检查源码摘要未漂移；该方式依赖Linux用户systemd会话。必须同时核对BUILD_COMPLETE、退出0、二进制摘要和后续真实运行，不能把任务启动视为成功。
 
-当前独立扩展核复现显式使用 `VDOT_COMPILE_MEMORY_MAX=7G bash scripts/build_emu.sh`；原核也在模型生成阶段把进程组限制在线调至7GiB并保存调整记录。两者实际资源参数见CLEAN_REPRODUCTION.md及各阶段命令/日志，不能仅依据脚本默认值推断实测峰值。
+2026-11-05的独立扩展核复现显式使用 `VDOT_COMPILE_MEMORY_MAX=7G bash scripts/build_emu.sh`；原核也在模型生成阶段把进程组限制在线调至7GiB并保存调整记录。两者实际资源参数见CLEAN_REPRODUCTION.md及各阶段命令/日志，不能仅依据脚本默认值推断实测峰值。
 
 `scripts/lowmem-bin/mill`直接调用固定Mill 0.12.3主入口，并在新检出中先创建out锁目录。构建工具自身默认堆为2GiB，可用VDOT_MILL_HEAP显式覆盖；384MiB只在已有编译缓存时跑通过，干净检出编译315个Rocket Chip源码会Java heap OOM，2GiB同目标已实际通过。硬件生成子进程另由-Djvm-xmx参数配置，不能将子进程8GiB误当成Mill自身的上限。
 
@@ -108,13 +108,13 @@ VDOT_JAVA_HEAP=8G \
 
 该方式通过 `-XX:AllocateHeapAt` 在项目目录下创建临时堆映射，进程退出后 JVM 关闭临时文件。可能因页读写而降低构建速度。它只用于构建，不用于 RTL 性能计时。机制见 [OpenJDK 20 实现](https://github.com/openjdk/jdk20u/blob/master/src/hotspot/os/posix/os_posix.cpp) 与 [JVM 选项文档](https://docs.oracle.com/en/java/javase/11/tools/java.html)。
 
-早期开发恢复路线的独立firtool 1.62.1实测5分46秒、最大RSS5359524KiB，见reports/firtool-standalone-time.txt。随后带FST的Verilator在常规分配器下超过5200MiB；改用原生文件映射分配库后完成模型生成及C++链接。本轮完整干净构建已成功，各阶段的新测量见CLEAN_REPRODUCTION.md；不能混用两轮的资源结果。
+早期开发恢复路线的独立firtool 1.62.1实测5分46秒、最大RSS5359524KiB，见reports/firtool-standalone-time.txt。随后带FST的Verilator在常规分配器下超过5200MiB；改用原生文件映射分配库后完成模型生成及C++链接。各轮完整构建的实际资源分别记录在CLEAN_REPRODUCTION.md；早期宿主试验不能替代2026-11-06本轮的参数和结果。
 
 `scripts/lowmem-bin/verilator` 仅对模型生成的Verilator 5.022原生进程使用 `libvmmalloc`，默认临时池32GiB，退出后释放，仿真器运行不加载该库。小规模测试在384MiB限制下校验512MiB数据通过；整核生成成功证据为 `reports/model-resume-20261104T155853Z-3297719/`，该次make随后因C++选项不兼容失败，经修复后在 `reports/model-resume-20261104T170533Z-3349034/` 完成链接。工具库来自Debian官方 `libvmmalloc1=1.8-2`，本地安装入口为 `bash scripts/install_memory_helper.sh`，带固定SHA256校验，不修改系统目录。机制见 [官方手册](https://pmem.io/vmem/manpages/linux/master/libvmmalloc/libvmmalloc.7.html) 和 [Debian包信息](https://packages.debian.org/bullseye/libvmmalloc1)。
 
 分阶段默认需要约33GiB临时堆空间，另给RTL、C++和对象文件保留充足空间。默认追踪12层层级、生成器优化等级O1，均只作用于宿主模型构建；实际FST已提取到后端译码、重命名、执行、写回与提交接口。`VDOT_VERILATOR_BIN`可覆盖本机原生Verilator路径，`VDOT_NATIVE_FILE_HEAP=0`可在有足够内存时禁用原生文件映射库。不要把构建时间计入处理器性能测量。
 
-wrapper在所有`-O`选项之后显式追加`--inline-mult 2000`。Verilator5.022的`-O3`会设置最大内联，随后`-O1`不会撤销该设置；小例已实测33个与1个内联实例的差异。本轮原核和扩展核的干净构建均已使用显式内联参数成功生成模型，但未在同条件下与旧参数做完整A/B资源实验，不声称具体内存收益。`VDOT_INLINE_MULT`可显式覆盖；早期开发模型仍保留历史参数。详见[固定版本低内存选项核对](LOWMEM_OPTIONS.md)。
+wrapper默认在所有`-O`选项之后显式追加`--inline-mult 2000`，可由VDOT_INLINE_MULT覆盖。Verilator5.022的`-O3`会设置最大内联，随后`-O1`不会撤销该设置；小例已实测33个与1个内联实例的差异。2026-11-05的原核和扩展核干净构建均已使用当时的显式内联参数成功生成模型，但未在同条件下与旧参数做完整A/B资源实验，不声称具体内存收益。`VDOT_INLINE_MULT`可显式覆盖；早期开发模型仍保留历史参数。详见[固定版本低内存选项核对](LOWMEM_OPTIONS.md)。
 
 可用环境变量显式指定配置和资源：
 
@@ -145,9 +145,9 @@ bash scripts/build_emu.sh --resume-fir /absolute/path/to/prior-build-report
 
 scripts/run_rtl.sh的参数、短窗口FST、真实Difftest及性能命令已有实际运行证据。独立检出的完整构建和回归单独保留，结果见CLEAN_REPRODUCTION.md；不以开发目录的可运行二进制替代最终复现。
 
-## 本轮性能模型的内存与编译恢复方案
+## 2026-11-05开发期性能模型的恢复方案
 
-本轮新增实验在文件映射堆写回过多、普通堆5200MiB保护上限失败后，采用jemalloc单arena、Verilator O1、inline-mult=1、关闭波形及6GiB进程组上限完成模型生成。该次生成耗时91.92秒，最大RSS为6019712KiB；它是在测得约6.8GiB可用内存时完成的实测，不作为任意机器的最低配置承诺。本次没有启用新增交换文件。本机可选分配库为libjemalloc2 5.3.0-4，脚本在启用该选项时检查实际库文件。
+该次开发试验在文件映射堆写回过多、普通堆5200MiB保护上限失败后，采用jemalloc单arena、Verilator O1、inline-mult=1、关闭波形及6GiB进程组上限完成模型生成。该次生成耗时91.92秒，最大RSS为6019712KiB；它是在测得约6.8GiB可用内存时完成的实测，不作为任意机器的最低配置承诺。该次开发试验没有启用新增交换文件；2026-11-06带FST模型的恢复另有8GiB临时交换记录。本机可选分配库为libjemalloc2 5.3.0-4，脚本在启用该选项时检查实际库文件。
 
 GCC15对生成的DecodeUnit表达式优化时间很长。可显式开启VDOT_CPP_DECODER_O0=1，仅将该模块的宿主C++快速对象改为O0并使用普通头文件，其他快速对象仍为O2。规则位于configs/gcc_decode_compat.mk，与实际生成新仿真器时使用的兼容规则逐字节相同。它不修改RTL或客体周期计数；新模型完整功能差分、流水压力和故障注入已通过，新增性能结果另见OPTIMIZATION.md。
 
