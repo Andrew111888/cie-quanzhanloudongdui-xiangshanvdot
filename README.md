@@ -18,13 +18,13 @@
 
 全核构建继续采用官方 `MinimalConfig`，通过 `DISABLE_PERF=1 DISABLE_ALWAYSDB=1` 减少仿真统计与数据库逻辑。此前的 `VdotSimConfig` 精简实验还遇到软 PTW 和缓存索引问题，不作为可用配置。
 
-本轮新FST再次核实2周期算术延迟、错路冲刷与独立突发；直接比较独立生成的前后1868个SV模块，只有DecodeUnit改变。报告输出到output/pdf/20261106-optimized，三段录屏输出到output/video/20261106-optimized；生成状态和校验值见各manifest及本机output/delivery-20261106.json。本轮不制作PPT，官网和官方PR仍保留旧提交。
+本轮新FST再次核实2周期算术延迟、错路冲刷与独立突发；直接比较独立生成的前后1868个SV模块，只有DecodeUnit改变。当前按赛题编号的PDF、源码和原始证据统一保存在本机output/按赛题要求提交，状态与校验值见其中README.md和提交清单.json。三段官网录屏由参赛者自行完成，此前录屏保留为历史记录；当前不制作PPT。官网继续暂停更新，官方加密提交和PR同步状态单独记入最新提交回执。
 
 实现说明见 [设计文档](docs/DESIGN.md)，当前工具、构建命令和限制见 [构建与运行记录](docs/BUILDING.md)。
 
 历史未修改原核构建与vadd证据保留在上一轮独立目录；本轮另建目录，从固定源码生成优化版RTL、C++及NEMU并完成完整验收，详见[干净复现记录](docs/CLEAN_REPRODUCTION.md)。复用固定外部工具和下载缓存，未做全新操作系统验证。实际构建提交与最终文档/工具提交在发布包source-binding.json中分别记录，并逐字节核对关键输入。代码与依赖来源见[NOTICE](NOTICE.md)。
 
-从[环境准备](docs/BOOTSTRAP.md)获取固定源码和工具后，运行scripts/build_workloads.sh、scripts/build_nemu.sh、scripts/build_emu.sh，再用scripts/verify_reproduction.sh执行完整验收。具体参数、资源和恢复条件见[构建说明](docs/BUILDING.md)。报告、三段真实录屏和四类ZIP的生成入口见[材料工作流](docs/ARTIFACTS.md)。
+从[环境准备](docs/BOOTSTRAP.md)获取固定源码和工具后，运行scripts/build_workloads.sh、scripts/build_nemu.sh、scripts/build_emu.sh，再用scripts/verify_reproduction.sh执行完整验收。具体参数、资源和恢复条件见[构建说明](docs/BUILDING.md)。当前三阶段非视频材料由scripts/render_requirement_reports.py和scripts/package_requirements.py生成，命令参数见各脚本--help；[此前材料工作流](docs/ARTIFACTS.md)保留历史录屏与四类ZIP的复现方法。
 
 官网四栏逐项来源见[要求核对](docs/REQUIREMENTS_AUDIT.md)，阶段材料见[交付清单](docs/DELIVERY_CHECKLIST.md)。[历史发布页](https://github.com/Andrew111888/cie-quanzhanloudongdui-xiangshanvdot/releases/latest)保留旧归档与旧提交回执，本轮本地新稿不据此视为已同步官网；技术验收通过不代表官方评审通过。
 
