@@ -442,5 +442,426 @@
       "difftest_enabled": true,
       "image_generation_used": false
     }
+  },
+  "stage3_review": {
+    "status": "passed",
+    "scope": "audit_of_retained_rtl_nemu_runs",
+    "core_commit": "14c8b3489a610d9b210ab57b5bf30901f8cf4263",
+    "reference_commit": "3097fa05435c3e85c1541f09027457ee7ee13f43",
+    "validation_shards_verified": 16,
+    "random_input_groups": 1000,
+    "legal_instruction_executions": 22318,
+    "fault_exit_statuses": [
+      0,
+      1,
+      0
+    ],
+    "fault_log_sha256": {
+      "normal": "9fbf7125959471667c9adbd0853fb642be99f42bc28fcc0d7dd280f9f13391e7",
+      "injected": "b3aafae504073d69b556a9235b744c8d8dc9fa918cd697121ce015b79a29a56c",
+      "restored": "b8c8ec5ff65a07ccf99bbd686630538c31492e4abeaaf5adadc528686ae57e2f"
+    },
+    "benchmark_shards_verified": 8,
+    "performance_samples": 180,
+    "repeats": 5,
+    "benchmark_log_sha256": "af9a9da8449286d703a9d6c305f5e6894346bc62b1240013f2f61ce698866403",
+    "long_directed_executions": 48,
+    "long_directed_checksum": 1060332573,
+    "long_directed_verification": "guest full-128-bit assertions and independent ordered-checksum verification",
+    "long_comparisons": [
+      {
+        "k": 32,
+        "golden_and_actual_result": 46348,
+        "variants": [
+          {
+            "variant": 0,
+            "median": 119,
+            "min": 119,
+            "max": 119
+          },
+          {
+            "variant": 1,
+            "median": 127,
+            "min": 127,
+            "max": 127
+          },
+          {
+            "variant": 2,
+            "median": 128,
+            "min": 128,
+            "max": 128
+          },
+          {
+            "variant": 3,
+            "median": 113,
+            "min": 113,
+            "max": 113
+          }
+        ],
+        "selected_rvv_variant": 1,
+        "selected_rvv_median": 127,
+        "rvv_over_vdot": 1.0672268907563025,
+        "rvv_over_acc": 1.1238938053097345
+      },
+      {
+        "k": 128,
+        "golden_and_actual_result": 12398,
+        "variants": [
+          {
+            "variant": 0,
+            "median": 183,
+            "min": 183,
+            "max": 210
+          },
+          {
+            "variant": 1,
+            "median": 208,
+            "min": 208,
+            "max": 229
+          },
+          {
+            "variant": 2,
+            "median": 173,
+            "min": 173,
+            "max": 195
+          },
+          {
+            "variant": 3,
+            "median": 176,
+            "min": 176,
+            "max": 192
+          }
+        ],
+        "selected_rvv_variant": 2,
+        "selected_rvv_median": 173,
+        "rvv_over_vdot": 0.9453551912568307,
+        "rvv_over_acc": 0.9829545454545454
+      },
+      {
+        "k": 512,
+        "golden_and_actual_result": -38688,
+        "variants": [
+          {
+            "variant": 0,
+            "median": 453,
+            "min": 439,
+            "max": 470
+          },
+          {
+            "variant": 1,
+            "median": 549,
+            "min": 536,
+            "max": 556
+          },
+          {
+            "variant": 2,
+            "median": 365,
+            "min": 365,
+            "max": 377
+          },
+          {
+            "variant": 3,
+            "median": 409,
+            "min": 409,
+            "max": 431
+          }
+        ],
+        "selected_rvv_variant": 2,
+        "selected_rvv_median": 365,
+        "rvv_over_vdot": 0.8057395143487859,
+        "rvv_over_acc": 0.8924205378973105
+      }
+    ],
+    "chain_comparisons_512": [
+      {
+        "chains": 1,
+        "rounds": 512,
+        "variants": [
+          {
+            "variant": 0,
+            "median": 3137,
+            "min": 3137,
+            "max": 3167
+          },
+          {
+            "variant": 1,
+            "median": 3639,
+            "min": 3639,
+            "max": 3656
+          }
+        ],
+        "dot_add_over_acc": 0.8620500137400384
+      },
+      {
+        "chains": 2,
+        "rounds": 512,
+        "variants": [
+          {
+            "variant": 0,
+            "median": 3490,
+            "min": 3490,
+            "max": 3490
+          },
+          {
+            "variant": 1,
+            "median": 3640,
+            "min": 3640,
+            "max": 3660
+          }
+        ],
+        "dot_add_over_acc": 0.9587912087912088
+      },
+      {
+        "chains": 4,
+        "rounds": 512,
+        "variants": [
+          {
+            "variant": 0,
+            "median": 5201,
+            "min": 5201,
+            "max": 5201
+          },
+          {
+            "variant": 1,
+            "median": 3643,
+            "min": 3643,
+            "max": 3643
+          }
+        ],
+        "dot_add_over_acc": 1.427669503156739
+      },
+      {
+        "chains": 8,
+        "rounds": 512,
+        "variants": [
+          {
+            "variant": 0,
+            "median": 9814,
+            "min": 9814,
+            "max": 9815
+          },
+          {
+            "variant": 1,
+            "median": 4353,
+            "min": 4352,
+            "max": 4353
+          }
+        ],
+        "dot_add_over_acc": 2.2545371008499884
+      }
+    ],
+    "baseline_program": {
+      "file": "examples/acc_benchmark.c",
+      "sha256": "64053e03f47a3715a9b6d0b93bb6d4d74dab1c0ab6770705178aadd99af954bd"
+    },
+    "nemu_patch": {
+      "file": "patches/nemu.patch",
+      "sha256": "e6ebf001f287014a1fb8ba5a2f56cdfc76ac53b51bb42b1f69a334a6953e36ac"
+    },
+    "terminal_screenshots": [
+      {
+        "view": "difftest",
+        "file": "docs/figures/stage3-difftest-terminal.png",
+        "sha256": "fbd0b0a3ada538e1510b4b4d3c293a30f5961916fa30c13e4994aa7effb13418",
+        "method": "Unedited X11 window capture of verified retained records",
+        "visual_review": "passed"
+      },
+      {
+        "view": "performance",
+        "file": "docs/figures/stage3-performance-terminal.png",
+        "sha256": "2cf35754e112feedf5a9548a31d42af8435ae055411e0b98b7fc7e90b7fdeb27",
+        "method": "Unedited X11 window capture of verified retained records",
+        "visual_review": "passed"
+      }
+    ],
+    "plot": {
+      "file": "docs/figures/stage3-speedups.png",
+      "sha256": "9c89d019d84c70f57760c5cb12f65bd45d79f20a4310c8d3baea69a2c5f39f42",
+      "source_csvs": {
+        "docs/data/长点积周期.csv": "a413c8f330dbdde35214c96d74570e7abfce7b17072ceff186b2a807d7c263b7",
+        "docs/data/累加链周期.csv": "6398425dcc01640b7e06dd9077866de2690d2df275127aa251e056c402e98df7"
+      }
+    },
+    "paired_baseline_waveform": {
+      "status": "passed",
+      "scope": "one_paired_eight_int8_execution_span",
+      "core_commit": "14c8b3489a610d9b210ab57b5bf30901f8cf4263",
+      "core_dirty": 0,
+      "fst_sha256": "dd8a788033103b0d3c3824e7b6bf3a58d9adbbfc52ece01609788ac2ad691f93",
+      "run_log_sha256": "4930e25dbf7284c029843d2ffcf47144402d79321284535051455a040110e2a5",
+      "timescale": "1ps",
+      "sampling": "before rising backend clock edge",
+      "vdot_execution_cycles": 2,
+      "rvv_execution_span_cycles": 16,
+      "observed_span_ratio": 8.0,
+      "result_hex": "00000000000000000000000000020000",
+      "boundary": "source loads and destination/seed zeroing are outside; RVV interval is first multiply FU acceptance through final reduction FU output, including intermediate micro-ops and scheduling",
+      "reduction_commit_debug_destination_is_internal_first_microop": true,
+      "reference_commit": "3097fa05435c3e85c1541f09027457ee7ee13f43",
+      "program": {
+        "file": "examples/vdot_baseline_wave.c",
+        "sha256": "b5b3e3b8544875058f155751129e2400f42a8aaf59bfa623028016695a941aa3"
+      },
+      "analysis_scripts_sha256": {
+        "scripts/run_baseline_wave.py": "56c6f59a0e161ce4394f31bcaff8c4b27309c23b5cbf5c3ca657ce2cf41b5ac6",
+        "scripts/extract_wave_events.py": "fba2469ba0729cdf3c3383aba86b500433c3c5a6cbcf2475e1534e9845b335ae",
+        "scripts/analyze_baseline_wave.py": "e6a69ba12dd185a6d0a4689f5798b1ebebb6ecc8a1d31536890e113c4d72c3ea"
+      },
+      "instructions": {
+        "vdot.vv": {
+          "pc": "0x80000158",
+          "instruction_word": "02a4060b",
+          "rob": {
+            "flag": 0,
+            "value": 3
+          },
+          "renamed_destinations": [
+            {
+              "ldest": 12,
+              "pdest": 54
+            }
+          ],
+          "fu_inputs": [
+            {
+              "edge": 1754,
+              "tick": 3508,
+              "uop": 0,
+              "pdest": 54,
+              "source": "inner_vfExuBlock.exus.Vimac"
+            }
+          ],
+          "fu_outputs": [
+            {
+              "edge": 1756,
+              "tick": 3512,
+              "pdest": 54,
+              "data_hex": "00000000000000000000000000020000",
+              "source": "inner_vfExuBlock.exus.Vimac"
+            }
+          ],
+          "commit_edge": 1758
+        },
+        "baseline_mul": {
+          "pc": "0x80000196",
+          "instruction_word": "ee852857",
+          "rob": {
+            "flag": 0,
+            "value": 23
+          },
+          "renamed_destinations": [
+            {
+              "ldest": 16,
+              "pdest": 63
+            },
+            {
+              "ldest": 17,
+              "pdest": 64
+            }
+          ],
+          "fu_inputs": [
+            {
+              "edge": 1925,
+              "tick": 3850,
+              "uop": 0,
+              "pdest": 63,
+              "source": "inner_vfExuBlock.exus.Vimac"
+            },
+            {
+              "edge": 1926,
+              "tick": 3852,
+              "uop": 1,
+              "pdest": 64,
+              "source": "inner_vfExuBlock.exus.Vimac"
+            }
+          ],
+          "fu_outputs": [
+            {
+              "edge": 1927,
+              "tick": 3854,
+              "pdest": 63,
+              "data_hex": "40004000400040004000400040004000",
+              "source": "inner_vfExuBlock.exus.Vimac"
+            },
+            {
+              "edge": 1928,
+              "tick": 3856,
+              "pdest": 64,
+              "data_hex": "ffffffffffffffffffffffffffffffff",
+              "source": "inner_vfExuBlock.exus.Vimac"
+            }
+          ],
+          "commit_edge": 1930
+        },
+        "baseline_reduce": {
+          "pc": "0x8000019e",
+          "instruction_word": "c7000657",
+          "rob": {
+            "flag": 0,
+            "value": 25
+          },
+          "renamed_destinations": [
+            {
+              "ldest": 32,
+              "pdest": 65
+            },
+            {
+              "ldest": 12,
+              "pdest": 66
+            }
+          ],
+          "fu_inputs": [
+            {
+              "edge": 1932,
+              "tick": 3864,
+              "uop": 0,
+              "pdest": 65,
+              "source": "inner_vfExuBlock.exus_1.Vipu"
+            },
+            {
+              "edge": 1939,
+              "tick": 3878,
+              "uop": 1,
+              "pdest": 66,
+              "source": "inner_vfExuBlock.exus_1.Vipu"
+            }
+          ],
+          "fu_outputs": [
+            {
+              "edge": 1934,
+              "tick": 3868,
+              "pdest": 65,
+              "data_hex": "00008000000080000000800000008000",
+              "source": "inner_vfExuBlock.exus_1.Vipu"
+            },
+            {
+              "edge": 1941,
+              "tick": 3882,
+              "pdest": 66,
+              "data_hex": "00000000000000000000000000020000",
+              "source": "inner_vfExuBlock.exus_1.Vipu"
+            }
+          ],
+          "commit_edge": 1943
+        }
+      },
+      "screenshots": [
+        {
+          "file": "docs/figures/baseline-paired-vdot-gtkwave.png",
+          "sha256": "91e79e7c18e86d44fd4998bcae6814d632e69eaf30f13d7860f390b183232a96",
+          "marker_tick": 3511,
+          "raw_fst_values_verified": true,
+          "visual_review": "passed",
+          "method": "Unedited real GTKWave X11 window capture"
+        },
+        {
+          "file": "docs/figures/baseline-rvv-span-gtkwave.png",
+          "sha256": "492ccd9679a80490063fdcadefd2eca0f915b6717b5721ef28852103645574bd",
+          "marker_tick": 3881,
+          "raw_fst_values_verified": true,
+          "visual_review": "passed",
+          "method": "Unedited real GTKWave X11 window capture"
+        }
+      ]
+    }
   }
 }

@@ -70,6 +70,36 @@ def check(root):
         assert screen['marker_tick'] + 1 == probes[screen['instruction']]['interfaces'][event]['tick']
         views.add((screen['instruction'], screen['view']))
     assert len(wave['screenshots']) == len(views) == 6
+    review = summary['stage3_review']
+    assert review['status'] == 'passed'
+    assert review['core_commit'] == manifest['tested']['XiangShan']
+    assert review['reference_commit'] == manifest['tested']['NEMU_corrected']
+    assert review['validation_shards_verified'] == 16 and review['benchmark_shards_verified'] == 8
+    assert review['fault_exit_statuses'] == [0, 1, 0] and review['performance_samples'] == 180
+    for source in ('baseline_program', 'nemu_patch'):
+        assert digest(root / review[source]['file']) == review[source]['sha256']
+    assert {s['view'] for s in review['terminal_screenshots']} == {'difftest', 'performance'}
+    for screen in review['terminal_screenshots']:
+        assert screen['visual_review'] == 'passed'
+        assert digest(root / screen['file']) == screen['sha256']
+    plot = review['plot']
+    assert digest(root / plot['file']) == plot['sha256']
+    for path, expected in plot['source_csvs'].items():
+        assert digest(root / path) == expected
+    paired = review['paired_baseline_waveform']
+    assert paired['status'] == 'passed' and paired['core_dirty'] == 0
+    assert paired['core_commit'] == manifest['tested']['XiangShan']
+    assert paired['vdot_execution_cycles'] == 2 and paired['rvv_execution_span_cycles'] == 16
+    assert paired['observed_span_ratio'] == paired['rvv_execution_span_cycles'] / paired['vdot_execution_cycles']
+    assert int(paired['result_hex'], 16) == 131072
+    assert paired['reduction_commit_debug_destination_is_internal_first_microop']
+    assert digest(root / paired['program']['file']) == paired['program']['sha256']
+    for name, expected in paired['analysis_scripts_sha256'].items():
+        assert digest(root / name) == expected
+    assert len(paired['screenshots']) == 2
+    for screen in paired['screenshots']:
+        assert screen['raw_fst_values_verified'] and screen['visual_review'] == 'passed'
+        assert digest(root / screen['file']) == screen['sha256']
     for filename, count, keys, summaries in [
         ('长点积周期.csv', 60, ('variant', 'k'), summary['long_comparisons']),
         ('累加链周期.csv', 120, ('variant', 'chains', 'rounds'), summary['chain_comparisons']),
@@ -92,6 +122,12 @@ def check(root):
             else:
                 measured = {v: statistics.median(x[1] for x in groups[(v, item['chains'], item['rounds'])]) for v in (0, 1)}
                 assert measured[0] == item['dot_plus_add_median'] and measured[1] == item['acc_median']
+        if len(keys) == 2:
+            for item in review['long_comparisons']:
+                measured = {v: statistics.median(x[1] for x in groups[(v, item['k'])]) for v in range(4)}
+                assert item['selected_rvv_median'] == min(measured[1], measured[2])
+                assert abs(item['rvv_over_vdot'] - item['selected_rvv_median'] / measured[0]) < 1e-12
+                assert abs(item['rvv_over_acc'] - item['selected_rvv_median'] / measured[3]) < 1e-12
     with (root / 'docs/data/基础测试.csv').open() as stream:
         basic = list(csv.DictReader(stream))
     assert len(basic) == 6
