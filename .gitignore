@@ -17,3 +17,7 @@ __pycache__/
 *.a
 *.so
 *.log
+
+# Participant preparation documents
+/docs/录屏指南.md
+/docs/录屏讲解稿.md
