@@ -352,5 +352,64 @@
     "probe_instruction_count": 925,
     "probe_cycle_count": 8572,
     "trace_and_nontrace_probe_counts_equal": true
+  },
+  "stage1_vadd": {
+    "status": "passed",
+    "model_role": "stage_one_vector_add_validation",
+    "core_commit": "f1efc9c5ec57b89fdafd9432c72c5a0b456313b1",
+    "core_dirty": 0,
+    "greeting": "hello xiangshan, I am 全栈漏洞队, 10.104.2.73",
+    "raw_exit_status": 0,
+    "difftest_enabled": true,
+    "instruction_count": 847,
+    "cycle_count": 7493,
+    "run_log_sha256": "fb907817f1db31778c156ff9a701196a95f3904986f87c3d642adb577f9e8fe7",
+    "fst_sha256": "a92847dc2bf3246500c8df561c0297fbd8971238f9d9a529d285f1d02dde62d7",
+    "sampling": "before rising backend clock edge",
+    "pc": "0x80000118",
+    "instruction_word": "02850657",
+    "rob": {
+      "flag": 1,
+      "value": 18
+    },
+    "physical_destination": 51,
+    "decode_edge": 6425,
+    "rename_edge": 6427,
+    "issue_edge": 6450,
+    "fu_input_edge": 6453,
+    "fu_output_edge": 6454,
+    "writeback_edge": 6454,
+    "physical_register_write_edge": 6454,
+    "commit_edge": 6456,
+    "result_hex": "34302c2824201c1814100c080400fcf8",
+    "fu_input_to_output_cycles": 1,
+    "decode_to_commit_cycles": 31,
+    "screenshots": [
+      {
+        "view": "input",
+        "file": "docs/figures/vadd-input-gtkwave.png",
+        "sha256": "e1711d097d7d6d389450b2f8fe1ce1fd7c870b3c102f8c378c0ae35531db7f1b",
+        "marker_tick": 12905,
+        "cursor_values_verified_from_raw_fst": true
+      },
+      {
+        "view": "output",
+        "file": "docs/figures/vadd-output-gtkwave.png",
+        "sha256": "47964fa3c88b52cf39a46fd28f86108b609f37df2b03599af65c148923628b92",
+        "marker_tick": 12907,
+        "cursor_values_verified_from_raw_fst": true
+      },
+      {
+        "view": "commit",
+        "file": "docs/figures/vadd-commit-gtkwave.png",
+        "sha256": "c82cf198078438d27cd415ffba2a6108cc0243ec9bf334e9969c8af7368be7e2",
+        "marker_tick": 12911,
+        "cursor_values_verified_from_raw_fst": true
+      }
+    ],
+    "original_operation_record_count": 225,
+    "operation_inventory_files_present": true,
+    "clean_source_build_records_present": true,
+    "existing_stage1_file_checksums_verified": 583
   }
 }
