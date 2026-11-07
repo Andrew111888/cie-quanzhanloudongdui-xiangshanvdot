@@ -136,6 +136,48 @@ def check(root):
         assert int(row['expected']) == int(row['actual']) == expected
         assert int(row['vd_hex'], 16) == (expected & 0xffffffff)
 
+    supplement_path = root / 'docs/data/架构补充验证.json'
+    if supplement_path.exists():
+        supplement = json.loads(supplement_path.read_text())
+        for name, expected in supplement['source_sha256'].items():
+            assert digest(root / name) == expected, name
+        gemv = supplement['gemv']
+        assert gemv['status'] == 'passed' and gemv['hardware_performance']
+        assert gemv['samples'] == 180 and gemv['directed_executions'] == 144
+        with (root / 'docs/data/GEMV周期.csv').open() as stream:
+            samples = list(csv.DictReader(stream))
+        assert len(samples) == 180
+        medians = {}
+        for variant in range(4):
+            for m in (1, 4, 8):
+                for k in (32, 128, 512):
+                    rows = [r for r in samples if (int(r['variant']), int(r['m']), int(r['k'])) == (variant, m, k)]
+                    assert {int(r['repeat']) for r in rows} == set(range(5))
+                    medians[variant, m, k] = statistics.median(int(r['cycles']) for r in rows)
+        for c in gemv['comparisons']:
+            m, k = c['m'], c['k']
+            baseline = min(medians[1, m, k], medians[2, m, k])
+            assert abs(c['rvv_over_acc'] - baseline / medians[3, m, k]) < 1e-12
+            assert abs(c['rvv_over_dot_add'] - baseline / medians[0, m, k]) < 1e-12
+        isolation = supplement['operand_isolation']
+        assert isolation['status'] == 'PASS' and not isolation['power_measured']
+        assert not isolation['verification']['full_core_integrated']
+        for mode in isolation['modes']:
+            assert mode['accepted'] == mode['checked'] + mode['killed']
+            for metric in mode['stable_sample_activity'].values():
+                expected = (metric['isolated_bit_flips'] / metric['baseline_bit_flips'] - 1) * 100
+                assert abs(expected - metric['change_percent']) < 1e-6
+        assert supplement['control']['status'] == 'passed'
+        assert supplement['control']['core_dirty'] == 0
+        control = supplement['control_wave_analysis']
+        commits = control['mixed_instruction_commit_counts_in_capture']
+        assert sum(commits[name] for name in ('control_dot', 'control_acc', 'control_alias',
+                   'control_taken_acc', 'control_taken_dot', 'control_other_acc', 'control_other_dot')) == 200
+        assert commits['control_vmul'] + commits['control_vwmacc'] == 80
+        assert control['speculative_custom_rob_flush_covered']
+        assert not control['custom_execution_stage_flush_covered']
+        assert not control['custom_backpressure_covered']
+
     paths = [root / 'README.md', *(root / 'docs').rglob('*.md'), *(root / 'experiments').rglob('README.md'), *(root / 'rtl').rglob('README.md')]
     for path in paths:
         for target in re.findall(r'\]\(([^)]+)\)', path.read_text()):
@@ -145,7 +187,9 @@ def check(root):
         ast.parse(path.read_text(), filename=str(path))
     return {'status': 'passed', 'rtl_modules': len(rtl['modules']), 'basic_cases': 6,
             'random_input_groups': 1000, 'performance_samples': 180, 'exception_cases': 48,
-            'current_waveform_probes': len(probes), 'current_waveform_screenshots': len(views)}
+            'current_waveform_probes': len(probes), 'current_waveform_screenshots': len(views),
+            'supplemental_gemv_samples': 180 if supplement_path.exists() else 0,
+            'mixed_control_custom_commits': 200 if supplement_path.exists() else 0}
 
 
 if __name__ == '__main__':

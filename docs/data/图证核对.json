@@ -1,0 +1,396 @@
+{
+  "status": "verified",
+  "scope": "figure_mapping_of_existing_verified_features",
+  "exception_reference_check": {
+    "cases": 48,
+    "old_conforming": 28,
+    "old_different": 20,
+    "corrected_conforming": 48,
+    "corrected_rtl_difftest_passed": true
+  },
+  "coverage": {
+    "basic_cases": 6,
+    "random_input_groups": 1000,
+    "alias_modes": 6,
+    "tail_policies": 2,
+    "legal_instructions": 22318,
+    "pipeline_acc_instructions": 1664,
+    "boundary_register_forms": 6
+  },
+  "archived_result_sha256": {
+    "docs/data/acc-results/pipeline/results.json": "2e970e04facd0471d3d48c2dfa6c6ec645ca1d452dbee68a53c650da2ab6a7e3",
+    "docs/data/acc-results/registers/results.json": "0c6b545c54ae340f8f39bef1fe45f8de2f57f0d9d491aec43b88955ed9314250",
+    "docs/data/acc-results/precedence/results.json": "183cfe79affa572facb5f8c8ca7f720f06cfd85d3fa9b333201d09b8e7aa62be"
+  },
+  "figures": {
+    "docs/figures/vdot-source-dependencies.svg": "52b68bc9c00edd27640744e88ed7b7a28372bfa222a8c3ed33102ca3a8b3c329",
+    "docs/figures/verification-coverage.svg": "0b6fc5606c604e86087aa11df14ef8916e46d07e03937c2658941d1279e5d670",
+    "docs/figures/isolation-stage-enables.svg": "6084378ab887ab9dd4ee1a37d8e48ff6af309516533fc37e414e7e1bd7951449",
+    "docs/figures/arithmetic-area-timing.svg": "df27a42ba4145239fb1a5062b1dd7281d918d855370c221f001f2d8e9fd8f619",
+    "docs/figures/isolation-control-gtkwave.png": "f548609c3caf539938760c1b2e8210a197e410d01c56aa9955d88043737bff0c"
+  },
+  "isolation_wave": {
+    "method": "unedited GTKWave X11 window capture",
+    "vcd": "/home/yh/cie/vdot-kmhv2/reports/isolation-wave-20261107T143041Z-1551825/wave.vcd",
+    "vcd_sha256": "d9d6f7aa476f4854738c4eef85f4ebdbd80cd29a93cfba13b6f90d16b620f9ee",
+    "file": "docs/figures/isolation-control-gtkwave.png",
+    "sha256": "f548609c3caf539938760c1b2e8210a197e410d01c56aa9955d88043737bff0c",
+    "pixels": [
+      2510,
+      1216
+    ],
+    "cursor_tick": 1979,
+    "markers": {
+      "Hold": 1979,
+      "Flush_edge": 1996
+    },
+    "source_signal_names": [
+      "TOP.clock",
+      "TOP.in_valid",
+      "TOP.in_ready",
+      "TOP.out_valid",
+      "TOP.out_ready",
+      "TOP.isolated_enable1",
+      "TOP.isolated_enable2",
+      "TOP.flush",
+      "TOP.out_tag",
+      "TOP.baseline_dot_result",
+      "TOP.isolated_dot_result",
+      "TOP.IsolationCompare.isolated.nextResult_level1_0",
+      "TOP.IsolationCompare.valid1",
+      "TOP.IsolationCompare.valid2"
+    ],
+    "original_four_mode_counts_unchanged": true,
+    "sample_values": {
+      "1979": {
+        "clock": 0,
+        "out_ready": 0,
+        "out_valid": 1,
+        "in_ready": 0,
+        "isolated_enable1": 0,
+        "isolated_enable2": 0,
+        "flush": 0,
+        "out_tag": 757,
+        "baseline_dot_result": 4294962367,
+        "isolated_dot_result": 4294962367
+      },
+      "1995": {
+        "clock": 0,
+        "out_ready": 1,
+        "out_valid": 0,
+        "in_ready": 0,
+        "isolated_enable1": 0,
+        "isolated_enable2": 0,
+        "flush": 1,
+        "out_tag": 759,
+        "baseline_dot_result": 980261949,
+        "isolated_dot_result": 980261949
+      },
+      "1996": {
+        "clock": 1,
+        "out_ready": 1,
+        "out_valid": 0,
+        "in_ready": 0,
+        "isolated_enable1": 0,
+        "isolated_enable2": 0,
+        "flush": 1,
+        "out_tag": 759,
+        "baseline_dot_result": 980261949,
+        "isolated_dot_result": 980261949
+      },
+      "1997": {
+        "clock": 0,
+        "out_ready": 1,
+        "out_valid": 0,
+        "in_ready": 1,
+        "isolated_enable1": 0,
+        "isolated_enable2": 0,
+        "flush": 0,
+        "out_tag": 759,
+        "baseline_dot_result": 980261949,
+        "isolated_dot_result": 980261949
+      },
+      "1998": {
+        "clock": 1,
+        "out_ready": 1,
+        "out_valid": 0,
+        "in_ready": 1,
+        "isolated_enable1": 0,
+        "isolated_enable2": 0,
+        "flush": 0,
+        "out_tag": 759,
+        "baseline_dot_result": 980261949,
+        "isolated_dot_result": 980261949
+      },
+      "2001": {
+        "clock": 0,
+        "out_ready": 1,
+        "out_valid": 0,
+        "in_ready": 1,
+        "isolated_enable1": 1,
+        "isolated_enable2": 0,
+        "flush": 0,
+        "out_tag": 759,
+        "baseline_dot_result": 980261949,
+        "isolated_dot_result": 980261949
+      }
+    },
+    "runner_sha256": "f06b8b8b5ffafe32adea4190b70d528aa88c752ef7501e6f789c9acd30e640af"
+  },
+  "coverage_matrix": [
+    {
+      "feature": "向量加法输入、执行、写回及提交",
+      "stage": 1,
+      "evidence_type": "真实FST截图",
+      "figures": [
+        {
+          "figure": 1,
+          "page": 3,
+          "asset": "docs/figures/vadd-input-gtkwave.png"
+        },
+        {
+          "figure": 2,
+          "page": 3,
+          "asset": "docs/figures/vadd-output-gtkwave.png"
+        },
+        {
+          "figure": 3,
+          "page": 4,
+          "asset": "docs/figures/vadd-commit-gtkwave.png"
+        }
+      ]
+    },
+    {
+      "feature": "普通点积的读源选择",
+      "stage": 2,
+      "evidence_type": "源码对应结构图，执行结果另由第三阶段核对",
+      "figures": [
+        {
+          "figure": 1,
+          "page": 2,
+          "asset": "docs/figures/vdot-source-dependencies.svg"
+        }
+      ]
+    },
+    {
+      "feature": "共享乘法、压缩与前缀加法路径",
+      "stage": 2,
+      "evidence_type": "源码对应数据通路图",
+      "figures": [
+        {
+          "figure": 2,
+          "page": 3,
+          "asset": "docs/figures/acc-retimed-datapath.svg"
+        }
+      ]
+    },
+    {
+      "feature": "正数、负数、最大最小值与零",
+      "stage": 2,
+      "evidence_type": "原真实终端截图，六项预期与实际结果",
+      "figures": [
+        {
+          "figure": 3,
+          "page": 6,
+          "asset": "docs/figures/vdot-basic-terminal.png"
+        }
+      ]
+    },
+    {
+      "feature": "完整128位结果与高位清零",
+      "stage": 3,
+      "evidence_type": "真实FST输入输出及完整结果",
+      "figures": [
+        {
+          "figure": 2,
+          "page": 3,
+          "asset": "docs/figures/vdot-input-gtkwave.png"
+        },
+        {
+          "figure": 3,
+          "page": 4,
+          "asset": "docs/figures/vdot-output-gtkwave.png"
+        },
+        {
+          "figure": 5,
+          "page": 5,
+          "asset": "docs/figures/vdot-acc-input-gtkwave.png"
+        },
+        {
+          "figure": 6,
+          "page": 5,
+          "asset": "docs/figures/vdot-acc-output-gtkwave.png"
+        }
+      ]
+    },
+    {
+      "feature": "累加非零初值与真实旧目标依赖",
+      "stage": 3,
+      "evidence_type": "真实FST输入、结果与提交",
+      "figures": [
+        {
+          "figure": 5,
+          "page": 5,
+          "asset": "docs/figures/vdot-acc-input-gtkwave.png"
+        },
+        {
+          "figure": 6,
+          "page": 5,
+          "asset": "docs/figures/vdot-acc-output-gtkwave.png"
+        },
+        {
+          "figure": 7,
+          "page": 6,
+          "asset": "docs/figures/vdot-acc-commit-gtkwave.png"
+        }
+      ]
+    },
+    {
+      "feature": "随机、源目标重叠、回绕与边界寄存器",
+      "stage": 2,
+      "evidence_type": "归档验证覆盖图，原始程序与摘要绑定",
+      "figures": [
+        {
+          "figure": 4,
+          "page": 7,
+          "asset": "docs/figures/verification-coverage.svg"
+        }
+      ]
+    },
+    {
+      "feature": "非法配置和NEMU异常参考修正",
+      "stage": 2,
+      "evidence_type": "48项契约检查统计，修正后RTL差分",
+      "figures": [
+        {
+          "figure": 4,
+          "page": 7,
+          "asset": "docs/figures/verification-coverage.svg"
+        }
+      ]
+    },
+    {
+      "feature": "RTL/NEMU差分与故障检出、恢复",
+      "stage": 3,
+      "evidence_type": "原真实终端截图",
+      "figures": [
+        {
+          "figure": 1,
+          "page": 2,
+          "asset": "docs/figures/stage3-difftest-terminal.png"
+        }
+      ]
+    },
+    {
+      "feature": "普通vdot与RVV等价序列的执行跨度",
+      "stage": 3,
+      "evidence_type": "同输入真实FST截图",
+      "figures": [
+        {
+          "figure": 8,
+          "page": 9,
+          "asset": "docs/figures/baseline-paired-vdot-gtkwave.png"
+        },
+        {
+          "figure": 9,
+          "page": 9,
+          "asset": "docs/figures/baseline-rvv-span-gtkwave.png"
+        }
+      ]
+    },
+    {
+      "feature": "含访存性能与独立累加链收益",
+      "stage": 3,
+      "evidence_type": "逐次周期统计图和原终端核对图",
+      "figures": [
+        {
+          "figure": 10,
+          "page": 12,
+          "asset": "docs/figures/stage3-speedups.png"
+        },
+        {
+          "figure": 11,
+          "page": 13,
+          "asset": "docs/figures/stage3-performance-terminal.png"
+        }
+      ]
+    },
+    {
+      "feature": "提前压缩的面积与时序改善",
+      "stage": 3,
+      "evidence_type": "同一约束的模块级映射与STA数据图",
+      "figures": [
+        {
+          "figure": 12,
+          "page": 14,
+          "asset": "docs/figures/arithmetic-area-timing.svg"
+        }
+      ]
+    },
+    {
+      "feature": "多输出GEMV输入复用与累加",
+      "stage": 3,
+      "evidence_type": "180条样本形成的周期比图",
+      "figures": [
+        {
+          "figure": 13,
+          "page": 16,
+          "asset": "docs/figures/gemv-measured-ratios.svg"
+        }
+      ]
+    },
+    {
+      "feature": "混合执行与推测点积取消提交",
+      "stage": 3,
+      "evidence_type": "真实FST截图，完整提交槽事件记录补充",
+      "figures": [
+        {
+          "figure": 14,
+          "page": 18,
+          "asset": "docs/figures/control-redirect-gtkwave.png"
+        }
+      ]
+    },
+    {
+      "feature": "隔离输入选择与两级独立使能",
+      "stage": 2,
+      "evidence_type": "源码对应控制结构图",
+      "figures": [
+        {
+          "figure": 5,
+          "page": 8,
+          "asset": "docs/figures/isolation-stage-enables.svg"
+        }
+      ]
+    },
+    {
+      "feature": "隔离候选的信号活动变化",
+      "stage": 3,
+      "evidence_type": "真实RTL稳定采样位翻转统计图",
+      "figures": [
+        {
+          "figure": 15,
+          "page": 19,
+          "asset": "docs/figures/isolation-stage1-activity.svg"
+        }
+      ]
+    },
+    {
+      "feature": "局部停顿、结果保持、使能和清空",
+      "stage": 3,
+      "evidence_type": "真实VCD截图，原四模式记分板检查保持",
+      "figures": [
+        {
+          "figure": 16,
+          "page": 20,
+          "asset": "docs/figures/isolation-control-gtkwave.png"
+        }
+      ]
+    }
+  ],
+  "uncovered": [
+    "whole_core_dot_execution_resident_flush",
+    "whole_core_dot_output_backpressure",
+    "operand_isolation_full_core_integration_and_ppa"
+  ]
+}
