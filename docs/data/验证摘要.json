@@ -411,5 +411,26 @@
     "operation_inventory_files_present": true,
     "clean_source_build_records_present": true,
     "existing_stage1_file_checksums_verified": 583
+  },
+  "stage2_basic": {
+    "status": "passed",
+    "scope": "rtl_nemu_difftest",
+    "core_commit": "14c8b3489a610d9b210ab57b5bf30901f8cf4263",
+    "core_dirty": 0,
+    "reference_commit": "3097fa05435c3e85c1541f09027457ee7ee13f43",
+    "program": {
+      "file": "examples/vdot_basic.c",
+      "sha256": "6273242273021d86b9c3203d82b12d60b62f35886c8f086187ccfcb1f0233a00"
+    },
+    "run_log_sha256": "e7e2f5f3d6d01c28be0185351f4333770326f16883cedd1ca12f53d06f82ed63",
+    "raw_exit_status": 0,
+    "difftest_enabled": true,
+    "case_count": 6,
+    "full_128_bit_result_checked": true,
+    "source_high_half_ignored_checked": true,
+    "destination_prefilled_with_nonzero": true,
+    "source_and_generated_rtl_match_tested_core": true,
+    "instruction_count": 9553,
+    "cycle_count": 71832
   }
 }
