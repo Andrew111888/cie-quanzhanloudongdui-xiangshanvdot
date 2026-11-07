@@ -31,6 +31,16 @@ def check(root):
     assert summary['core_commit'] == manifest['tested']['XiangShan']
     assert summary['random_input_groups'] == 1000 and summary['exception_cases'] == 48
     assert summary['fault_original_exit_codes'] == [0, 1, 0]
+    basic_run = summary['stage2_basic']
+    assert basic_run['status'] == 'passed' and basic_run['scope'] == 'rtl_nemu_difftest'
+    assert basic_run['case_count'] == 6 and basic_run['raw_exit_status'] == 0
+    assert basic_run['core_commit'] == manifest['tested']['XiangShan'] and basic_run['core_dirty'] == 0
+    assert digest(root / basic_run['program']['file']) == basic_run['program']['sha256']
+    terminal = basic_run['terminal_screenshot']
+    assert terminal['displayed_cases_match_raw_log'] and terminal['case_count'] == 6
+    assert terminal['test_exit_status'] == 0 and terminal['difftest_enabled']
+    assert terminal['image_generation_used'] is False
+    assert digest(root / terminal['file']) == terminal['sha256']
     wave = summary['current_vdot_waveform']
     assert wave['status'] == 'passed' and wave['core_dirty'] == 0
     assert wave['core_commit'] == manifest['tested']['XiangShan']

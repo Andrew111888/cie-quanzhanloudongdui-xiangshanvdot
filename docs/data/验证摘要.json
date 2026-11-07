@@ -422,7 +422,7 @@
       "file": "examples/vdot_basic.c",
       "sha256": "6273242273021d86b9c3203d82b12d60b62f35886c8f086187ccfcb1f0233a00"
     },
-    "run_log_sha256": "e7e2f5f3d6d01c28be0185351f4333770326f16883cedd1ca12f53d06f82ed63",
+    "run_log_sha256": "17c02e288a6624eb982ac166408b0986fdc3e0e4971dc6296ac073253fde3e04",
     "raw_exit_status": 0,
     "difftest_enabled": true,
     "case_count": 6,
@@ -431,6 +431,16 @@
     "destination_prefilled_with_nonzero": true,
     "source_and_generated_rtl_match_tested_core": true,
     "instruction_count": 9553,
-    "cycle_count": 71832
+    "cycle_count": 71832,
+    "terminal_screenshot": {
+      "file": "docs/figures/vdot-basic-terminal.png",
+      "sha256": "0705f403dedf52d17b483d1a6b0fcfd8cd1d0eef63e73d7e5446fb482536df65",
+      "method": "actual_terminal_window_capture_of_completed_run_log",
+      "displayed_cases_match_raw_log": true,
+      "case_count": 6,
+      "test_exit_status": 0,
+      "difftest_enabled": true,
+      "image_generation_used": false
+    }
   }
 }
