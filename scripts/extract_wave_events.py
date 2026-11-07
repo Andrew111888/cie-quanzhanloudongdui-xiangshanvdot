@@ -127,8 +127,10 @@ def finish_timestamp():
                 data = values(group)
                 if data.get('valid') == 1 and data.get('ready') == 0:
                     stalls[group['kind'] + ':' + group['source']] += 1
-                    decoded_dot = group['kind'] == 'decode' and data.get('instr') is not None and data['instr'] & 0xfc00707f == 0x0000000b
-                    renamed_dot = group['kind'] == 'rename' and data.get('vecwen') == 1 and data.get('op') == 0x100
+                    decoded_dot = (group['kind'] == 'decode' and data.get('instr') is not None
+                                   and data['instr'] & 0xfc00707f in (0x0000000b, 0x0400000b))
+                    renamed_dot = (group['kind'] == 'rename' and data.get('vecwen') == 1
+                                   and data.get('op') in (0x100, 0x101))
                     if decoded_dot or renamed_dot:
                         vdot_frontend_stalls[group['kind'] + ':' + group['source']] += 1
                 if data.get('valid') != 1 or ('ready' in data and data['ready'] != 1):
@@ -201,6 +203,7 @@ with (args.output / 'fst2vcd.stderr').open('w') as errors:
 
 metadata = {'fst': str(args.fst.resolve()),
             'fst_sha256': hashlib.sha256(args.fst.read_bytes()).hexdigest(),
+            'extractor_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'timescale': ' '.join(timescale), 'sampling': 'before rising backend clock edge',
             'clock': backend + '.clock' if backend + '.clock' in clock_codes else 'TOP.clock',
             'edges': edge, 'event_count': len(events), 'selected_signals': len(selected),

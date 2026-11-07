@@ -175,187 +175,182 @@
     "docs/data/basic-current/cases.json": "c4f0ebfbf11401c0d7ed2e2ee555c6440f1a9ce04e9e94415d2e590c0c756695",
     "docs/data/acc-ppa/full-core/results.json": "8bf1d0071594e9a90cdbc08982a58bc91c4b38e33c88ba6608b4d96676580da4"
   },
-  "original_vdot_waveform": {
-    "implementation": "original_vdot_balanced_tree",
-    "fst_file": "wave.fst",
-    "fst_sha256": "bb769f6404f7f430ede18c597fa017b5869965765a5c355bab4f72b1982ab7aa",
-    "run_log_sha256": "0376a2232a39db7b3b9ef01370f85f3947a1296612d31544c579981b964ce5c0",
-    "source_record_sha256": "f963c89bec65e0957b930cd0f8c505e45ce7f5c75b4e9363111d09034a620a81",
-    "core_upstream_commit": "7b16188f7f18a97be69c9b1a2dae8a446eec3b47",
-    "core_working_tree_dirty_at_capture": true,
-    "changed_source_sha256": {
-      "src/main/scala/xiangshan/backend/decode/VecDecoder.scala": "abd554f3172b6e47c5e10968c5a96a84052b4cc9f3dbfad9eebfd6b4f505b9df",
-      "src/main/scala/xiangshan/backend/decode/isa/bitfield/RiscvInst.scala": "4e0800b70699eb24557352b144741e8ed480ce51de64aa2dbccee3c4c72d2f50",
-      "src/main/scala/xiangshan/backend/fu/wrapper/VIMacU.scala": "1845e685513507b724ba7e37ab46eb42c7b32c7fa2477644c4d728230a508fce",
-      "src/main/scala/xiangshan/backend/fu/vector/Vdot.scala": "d758aff49a6d10c0369a6d06968a5782cc8d1e13cad2c6a967d919b782adf6b4"
-    },
-    "sampling": "before rising backend clock edge",
+  "current_vdot_waveform": {
+    "status": "passed",
+    "implementation": "current_shared_dot_acc_retimed_prefix",
+    "core_commit": "14c8b3489a610d9b210ab57b5bf30901f8cf4263",
+    "core_dirty": 0,
+    "reference_commit": "3097fa05435c3e85c1541f09027457ee7ee13f43",
+    "emulator_sha256": "704a7c9c13b0b526210a3890ba98fb418b4575c03db5c6e1b8f1a1aa22d5453e",
+    "reference_sha256": "e2795789c22c3f35c1df06f23b3f9bd6a434e61dcdfb875b4099b899d1325f2e",
+    "performance_emulator_sha256": "07dd955d3d41d927e89be93035feef0145fa2dd894db327cd8c0bb3ae0cc6150",
+    "whole_core_rtl_byte_identical_to_performance_model": true,
+    "performance_emulator_unchanged": true,
+    "fst_sha256": "320f8a5b705678ba1eb91ff04b804e0978cb55b16869d1ed459e64285a6c8f0a",
+    "run_log_sha256": "ec5974e5157fe65187a1008e048855326118b25707cd32b84121223151979dc1",
     "timescale": "1ps",
-    "pc": "0x800000e2",
-    "rob": {
-      "flag": 0,
-      "value": 42
+    "sampling": "before rising backend clock edge",
+    "capture_begin": 0,
+    "capture_end": 6000,
+    "probe_program": {
+      "file": "examples/vdot_wave.c",
+      "sha256": "67763be18f57c5de65d6794cc1c376b66c49588e2c3fb4a5bfeddb5568d12999"
     },
-    "logical_destination": "v12",
-    "physical_destination": 60,
-    "events": {
-      "fu_input": 1477,
-      "fu_output": 1479,
-      "writeback": 1479,
-      "commit": 1502
+    "analysis_scripts_sha256": {
+      "scripts/run_vdot_wave.py": "1b4ce4f14ca7b8d4425fe5e54c705b69b2dd2b7d5aae097541a81f042173c375",
+      "scripts/extract_wave_events.py": "fba2469ba0729cdf3c3383aba86b500433c3c5a6cbcf2475e1534e9845b335ae",
+      "scripts/analyze_vdot_wave.py": "9686a0cb9604bd26c8c6763f3e4534baabb0caae039548fde3a48efe2b5407ae"
     },
-    "fu_input_to_output_cycles": 2,
-    "result_hex": "00000000000000000000000000000008",
-    "arithmetic_handshakes": {
-      "multiply": [
-        {
-          "pdest": 51,
-          "uop": 0,
-          "fu": "inner_vfExuBlock.exus.Vimac",
-          "input_edge": 1468,
-          "output_edge": 1470,
-          "cycles": 2,
-          "result_hex": "00010001000100010001000100010001"
-        },
-        {
-          "pdest": 52,
-          "uop": 1,
-          "fu": "inner_vfExuBlock.exus.Vimac",
-          "input_edge": 1469,
-          "output_edge": 1471,
-          "cycles": 2,
-          "result_hex": "90a0b3b63d4296112a3951e65b940b39"
-        }
-      ],
-      "reduce": [
-        {
-          "pdest": 55,
-          "uop": 0,
-          "fu": "inner_vfExuBlock.exus_1.Vipu",
-          "input_edge": 1475,
-          "output_edge": 1477,
-          "cycles": 2,
-          "result_hex": "00000002000000020000000200000002"
-        },
-        {
-          "pdest": 56,
-          "uop": 1,
-          "fu": "inner_vfExuBlock.exus_1.Vipu",
-          "input_edge": 1482,
-          "output_edge": 1484,
-          "cycles": 2,
-          "result_hex": "00000000000000000000000000000008"
-        }
-      ],
-      "vdot": [
-        {
-          "pdest": 60,
-          "uop": 0,
-          "fu": "inner_vfExuBlock.exus.Vimac",
-          "input_edge": 1477,
-          "output_edge": 1479,
-          "cycles": 2,
-          "result_hex": "00000000000000000000000000000008"
-        }
-      ]
+    "rtl": {
+      "rtl/VIMacU.sv": "a728e8f109bd0c3261af12c644ee0f5a003b6ad4ae08dbe2573bf24f2207d1c8",
+      "rtl/VdotAccRetimedDatapath.sv": "4723293e599df8d4221797422ec742e7f1db149308a6fa929bc1cfa52e6f654e"
     },
-    "latest_accumulator_core_fst_available": false,
-    "screenshots": [
+    "probes": [
       {
-        "view": "input",
-        "file": "docs/figures/vdot-input-gtkwave.png",
-        "sha256": "5f70f4073e157be7c4cb30eb409ca6235512a0647e8ab3ae515cc32f771195df",
-        "marker_tick": 2953,
-        "savefile_sha256": "05797d3c5f335b9cbae66354c5bcf3cf25ebc0b7439fd209ee646f156e39af9e",
-        "script_sha256": "738aa6ab2377ab7b8713dae8ad374aef3161c578c004ee4319e3374e8906f3d6"
+        "instruction": "vdot.vv",
+        "pc": "0x80000158",
+        "instruction_word": "02a4060b",
+        "logical_destination": "v12",
+        "rob": {
+          "flag": 0,
+          "value": 3
+        },
+        "physical_destination": 53,
+        "input_to_output_cycles": 2,
+        "output_to_commit_cycles": 2,
+        "result_hex": "00000000000000000000000000000008",
+        "interfaces": {
+          "fu_input": {
+            "edge": 1754,
+            "tick": 3508,
+            "source": "inner_vfExuBlock.exus.Vimac"
+          },
+          "fu_output": {
+            "edge": 1756,
+            "tick": 3512,
+            "source": "inner_vfExuBlock.exus.Vimac"
+          },
+          "writeback": {
+            "edge": 1756,
+            "tick": 3512,
+            "source": "inner_wbDataPath.io_toCtrlBlock_writeback_13"
+          },
+          "physical_register_write": {
+            "edge": 1756,
+            "tick": 3512,
+            "source": "inner_wbDataPath.io_toVfPreg_0"
+          },
+          "commit": {
+            "edge": 1758,
+            "tick": 3516,
+            "source": "inner_ctrlBlock.rob.commit_0"
+          }
+        },
+        "source_values_hex": {
+          "src0": "1211100f0e0d0c0b0101010101010101",
+          "src1": "eeeff0f1f2f3f4f50101010101010101",
+          "src2": "00000000000000000000000000000000"
+        }
       },
       {
-        "view": "output",
-        "file": "docs/figures/vdot-output-gtkwave.png",
-        "sha256": "fcd8fa029dd031173733df47505684d3c829f063609df3c51dc3aa4fdd953572",
-        "marker_tick": 2957,
-        "savefile_sha256": "2f724fb4bf7540de2dadc7999e1e72db59616cb69803a9bd65a4ef5d37c80921",
-        "script_sha256": "f7c26e164b7ea539ea1ad5f7c636c6f19327d3a99b9d52eba0ec8bdafb6f1e55"
-      },
-      {
-        "view": "commit",
-        "file": "docs/figures/vdot-commit-gtkwave.png",
-        "sha256": "097bf8ee679fddc290abb0007149800a3d3433164d476cc659e05d64d18d7c17",
-        "marker_tick": 3003,
-        "savefile_sha256": "5e81a604dd694ec436af4b0be52b38d671e16dfe4c659bb1fabe94ae657525b7",
-        "script_sha256": "f2ccc8e5835ae3368aa3228d5fcc1aa3c7390edc7a3efd88a8a09df466a08590"
+        "instruction": "vdot.acc",
+        "pc": "0x80000196",
+        "instruction_word": "06a4060b",
+        "logical_destination": "v12",
+        "rob": {
+          "flag": 0,
+          "value": 23
+        },
+        "physical_destination": 61,
+        "input_to_output_cycles": 2,
+        "output_to_commit_cycles": 2,
+        "result_hex": "00000000000000000000000012345680",
+        "interfaces": {
+          "fu_input": {
+            "edge": 1881,
+            "tick": 3762,
+            "source": "inner_vfExuBlock.exus.Vimac"
+          },
+          "fu_output": {
+            "edge": 1883,
+            "tick": 3766,
+            "source": "inner_vfExuBlock.exus.Vimac"
+          },
+          "writeback": {
+            "edge": 1883,
+            "tick": 3766,
+            "source": "inner_wbDataPath.io_toCtrlBlock_writeback_13"
+          },
+          "physical_register_write": {
+            "edge": 1883,
+            "tick": 3766,
+            "source": "inner_wbDataPath.io_toVfPreg_0"
+          },
+          "commit": {
+            "edge": 1885,
+            "tick": 3770,
+            "source": "inner_ctrlBlock.rob.commit_0"
+          }
+        },
+        "source_values_hex": {
+          "src0": "1211100f0e0d0c0b0101010101010101",
+          "src1": "eeeff0f1f2f3f4f50101010101010101",
+          "src2": "abcdef0176543210deadbeef12345678"
+        }
       }
     ],
-    "screenshot_method": "Unedited GTKWave window capture from the original FST",
-    "signal_aliases": {
-      "clock": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.clock",
-      "IN_valid": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_in_valid",
-      "IN_ready": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_in_ready",
-      "IN_op": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_in_bits_ctrl_fuOpType[8:0]",
-      "IN_ROB_flag": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_in_bits_robIdx_flag",
-      "IN_ROB_index": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_in_bits_robIdx_value[5:0]",
-      "IN_pdest": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_in_bits_pdest[7:0]",
-      "IN_src0": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_in_bits_data_src_0[127:0]",
-      "IN_src1": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_in_bits_data_src_1[127:0]",
-      "OUT_valid": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_out_valid",
-      "OUT_ready": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_out_ready",
-      "OUT_data": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.Vimac.io_out_bits_res_data[127:0]",
-      "OUT_ROB_flag": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_out_bits_robIdx_flag",
-      "OUT_ROB_index": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_out_bits_robIdx_value[5:0]",
-      "OUT_pdest": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_vfExuBlock.exus.io_out_bits_pdest[7:0]",
-      "WB_valid": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_valid",
-      "WB_data": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_bits_data_0[127:0]",
-      "WB_ROB_flag": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_bits_robIdx_flag",
-      "WB_ROB_index": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_bits_robIdx_value[5:0]",
-      "WB_pdest": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_bits_pdest[7:0]",
-      "WB_vecWen": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_wbDataPath.io_toCtrlBlock_writeback_13_bits_vecWen",
-      "ROB_isCommit": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_isCommit",
-      "COMMIT2_valid": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_commitValid_2",
-      "COMMIT2_pc": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_info_2_debug_pc[49:0]",
-      "COMMIT2_instr": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_info_2_debug_instr[31:0]",
-      "COMMIT2_ROB_flag": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_robIdx_2_flag",
-      "COMMIT2_ROB_index": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_robIdx_2_value[5:0]",
-      "COMMIT2_ldest": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_info_2_basicDebug_ldest[5:0]",
-      "COMMIT2_pdest": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_info_2_basicDebug_pdest[7:0]",
-      "COMMIT2_vecWen": "TOP.SimTop.cpu.l_soc.core_with_l2.core.backend.inner_ctrlBlock.rob.io_commits_info_2_basicDebug_vecWen"
-    },
-    "cursor_values_checked_from_fst": true,
-    "cursor_samples": {
-      "2953": {
-        "IN_valid": 1,
-        "IN_pdest": 60,
-        "IN_ROB_index": 42,
-        "IN_ROB_flag": 0,
-        "IN_src1": 1334440654591915542993625911497130241,
-        "IN_src0": 1334440654591915542993625911497130241,
-        "IN_op": 256,
-        "IN_ready": 1
+    "screenshots": [
+      {
+        "instruction": "vdot.vv",
+        "view": "input",
+        "file": "docs/figures/vdot-input-gtkwave.png",
+        "sha256": "f9799eb883b62edf8da84a4267d87f2815ccc9a96c94deac1903c14f3b742442",
+        "marker_tick": 3507,
+        "cursor_values_verified_from_raw_fst": true
       },
-      "2957": {
-        "OUT_data": 8,
-        "OUT_valid": 1,
-        "OUT_ROB_index": 42,
-        "OUT_ROB_flag": 0,
-        "OUT_pdest": 60,
-        "OUT_ready": 1,
-        "WB_vecWen": 1,
-        "WB_ROB_index": 42,
-        "WB_ROB_flag": 0,
-        "WB_pdest": 60,
-        "WB_data": 8,
-        "WB_valid": 1
+      {
+        "instruction": "vdot.vv",
+        "view": "output",
+        "file": "docs/figures/vdot-output-gtkwave.png",
+        "sha256": "1653d403be3b9605c67ebb6847931d5c17db3de27cd1a88999f077ac442bbad7",
+        "marker_tick": 3511,
+        "cursor_values_verified_from_raw_fst": true
       },
-      "3003": {
-        "COMMIT2_ROB_index": 42,
-        "COMMIT2_ROB_flag": 0,
-        "COMMIT2_vecWen": 1,
-        "COMMIT2_pdest": 60,
-        "COMMIT2_ldest": 12,
-        "COMMIT2_instr": 44303883,
-        "COMMIT2_pc": 2147483874,
-        "COMMIT2_valid": 1,
-        "ROB_isCommit": 1
+      {
+        "instruction": "vdot.vv",
+        "view": "commit",
+        "file": "docs/figures/vdot-commit-gtkwave.png",
+        "sha256": "4ea1708ab97da9948b0795b7c9a71915eb132cfcab7ad58eaa452f0d7b9f5a92",
+        "marker_tick": 3515,
+        "cursor_values_verified_from_raw_fst": true
+      },
+      {
+        "instruction": "vdot.acc",
+        "view": "input",
+        "file": "docs/figures/vdot-acc-input-gtkwave.png",
+        "sha256": "140dc8cd1e2b57de51a37c8ce950c0614c2a996a509370765cd7456bd5857bc6",
+        "marker_tick": 3761,
+        "cursor_values_verified_from_raw_fst": true
+      },
+      {
+        "instruction": "vdot.acc",
+        "view": "output",
+        "file": "docs/figures/vdot-acc-output-gtkwave.png",
+        "sha256": "048a99cc75b2cde50482b1bc3c6175474b67f764a2d8cf15430177158cf43c9d",
+        "marker_tick": 3765,
+        "cursor_values_verified_from_raw_fst": true
+      },
+      {
+        "instruction": "vdot.acc",
+        "view": "commit",
+        "file": "docs/figures/vdot-acc-commit-gtkwave.png",
+        "sha256": "72ecf20fc1618a0e71fc71ee8655e856be5d45a321e15e721ec2d2ae6932f0e1",
+        "marker_tick": 3769,
+        "cursor_values_verified_from_raw_fst": true
       }
-    }
+    ],
+    "probe_instruction_count": 925,
+    "probe_cycle_count": 8572,
+    "trace_and_nontrace_probe_counts_equal": true
   }
 }

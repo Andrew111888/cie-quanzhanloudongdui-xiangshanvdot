@@ -31,6 +31,35 @@ def check(root):
     assert summary['core_commit'] == manifest['tested']['XiangShan']
     assert summary['random_input_groups'] == 1000 and summary['exception_cases'] == 48
     assert summary['fault_original_exit_codes'] == [0, 1, 0]
+    wave = summary['current_vdot_waveform']
+    assert wave['status'] == 'passed' and wave['core_dirty'] == 0
+    assert wave['core_commit'] == manifest['tested']['XiangShan']
+    assert wave['reference_commit'] == manifest['tested']['NEMU_corrected']
+    assert wave['whole_core_rtl_byte_identical_to_performance_model']
+    assert wave['performance_emulator_unchanged']
+    assert digest(root / wave['probe_program']['file']) == wave['probe_program']['sha256']
+    for name, expected in wave['analysis_scripts_sha256'].items():
+        assert digest(root / name) == expected, name
+    assert wave['rtl'] == manifest['rtl']
+    probes = {p['instruction']: p for p in wave['probes']}
+    assert set(probes) == {'vdot.vv', 'vdot.acc'}
+    for name, expected in [('vdot.vv', 8), ('vdot.acc', 0x12345680)]:
+        probe = probes[name]
+        assert int(probe['result_hex'], 16) == expected
+        assert probe['input_to_output_cycles'] == 2
+        interfaces = probe['interfaces']
+        assert interfaces['fu_output']['edge'] - interfaces['fu_input']['edge'] == 2
+        assert interfaces['writeback']['edge'] == interfaces['physical_register_write']['edge'] == interfaces['fu_output']['edge']
+        assert interfaces['commit']['edge'] >= interfaces['fu_output']['edge']
+    assert int(probes['vdot.acc']['source_values_hex']['src2'], 16) & 0xffffffff == 0x12345678
+    views = set()
+    for screen in wave['screenshots']:
+        assert screen['cursor_values_verified_from_raw_fst']
+        assert digest(root / screen['file']) == screen['sha256'], screen['file']
+        event = {'input': 'fu_input', 'output': 'fu_output', 'commit': 'commit'}[screen['view']]
+        assert screen['marker_tick'] + 1 == probes[screen['instruction']]['interfaces'][event]['tick']
+        views.add((screen['instruction'], screen['view']))
+    assert len(wave['screenshots']) == len(views) == 6
     for filename, count, keys, summaries in [
         ('长点积周期.csv', 60, ('variant', 'k'), summary['long_comparisons']),
         ('累加链周期.csv', 120, ('variant', 'chains', 'rounds'), summary['chain_comparisons']),
@@ -69,7 +98,8 @@ def check(root):
     for path in (root / 'scripts').glob('*.py'):
         ast.parse(path.read_text(), filename=str(path))
     return {'status': 'passed', 'rtl_modules': len(rtl['modules']), 'basic_cases': 6,
-            'random_input_groups': 1000, 'performance_samples': 180, 'exception_cases': 48}
+            'random_input_groups': 1000, 'performance_samples': 180, 'exception_cases': 48,
+            'current_waveform_probes': len(probes), 'current_waveform_screenshots': len(views)}
 
 
 if __name__ == '__main__':
